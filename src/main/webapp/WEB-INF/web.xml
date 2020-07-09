@@ -7,7 +7,7 @@
 
   <servlet>
     <servlet-name>productList</servlet-name>
-    <servlet-class>com.es.phoneshop.web.ProductListPageServlet</servlet-class>
+    <servlet-class>com.es.phoneshop.controller.ProductListPageServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
