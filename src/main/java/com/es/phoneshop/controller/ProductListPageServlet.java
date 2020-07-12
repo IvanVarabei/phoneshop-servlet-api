@@ -3,6 +3,7 @@ package com.es.phoneshop.controller;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.dao.initializer.ProductStockHardCodeInitializer;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,8 @@ import java.io.IOException;
 
 public class ProductListPageServlet extends HttpServlet {
     @Override
-    public void init(){
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
         new ProductStockHardCodeInitializer().initProductStock();
     }
 
