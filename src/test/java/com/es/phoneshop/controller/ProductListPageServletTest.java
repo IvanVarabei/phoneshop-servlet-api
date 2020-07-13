@@ -1,5 +1,6 @@
-package com.es.phoneshop.web;
+package com.es.phoneshop.controller;
 
+import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,9 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProductListPageServletTest {
@@ -25,17 +24,21 @@ public class ProductListPageServletTest {
     @Mock
     private RequestDispatcher requestDispatcher;
 
-    private ProductListPageServlet servlet = new ProductListPageServlet();
+    private final ProductListPageServlet servlet = new ProductListPageServlet();
 
     @Before
-    public void setup(){
+    public void setup() throws ServletException, IOException {
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
+        servlet.doGet(request, response);
     }
 
     @Test
-    public void testDoGet() throws ServletException, IOException {
-        servlet.doGet(request, response);
+    public void testDoGetRequestSetAttribute() {
+        verify(request).setAttribute("products", new ArrayListProductDao().findProducts());
+    }
 
-        verify(requestDispatcher).forward(request, response);
+    @Test
+    public void testDoGetForward() throws ServletException, IOException {
+        verify(requestDispatcher, times(1)).forward(request, response);
     }
 }
