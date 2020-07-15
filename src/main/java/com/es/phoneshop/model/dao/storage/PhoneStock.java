@@ -1,4 +1,6 @@
-package com.es.phoneshop.model.entity;
+package com.es.phoneshop.model.dao.storage;
+
+import com.es.phoneshop.model.entity.Product;
 
 import java.util.ArrayList;
 import java.util.Collections;
