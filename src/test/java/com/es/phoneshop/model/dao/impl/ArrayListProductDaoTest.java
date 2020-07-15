@@ -27,6 +27,8 @@ public class ArrayListProductDaoTest {
     private Product product2;
     @Mock
     private Product product3;
+    @Mock
+    private Product productWithExistingId;
     private List<Product> productList;
     @InjectMocks
     private final ArrayListProductDao dao = new ArrayListProductDao();
@@ -42,6 +44,30 @@ public class ArrayListProductDaoTest {
         when(product3.getId()).thenReturn(3L);
         when(product3.getPrice()).thenReturn(new BigDecimal(900));
         when(product3.getStock()).thenReturn(3);
+        when(productWithExistingId.getId()).thenReturn(2L);
+    }
+
+    @Test
+    public void testSaveIdWhichExists() {
+        productList.add(product1);
+        productList.add(product2);
+        productList.add(product3);
+        dao.save(productWithExistingId);
+        boolean isContainProductWithExistingId = productList.contains(productWithExistingId);
+        boolean isContainProduct2 = productList.contains(product2);
+
+        assertTrue(isContainProductWithExistingId);
+        assertFalse(isContainProduct2);
+    }
+
+    @Test
+    public void testSaveNullId() {
+        when(product1.getId()).thenReturn(null);
+
+        dao.save(product1);
+        boolean actual = productList.contains(product1);
+
+        assertTrue(actual);
     }
 
     @Test
