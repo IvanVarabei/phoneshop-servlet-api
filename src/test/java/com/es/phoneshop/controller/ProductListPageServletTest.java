@@ -37,7 +37,7 @@ public class ProductListPageServletTest {
 
     @Before
     public void setup() {
-        when(arrayListProductDao.findProducts()).thenReturn(List.of(product1, product2));
+       // when(arrayListProductDao.findProducts("")).thenReturn(List.of(product1, product2));
         when(request.getRequestDispatcher("/WEB-INF/pages/productList.jsp")).thenReturn(requestDispatcher);
     }
 

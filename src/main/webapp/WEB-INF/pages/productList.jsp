@@ -8,18 +8,33 @@
   <p>
     Welcome to Expert-Soft training!
   </p>
+  <form>
+    <label>
+      <input name="query" value="${param.query}">
+    </label>
+    <input type="submit" value="Search">
+  </form>
   <table>
+    <caption>Product list</caption>
     <thead>
       <tr>
         <td>Image</td>
-        <td>Description</td>
-        <td class="price">Price</td>
+        <td>Description
+          <tags:sortLink sortField="Description" sortOrder="asc" direction="up"></tags:sortLink>
+          <tags:sortLink sortField="Description" sortOrder="desc"></tags:sortLink>
+        </td>
+        <td>Price
+          <tags:sortLink sortField="Price" sortOrder="asc" direction="up"></tags:sortLink>
+          <tags:sortLink sortField="Price" sortOrder="desc"></tags:sortLink>
+        </td>
       </tr>
     </thead>
     <c:forEach var="product" items="${products}">
       <tr>
         <td>
-          <img class="product-tile" src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
+          <img class="product-tile"
+               src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}"
+               alt="image can not be found">
         </td>
         <td>${product.description}</td>
         <td class="price">

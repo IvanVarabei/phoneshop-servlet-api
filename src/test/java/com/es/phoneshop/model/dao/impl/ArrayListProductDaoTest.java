@@ -105,7 +105,7 @@ public class ArrayListProductDaoTest {
         productList.add(product2);
         productList.add(product3);
         List<Product> expected = List.of(product1, product3);
-        List<Product> actual = dao.findProducts();
+        List<Product> actual = null;// dao.findProducts("");
 
         assertEquals(expected, actual);
     }
