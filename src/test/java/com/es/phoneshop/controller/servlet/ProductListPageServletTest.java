@@ -1,5 +1,6 @@
-package com.es.phoneshop.controller;
+package com.es.phoneshop.controller.servlet;
 
+import com.es.phoneshop.controller.servlet.ProductListPageServlet;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.entity.Product;
 import org.junit.Before;

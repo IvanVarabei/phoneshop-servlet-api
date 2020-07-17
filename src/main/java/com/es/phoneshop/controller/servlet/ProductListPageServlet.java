@@ -1,11 +1,9 @@
-package com.es.phoneshop.controller;
+package com.es.phoneshop.controller.servlet;
 
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
-import com.es.phoneshop.model.dao.initializer.ProductStockHardCodeInitializer;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,13 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ProductListPageServlet extends HttpServlet {
-    private ArrayListProductDao arrayListProductDao = new ArrayListProductDao();
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        new ProductStockHardCodeInitializer().initProductStock();
-    }
+    private ArrayListProductDao arrayListProductDao = ArrayListProductDao.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

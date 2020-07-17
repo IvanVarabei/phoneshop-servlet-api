@@ -1,6 +1,5 @@
 package com.es.phoneshop.model.dao.impl;
 
-import com.es.phoneshop.model.dao.storage.PhoneStock;
 import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.exception.PhoneShopException;
 import org.junit.Before;
@@ -20,8 +19,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ArrayListProductDaoTest {
     @Mock
-    private PhoneStock phoneStock;
-    @Mock
     private Product product1;
     @Mock
     private Product product2;
@@ -31,12 +28,12 @@ public class ArrayListProductDaoTest {
     private Product productWithExistingId;
     private List<Product> productList;
     @InjectMocks
-    private final ArrayListProductDao dao = new ArrayListProductDao();
+    private final ArrayListProductDao dao = ArrayListProductDao.getInstance();
 
     @Before
     public void setup() {
         productList = new ArrayList<>();
-        when(phoneStock.getPhoneList()).thenReturn(productList);
+        //when(phoneStock.getPhoneList()).thenReturn(productList);
         when(product1.getId()).thenReturn(1L);
         when(product1.getPrice()).thenReturn(new BigDecimal(1000));
         when(product1.getStock()).thenReturn(5);

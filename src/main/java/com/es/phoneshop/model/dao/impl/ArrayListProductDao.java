@@ -3,25 +3,36 @@ package com.es.phoneshop.model.dao.impl;
 import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
-import com.es.phoneshop.model.dao.storage.PhoneStock;
 import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.exception.PhoneShopException;
 import com.es.phoneshop.model.util.StreamUtil;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ArrayListProductDao implements ProductDao {
-    private PhoneStock phoneStock = PhoneStock.getInstance();
-    private static long productIdCounter;
     private static final String BLANK = "\\p{Blank}";
+    private static long productIdCounter;
+    private final List<Product> phoneList = Collections.synchronizedList(new ArrayList<>());
+
+    private ArrayListProductDao() {
+    }
+
+    public static class SingletonHolder {
+        public static final ArrayListProductDao HOLDER_INSTANCE = new ArrayListProductDao();
+
+        private SingletonHolder() {
+        }
+    }
+
+    public static ArrayListProductDao getInstance() {
+        return SingletonHolder.HOLDER_INSTANCE;
+    }
 
     @Override
     public synchronized Product findProduct(Long id) throws PhoneShopException {
-        return phoneStock.getPhoneList().stream()
+        return phoneList.stream()
                 .filter(product -> product.getId().equals(id))
                 .findAny()
                 .orElseThrow(PhoneShopException::new);
@@ -45,9 +56,9 @@ public class ArrayListProductDao implements ProductDao {
 
     private synchronized Stream<Product> search(String query) {
         if (query == null || query.isEmpty()) {
-            return phoneStock.getPhoneList().stream();
+            return phoneList.stream();
         } else {
-            return phoneStock.getPhoneList().stream()
+            return phoneList.stream()
                     .filter(product -> product.getPrice() != null)
                     .filter(product -> product.getStock() > 0)
                     .filter(p -> Arrays.stream(p.getDescription().split(BLANK))
@@ -62,18 +73,16 @@ public class ArrayListProductDao implements ProductDao {
 
     @Override
     public synchronized void save(Product product) {
-        List<Product> productList = phoneStock.getPhoneList();
-        if (product.getId() != null && productList.removeIf(p -> product.getId().equals(p.getId()))) {
-            productList.add(product);
+        if (product.getId() != null && phoneList.removeIf(p -> product.getId().equals(p.getId()))) {
+            phoneList.add(product);
             return;
         }
         product.setId(++productIdCounter);
-        productList.add(product);
+        phoneList.add(product);
     }
 
     @Override
     public synchronized void delete(Long id) {
-        List<Product> productList = phoneStock.getPhoneList();
-        productList.removeIf(p -> id.equals(p.getId()));
+        phoneList.removeIf(p -> id.equals(p.getId()));
     }
 }
