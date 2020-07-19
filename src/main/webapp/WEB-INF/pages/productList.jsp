@@ -34,7 +34,7 @@
             <tr>
                 <td>
                     <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
-                        <img class="product-tile"
+                        <img width="64px"
                              src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
                     </a>
                 </td>
@@ -45,7 +45,8 @@
                     <span class="popup" onclick="changePopup(${product.id})">
                         <fmt:formatNumber value="${product.price}" type="currency"
                                           currencySymbol="${product.currency.symbol}"/>
-                        <div class="popuptext" id="${product.id}">Price history<br>
+                        <div class="popupText" id="${product.id}">
+                            Price history<br>
                             ${product.description}
                             <table>
                                 <tr>
