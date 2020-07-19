@@ -1,42 +1,121 @@
 header {
-  background-color: aquamarine;
-  font: 400 70px/1.3 'Lobster Two', Helvetica, sans-serif;
-  color: #2b2b2b;
-  text-shadow: 1px 1px 0 #ededed, 4px 4px 0 rgba(0,0,0,0.15);
+    background-color: aquamarine;
+    font: 400 70px/1.3 'Lobster Two', Helvetica, sans-serif;
+    color: #2b2b2b;
+    text-shadow: 1px 1px 0 #ededed, 4px 4px 0 rgba(0, 0, 0, 0.15);
 }
-thead td a{
-  font-size: 24px;
-  color: green;
+
+thead td a {
+    font-size: 24px;
+    color: green;
 }
-.page{
-  overflow: hidden;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  min-height: 100vh;
+
+.page {
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
 }
-footer{
-  background-color: aquamarine;
-  margin-top: auto;
-  padding: 20px;
+
+footer {
+    background-color: aquamarine;
+    margin-top: auto;
+    padding: 20px;
 }
-.activeRef{
-  color: peru;
+
+.activeRef {
+    color: peru;
 }
+
 header a:link {
-  text-decoration: none;
+    text-decoration: none;
 }
+
 header img {
-  max-width: 64px;
+    max-width: 64px;
 }
+
 table {
-  border-collapse: collapse;
-  border : 1px solid gray;
+    border-collapse: collapse;
+    border: 1px solid gray;
 }
+
 td {
-  padding: 10px;
-  border : 1px solid gray;
-  vertical-align: top;
+    padding: 10px;
+    border: 1px solid gray;
+    vertical-align: top;
 }
+
 img.product-tile {
-  max-width: 64px;
+    max-width: 64px;
+}
+
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+}
+
+.popup .popuptext table tr td {
+    padding: 5px;
+    color: #fff;
+    border-style: hidden;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

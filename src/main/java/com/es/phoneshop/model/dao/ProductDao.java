@@ -9,9 +9,10 @@ import java.util.List;
 public interface ProductDao {
     Product findProduct(Long id) throws PhoneShopException;
 
-    List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder);
-
     void save(Product product);
 
     void delete(Long id);
+
+    List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder);
+
 }

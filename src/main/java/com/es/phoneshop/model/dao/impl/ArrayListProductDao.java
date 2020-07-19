@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class ArrayListProductDao implements ProductDao {
     private static final String BLANK = "\\p{Blank}";
     private static long productIdCounter;
-    private final List<Product> phoneList = Collections.synchronizedList(new ArrayList<>());
+    private List<Product> phoneList = Collections.synchronizedList(new ArrayList<>());
 
     private ArrayListProductDao() {
     }
@@ -30,12 +30,31 @@ public class ArrayListProductDao implements ProductDao {
         return SingletonHolder.HOLDER_INSTANCE;
     }
 
+    protected void setPhoneList(List<Product> phoneList) {
+        this.phoneList = phoneList;
+    }
+
     @Override
     public synchronized Product findProduct(Long id) throws PhoneShopException {
         return phoneList.stream()
                 .filter(product -> product.getId().equals(id))
                 .findAny()
                 .orElseThrow(PhoneShopException::new);
+    }
+
+    @Override
+    public synchronized void save(Product product) {
+        if (product.getId() != null && phoneList.removeIf(p -> product.getId().equals(p.getId()))) {
+            phoneList.add(product);
+            return;
+        }
+        product.setId(++productIdCounter);
+        phoneList.add(product);
+    }
+
+    @Override
+    public synchronized void delete(Long id) {
+        phoneList.removeIf(p -> id.equals(p.getId()));
     }
 
     @Override
@@ -56,11 +75,11 @@ public class ArrayListProductDao implements ProductDao {
 
     private synchronized Stream<Product> search(String query) {
         if (query == null || query.isEmpty()) {
-            return phoneList.stream();
-        } else {
             return phoneList.stream()
                     .filter(product -> product.getPrice() != null)
-                    .filter(product -> product.getStock() > 0)
+                    .filter(product -> product.getStock() > 0);
+        } else {
+            return phoneList.stream()
                     .filter(p -> Arrays.stream(p.getDescription().split(BLANK))
                             .anyMatch(sub -> Arrays.stream(query.split(BLANK))
                                     .anyMatch(sub::contains)))
@@ -69,20 +88,5 @@ public class ArrayListProductDao implements ProductDao {
                                     .anyMatch(sub::contains))
                             .count(), Comparator.reverseOrder()));
         }
-    }
-
-    @Override
-    public synchronized void save(Product product) {
-        if (product.getId() != null && phoneList.removeIf(p -> product.getId().equals(p.getId()))) {
-            phoneList.add(product);
-            return;
-        }
-        product.setId(++productIdCounter);
-        phoneList.add(product);
-    }
-
-    @Override
-    public synchronized void delete(Long id) {
-        phoneList.removeIf(p -> id.equals(p.getId()));
     }
 }

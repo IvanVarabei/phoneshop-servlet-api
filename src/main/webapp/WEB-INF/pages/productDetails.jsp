@@ -18,6 +18,16 @@
                                   currencySymbol="${product.currency.symbol}"/></td>
         </tr>
         <tr>
+            <td>Price history</td>
+            <td>
+                <c:forEach var="entry" items="${product.priceHistory}">
+                    ${entry.key} -
+                    <fmt:formatNumber value="${entry.value}" type="currency"
+                                      currencySymbol="${product.currency.symbol}"/><br>
+                </c:forEach>
+            </td>
+        </tr>
+        <tr>
             <td>Description</td>
             <td>${product.description}</td>
         </tr>
