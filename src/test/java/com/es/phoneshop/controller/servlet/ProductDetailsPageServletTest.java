@@ -2,7 +2,7 @@ package com.es.phoneshop.controller.servlet;
 
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.entity.Product;
-import com.es.phoneshop.model.exception.PhoneShopException;
+import com.es.phoneshop.model.exception.DaoException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +34,7 @@ public class ProductDetailsPageServletTest {
     private final ProductDetailsPageServlet servlet = new ProductDetailsPageServlet();
 
     @Before
-    public void setup() throws PhoneShopException {
+    public void setup() throws DaoException {
         when(request.getPathInfo()).thenReturn("/1");
         when(arrayListProductDao.findProduct(1L)).thenReturn(product1);
         when(request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp")).thenReturn(requestDispatcher);

@@ -15,15 +15,14 @@ public class ProductListPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String query = request.getParameter("query");
-        SortField sortField;
-        SortOrder sortOrder;
-        try {
-            sortField = SortField.valueOf(request.getParameter("sortField").toUpperCase());
-            sortOrder = SortOrder.valueOf(request.getParameter("sortOrder").toUpperCase());
-        } catch (IllegalArgumentException | NullPointerException e) {
-            sortField = SortField.DEFAULT;
-            sortOrder = SortOrder.DEFAULT;
+        String query = request.getParameter("query") != null ? request.getParameter("query") : "";
+        String sortFieldParam = request.getParameter("sortField");
+        String sortOrderParam = request.getParameter("sortOrder");
+        SortField sortField = SortField.DEFAULT;
+        SortOrder sortOrder = SortOrder.DEFAULT;
+        if (sortFieldParam != null && sortOrderParam != null) {
+            sortField = SortField.valueOf(sortFieldParam.toUpperCase());
+            sortOrder = SortOrder.valueOf(sortOrderParam.toUpperCase());
         }
         request.setAttribute("products", arrayListProductDao.findProducts(query, sortField, sortOrder));
         request.getRequestDispatcher("/WEB-INF/pages/productList.jsp").forward(request, response);

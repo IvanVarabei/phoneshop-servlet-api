@@ -1,7 +1,7 @@
 package com.es.phoneshop.controller.servlet;
 
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
-import com.es.phoneshop.model.exception.PhoneShopException;
+import com.es.phoneshop.model.exception.DaoException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +18,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
         try {
             request.setAttribute("product", arrayListProductDao.findProduct(Long.valueOf(productId.substring(1))));
             request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(request, response);
-        } catch (PhoneShopException | IllegalArgumentException | NullPointerException e) {
+        } catch (DaoException | IllegalArgumentException | NullPointerException e) {
             request.setAttribute("product", productId.substring(1));
             request.getRequestDispatcher("/WEB-INF/pages/productNotFound.jsp").forward(request, response);
         }

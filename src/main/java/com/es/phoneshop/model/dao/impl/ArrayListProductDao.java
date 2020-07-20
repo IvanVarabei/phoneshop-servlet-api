@@ -4,22 +4,26 @@ import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
 import com.es.phoneshop.model.entity.Product;
-import com.es.phoneshop.model.exception.PhoneShopException;
-import com.es.phoneshop.model.util.StreamUtil;
+import com.es.phoneshop.model.exception.DaoException;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ArrayListProductDao implements ProductDao {
     private static final String BLANK = "\\p{Blank}";
     private static long productIdCounter;
-    private List<Product> phoneList = Collections.synchronizedList(new ArrayList<>());
+    private List<Product> phoneList = new ArrayList<>();
 
     private ArrayListProductDao() {
     }
 
-    public static class SingletonHolder {
+    private static class SingletonHolder {
         public static final ArrayListProductDao HOLDER_INSTANCE = new ArrayListProductDao();
 
         private SingletonHolder() {
@@ -35,11 +39,11 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public synchronized Product findProduct(Long id) throws PhoneShopException {
+    public synchronized Product findProduct(Long id) throws DaoException {
         return phoneList.stream()
                 .filter(product -> product.getId().equals(id))
                 .findAny()
-                .orElseThrow(PhoneShopException::new);
+                .orElseThrow(DaoException::new);
     }
 
     @Override
@@ -59,14 +63,14 @@ public class ArrayListProductDao implements ProductDao {
 
     @Override
     public synchronized List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
-        Stream<Product> productStream = search(query);
         if (sortField != SortField.DEFAULT && sortOrder != SortOrder.DEFAULT) {
-            productStream = productStream.sorted(Comparator.comparing(p -> defineSortField(p, sortField)));
+            Comparator<Product> comparator = Comparator.comparing(p -> defineSortField(p, sortField));
             if (sortOrder == SortOrder.DESC) {
-                productStream = StreamUtil.reverseStream(productStream);
+                comparator = comparator.reversed();
             }
+            return search(query).sorted(comparator).collect(Collectors.toList());
         }
-        return productStream.collect(Collectors.toList());
+        return search(query).collect(Collectors.toList());
     }
 
     private synchronized <U> U defineSortField(Product p, SortField sortField) {
@@ -74,19 +78,18 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     private synchronized Stream<Product> search(String query) {
-        if (query == null || query.isEmpty()) {
-            return phoneList.stream()
-                    .filter(product -> product.getPrice() != null)
-                    .filter(product -> product.getStock() > 0);
+        return phoneList.stream()
+                .filter(getPriceAndStockPredicate(StringUtils.isBlank(query)))
+                .filter(p -> Arrays.stream(query.split(BLANK)).anyMatch(p.getDescription()::contains))
+                .sorted(Comparator.comparing(p -> Arrays.stream(query.split(BLANK))
+                        .filter(p.getDescription()::contains).count(), Comparator.reverseOrder()));
+    }
+
+    private Predicate<Product> getPriceAndStockPredicate(boolean queryPresent) {
+        if (queryPresent) {
+            return product -> product.getPrice() != null && product.getStock() > 0;
         } else {
-            return phoneList.stream()
-                    .filter(p -> Arrays.stream(p.getDescription().split(BLANK))
-                            .anyMatch(sub -> Arrays.stream(query.split(BLANK))
-                                    .anyMatch(sub::contains)))
-                    .sorted(Comparator.comparing(p -> Arrays.stream(p.getDescription().split(BLANK))
-                            .filter(sub -> Arrays.stream(query.split(BLANK))
-                                    .anyMatch(sub::contains))
-                            .count(), Comparator.reverseOrder()));
+            return product -> true;
         }
     }
 }

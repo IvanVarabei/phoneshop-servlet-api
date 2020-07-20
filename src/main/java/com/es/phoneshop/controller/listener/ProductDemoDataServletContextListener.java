@@ -7,10 +7,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Currency;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class ProductDemoDataServletContextListener implements ServletContextListener {
     @Override
@@ -28,11 +25,11 @@ public class ProductDemoDataServletContextListener implements ServletContextList
 
     private List<Product> getSampleProducts() {
         Currency usd = Currency.getInstance("USD");
-        Map<LocalDate, BigDecimal> priceHistory1 = new TreeMap<>();
+        Map<LocalDate, BigDecimal> priceHistory1 = new LinkedHashMap<>();
         priceHistory1.put(LocalDate.of(2017, 4, 23), BigDecimal.valueOf(150));
         priceHistory1.put(LocalDate.of(2016, 9, 2), BigDecimal.valueOf(180));
         priceHistory1.put(LocalDate.of(2016, 2, 11), BigDecimal.valueOf(190));
-        Map<LocalDate, BigDecimal> priceHistory2 = new TreeMap<>();
+        Map<LocalDate, BigDecimal> priceHistory2 = new LinkedHashMap<>();
         priceHistory2.put(LocalDate.of(2018, 4, 23), BigDecimal.valueOf(900));
         priceHistory2.put(LocalDate.of(2017, 3, 2), BigDecimal.valueOf(1000));
         priceHistory2.put(LocalDate.of(2016, 8, 11), BigDecimal.valueOf(1100));

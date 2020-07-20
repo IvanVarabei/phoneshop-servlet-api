@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 
 <jsp:useBean id="products" type="java.util.ArrayList" scope="request"/>
 <tags:master pageTitle="Product List">
@@ -55,7 +56,7 @@
                                 </tr>
                                 <c:forEach var="entry" items="${product.priceHistory}">
                                     <tr>
-                                        <td>${entry.key}</td>
+                                               <td>${entry.key}</td>
                                         <td>
                                             <fmt:formatNumber value="${entry.value}" type="currency"
                                                               currencySymbol="${product.currency.symbol}"/>
