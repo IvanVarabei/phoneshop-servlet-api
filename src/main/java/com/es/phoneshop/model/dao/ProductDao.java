@@ -14,5 +14,4 @@ public interface ProductDao {
     void delete(Long id);
 
     List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder);
-
 }
