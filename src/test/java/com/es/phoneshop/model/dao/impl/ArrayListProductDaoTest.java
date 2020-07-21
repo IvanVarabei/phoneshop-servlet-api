@@ -3,7 +3,7 @@ package com.es.phoneshop.model.dao.impl;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
 import com.es.phoneshop.model.entity.Product;
-import com.es.phoneshop.model.exception.DaoException;
+import com.es.phoneshop.model.exception.ItemNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -100,7 +100,7 @@ public class ArrayListProductDaoTest {
     }
 
     @Test
-    public void testFindProduct() throws DaoException {
+    public void testFindProduct() throws ItemNotFoundException {
         productList.add(product1);
         productList.add(product2);
         Product actual = dao.findProduct(2L);
@@ -109,8 +109,8 @@ public class ArrayListProductDaoTest {
         assertEquals(expected, actual);
     }
 
-    @Test(expected = DaoException.class)
-    public void testFindProductWhichDoesNotExist() throws DaoException {
+    @Test(expected = ItemNotFoundException.class)
+    public void testFindProductWhichDoesNotExist() throws ItemNotFoundException {
         dao.findProduct(-1L);
     }
 

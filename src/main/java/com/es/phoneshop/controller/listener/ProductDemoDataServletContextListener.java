@@ -10,11 +10,14 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class ProductDemoDataServletContextListener implements ServletContextListener {
+    private static final String CONTEXT_PARAM_VARIABLE = "isInsertDemoData";
+    private ArrayListProductDao arrayListProductDao = ArrayListProductDao.getInstance();
+
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        if (Boolean.parseBoolean(event.getServletContext().getInitParameter("isInsertDemoData"))) {
+        if (Boolean.parseBoolean(event.getServletContext().getInitParameter(CONTEXT_PARAM_VARIABLE))) {
             for (Product product : getSampleProducts()) {
-                ArrayListProductDao.getInstance().save(product);
+                arrayListProductDao.save(product);
             }
         }
     }
@@ -25,11 +28,11 @@ public class ProductDemoDataServletContextListener implements ServletContextList
 
     private List<Product> getSampleProducts() {
         Currency usd = Currency.getInstance("USD");
-        Map<LocalDate, BigDecimal> priceHistory1 = new LinkedHashMap<>();
+        LinkedHashMap<LocalDate, BigDecimal> priceHistory1 = new LinkedHashMap<>();
         priceHistory1.put(LocalDate.of(2017, 4, 23), BigDecimal.valueOf(150));
         priceHistory1.put(LocalDate.of(2016, 9, 2), BigDecimal.valueOf(180));
         priceHistory1.put(LocalDate.of(2016, 2, 11), BigDecimal.valueOf(190));
-        Map<LocalDate, BigDecimal> priceHistory2 = new LinkedHashMap<>();
+        LinkedHashMap<LocalDate, BigDecimal> priceHistory2 = new LinkedHashMap<>();
         priceHistory2.put(LocalDate.of(2018, 4, 23), BigDecimal.valueOf(900));
         priceHistory2.put(LocalDate.of(2017, 3, 2), BigDecimal.valueOf(1000));
         priceHistory2.put(LocalDate.of(2016, 8, 11), BigDecimal.valueOf(1100));

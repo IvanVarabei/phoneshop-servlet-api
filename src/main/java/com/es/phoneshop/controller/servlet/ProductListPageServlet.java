@@ -11,20 +11,25 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ProductListPageServlet extends HttpServlet {
+    private static final String SEARCH_QUERY_PARAM = "query";
+    private static final String SORT_FIELD_PARAM = "sortField";
+    private static final String SORT_ORDER_PARAM = "sortOrder";
+    private static final String PRODUCT_LIST_ATTRIBUTE = "products";
+    private static final String PRODUCT_LIST_PATH = "/WEB-INF/pages/productList.jsp";
     private ArrayListProductDao arrayListProductDao = ArrayListProductDao.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String query = request.getParameter("query") != null ? request.getParameter("query") : "";
-        String sortFieldParam = request.getParameter("sortField");
-        String sortOrderParam = request.getParameter("sortOrder");
+        String query = request.getParameter(SEARCH_QUERY_PARAM) != null ? request.getParameter(SEARCH_QUERY_PARAM) : "";
+        String sortFieldParam = request.getParameter(SORT_FIELD_PARAM);
+        String sortOrderParam = request.getParameter(SORT_ORDER_PARAM);
         SortField sortField = SortField.DEFAULT;
         SortOrder sortOrder = SortOrder.DEFAULT;
         if (sortFieldParam != null && sortOrderParam != null) {
             sortField = SortField.valueOf(sortFieldParam.toUpperCase());
             sortOrder = SortOrder.valueOf(sortOrderParam.toUpperCase());
         }
-        request.setAttribute("products", arrayListProductDao.findProducts(query, sortField, sortOrder));
-        request.getRequestDispatcher("/WEB-INF/pages/productList.jsp").forward(request, response);
+        request.setAttribute(PRODUCT_LIST_ATTRIBUTE, arrayListProductDao.findProducts(query, sortField, sortOrder));
+        request.getRequestDispatcher(PRODUCT_LIST_PATH).forward(request, response);
     }
 }

@@ -4,7 +4,7 @@ import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
 import com.es.phoneshop.model.entity.Product;
-import com.es.phoneshop.model.exception.DaoException;
+import com.es.phoneshop.model.exception.ItemNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -39,11 +39,11 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public synchronized Product findProduct(Long id) throws DaoException {
+    public synchronized Product findProduct(Long id) throws ItemNotFoundException {
         return phoneList.stream()
                 .filter(product -> product.getId().equals(id))
                 .findAny()
-                .orElseThrow(DaoException::new);
+                .orElseThrow(ItemNotFoundException::new);
     }
 
     @Override
@@ -73,11 +73,11 @@ public class ArrayListProductDao implements ProductDao {
         return search(query).collect(Collectors.toList());
     }
 
-    private synchronized <U> U defineSortField(Product p, SortField sortField) {
+    private <U> U defineSortField(Product p, SortField sortField) {
         return (U) (SortField.DESCRIPTION == sortField ? p.getDescription() : p.getPrice());
     }
 
-    private synchronized Stream<Product> search(String query) {
+    private Stream<Product> search(String query) {
         return phoneList.stream()
                 .filter(getPriceAndStockPredicate(StringUtils.isBlank(query)))
                 .filter(p -> Arrays.stream(query.split(BLANK)).anyMatch(p.getDescription()::contains))

@@ -2,7 +2,7 @@ package com.es.phoneshop.controller.servlet;
 
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.entity.Product;
-import com.es.phoneshop.model.exception.DaoException;
+import com.es.phoneshop.model.exception.ItemNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +34,7 @@ public class ProductDetailsPageServletTest {
     private final ProductDetailsPageServlet servlet = new ProductDetailsPageServlet();
 
     @Before
-    public void setup() throws DaoException {
+    public void setup() throws ItemNotFoundException {
         when(request.getPathInfo()).thenReturn("/1");
         when(arrayListProductDao.findProduct(1L)).thenReturn(product1);
         when(request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp")).thenReturn(requestDispatcher);
@@ -51,11 +51,10 @@ public class ProductDetailsPageServletTest {
     @Test
     public void testDoGetNonexistentProduct() throws ServletException, IOException {
         when(request.getPathInfo()).thenReturn("/blabla");
-        when(request.getRequestDispatcher("/WEB-INF/pages/productNotFound.jsp")).thenReturn(requestDispatcher);
 
         servlet.doGet(request, response);
 
-        verify(request).setAttribute("product", "blabla");
-        verify(requestDispatcher, times(1)).forward(request, response);
+        verify(request).setAttribute("message", "Product with code 'blabla' not found.");
+        verify(response, times(1)).sendError(404);
     }
 }

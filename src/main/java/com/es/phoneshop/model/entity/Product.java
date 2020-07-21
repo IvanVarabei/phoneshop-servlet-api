@@ -3,6 +3,7 @@ package com.es.phoneshop.model.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Product {
@@ -18,7 +19,7 @@ public class Product {
      */
     private Currency currency;
     private int stock;
-    private Map<LocalDate, BigDecimal> priceHistory;
+    private LinkedHashMap<LocalDate, BigDecimal> priceHistory;
     private String imageUrl;
 
 
@@ -26,7 +27,7 @@ public class Product {
     }
 
     public Product(String code, String description, BigDecimal price, Currency currency, int stock,
-                   Map<LocalDate, BigDecimal> priceHistory, String imageUrl) {
+                   LinkedHashMap<LocalDate, BigDecimal> priceHistory, String imageUrl) {
         this.code = code;
         this.description = description;
         this.price = price;
@@ -88,7 +89,7 @@ public class Product {
         return priceHistory;
     }
 
-    public void setPriceHistory(Map<LocalDate, BigDecimal> priceHistory) {
+    public void setPriceHistory(LinkedHashMap<LocalDate, BigDecimal> priceHistory) {
         this.priceHistory = priceHistory;
     }
 
