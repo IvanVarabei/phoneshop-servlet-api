@@ -1,7 +1,10 @@
 package com.es.phoneshop.model.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Currency;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Product {
     private Long id;
@@ -16,27 +19,21 @@ public class Product {
      */
     private Currency currency;
     private int stock;
+    private LinkedHashMap<LocalDate, BigDecimal> priceHistory;
     private String imageUrl;
+
 
     public Product() {
     }
 
-    public Product(Long id, String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl) {
-        this.id = id;
+    public Product(String code, String description, BigDecimal price, Currency currency, int stock,
+                   LinkedHashMap<LocalDate, BigDecimal> priceHistory, String imageUrl) {
         this.code = code;
         this.description = description;
         this.price = price;
         this.currency = currency;
         this.stock = stock;
-        this.imageUrl = imageUrl;
-    }
-
-    public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl) {
-        this.code = code;
-        this.description = description;
-        this.price = price;
-        this.currency = currency;
-        this.stock = stock;
+        this.priceHistory = priceHistory;
         this.imageUrl = imageUrl;
     }
 
@@ -88,6 +85,14 @@ public class Product {
         this.stock = stock;
     }
 
+    public Map<LocalDate, BigDecimal> getPriceHistory() {
+        return priceHistory;
+    }
+
+    public void setPriceHistory(LinkedHashMap<LocalDate, BigDecimal> priceHistory) {
+        this.priceHistory = priceHistory;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -123,6 +128,9 @@ public class Product {
         if (currency != null ? !currency.equals(product.currency) : product.currency != null) {
             return false;
         }
+        if (priceHistory != null ? !priceHistory.equals(product.priceHistory) : product.priceHistory != null) {
+            return false;
+        }
         return imageUrl != null ? imageUrl.equals(product.imageUrl) : product.imageUrl == null;
     }
 
@@ -134,6 +142,7 @@ public class Product {
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
         result = 31 * result + stock;
+        result = 31 * result + (priceHistory != null ? priceHistory.hashCode() : 0);
         result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
         return result;
     }
@@ -147,6 +156,7 @@ public class Product {
         sb.append(", price=").append(price);
         sb.append(", currency=").append(currency);
         sb.append(", stock=").append(stock);
+        sb.append(", priceHistory=").append(priceHistory);
         sb.append(", imageUrl='").append(imageUrl).append('\'');
         sb.append('}');
         return sb.toString();

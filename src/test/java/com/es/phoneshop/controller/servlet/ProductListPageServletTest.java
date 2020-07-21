@@ -1,6 +1,8 @@
-package com.es.phoneshop.controller;
+package com.es.phoneshop.controller.servlet;
 
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.model.dao.sort.SortField;
+import com.es.phoneshop.model.dao.sort.SortOrder;
 import com.es.phoneshop.model.entity.Product;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,15 +39,30 @@ public class ProductListPageServletTest {
 
     @Before
     public void setup() {
-        when(arrayListProductDao.findProducts()).thenReturn(List.of(product1, product2));
+        when(request.getParameter("query")).thenReturn("");
+        when(arrayListProductDao.findProducts("", SortField.DEFAULT, SortOrder.DEFAULT))
+                .thenReturn(List.of(product1, product2));
+        when(arrayListProductDao.findProducts("", SortField.PRICE, SortOrder.ASC))
+                .thenReturn(List.of(product2, product1));
         when(request.getRequestDispatcher("/WEB-INF/pages/productList.jsp")).thenReturn(requestDispatcher);
     }
 
     @Test
-    public void testDoGet() throws ServletException, IOException {
+    public void testDoGetEmptySortFieldEmptySortOrder() throws ServletException, IOException {
         servlet.doGet(request, response);
 
         verify(request).setAttribute("products", List.of(product1, product2));
+        verify(requestDispatcher, times(1)).forward(request, response);
+    }
+
+    @Test
+    public void testDoGet() throws ServletException, IOException {
+        when(request.getParameter("sortField")).thenReturn("price");
+        when(request.getParameter("sortOrder")).thenReturn("asc");
+
+        servlet.doGet(request, response);
+
+        verify(request).setAttribute("products", List.of(product2, product1));
         verify(requestDispatcher, times(1)).forward(request, response);
     }
 }

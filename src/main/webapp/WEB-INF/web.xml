@@ -3,16 +3,43 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-  <display-name>Phoneshop servlet api training</display-name>
+    <display-name>Phoneshop servlet api training</display-name>
 
-  <servlet>
-    <servlet-name>productList</servlet-name>
-    <servlet-class>com.es.phoneshop.controller.ProductListPageServlet</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>productList</servlet-name>
-    <url-pattern>/products</url-pattern>
-  </servlet-mapping>
+    <context-param>
+        <param-name>isInsertDemoData</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>com.es.phoneshop.controller.listener.ProductDemoDataServletContextListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>productList</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.ProductListPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>productList</servlet-name>
+        <url-pattern>/products</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>productDetails</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.ProductDetailsPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>productDetails</servlet-name>
+        <url-pattern>/products/*</url-pattern>
+    </servlet-mapping>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/pages/error404.jsp</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/WEB-INF/pages/error500.jsp</location>
+    </error-page>
 
 </web-app>
