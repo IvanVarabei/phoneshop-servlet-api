@@ -95,3 +95,57 @@ td {
         opacity: 1;
     }
 }
+
+.products-container {
+    font-size: 0;
+    overflow: hidden;
+}
+.products-container .item {
+    display: inline-block;
+    vertical-align: top;
+    width: 180px;
+    margin-right: 5px;
+    margin-bottom: 32px;
+}
+.products-container .item>a {
+    width: 100%;
+    display: block;
+    text-align: center;
+    position: relative;
+    text-decoration: none;
+}
+.products-container .item-img img {
+    max-width: 80%;
+    height: auto;
+}
+
+.products-container .item-info .good {
+    white-space: nowrap;
+    overflow: hidden;
+    font-family: system,-apple-system,BlinkMacSystemFont,'Segoe UI','Segoe WP',Roboto,Ubuntu,Oxygen,Cantarell,'Fira Sans','Helvetica Neue',Helvetica,'Lucida Grande','Droid Sans',Tahoma,'Microsoft Sans Serif',sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #8b8b8b;
+    position: relative;
+}
+.products-container .item-info .good:after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: -webkit-gradient(linear,right top,left top,from(#fff),to(rgba(255,255,255,0)));
+    background: linear-gradient(to left,#fff,rgba(255,255,255,0));
+}
+.details{
+    text-align: right;
+}
+.success{
+    color: green;
+}
+.error{
+    color: red;
+}
