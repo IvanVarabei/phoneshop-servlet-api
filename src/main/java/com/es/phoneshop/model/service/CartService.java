@@ -4,10 +4,12 @@ import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.entity.Cart;
 import com.es.phoneshop.model.entity.CartItem;
 import com.es.phoneshop.model.entity.Product;
-import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.exception.OutOfStockException;
 
+import javax.servlet.http.HttpSession;
+
 public class CartService {
+    private static final String SESSION_ATTRIBUTE_CART = "cart";
     private ArrayListProductDao dao = ArrayListProductDao.getInstance();
 
     private CartService() {
@@ -21,19 +23,29 @@ public class CartService {
         return CartServiceHolder.CART_SERVICE_INSTANCE;
     }
 
-    public synchronized void add(Cart cart, Long productId, int quantity) throws OutOfStockException {
-        Product product;
-        try {
-            product = dao.findProduct(productId);
-            int cartAmount = cart.getCartItemList().stream()
-                    .filter(p -> p.getProduct().getId().equals(productId))
-                    .findAny().orElse(new CartItem(null, 0)).getQuantity();
-            if (product.getStock() - cartAmount < quantity) {
-                throw new OutOfStockException(product.getStock() - cartAmount);
-            }
-        } catch (ItemNotFoundException e) {
-            throw new OutOfStockException(e, 0);
+    public synchronized void add(HttpSession session, Product product, int quantity) throws OutOfStockException {
+        if (session.getAttribute(SESSION_ATTRIBUTE_CART) == null) {
+            session.setAttribute(SESSION_ATTRIBUTE_CART, new Cart());
         }
-        cart.add(new CartItem(product, quantity));
+        Cart cart = (Cart) session.getAttribute(SESSION_ATTRIBUTE_CART);
+        int cartAmount = cart.getCartItemList().stream()
+                .filter(p -> p.getProduct().getId().equals(product.getId()))
+                .findAny()
+                .map(CartItem::getQuantity)
+                .orElse(0);
+        if (product.getStock() - cartAmount < quantity || quantity < 0) {
+            throw new OutOfStockException(product.getStock() - cartAmount);
+        }
+        updateCart(cart, product, quantity);
+    }
+
+    private void updateCart(Cart cart, Product product, int quantity) {
+        for (CartItem cartItem : cart.getCartItemList()) {
+            if (cartItem.getProduct().equals(product)) {
+                cartItem.setQuantity(quantity + cartItem.getQuantity());
+                return;
+            }
+        }
+        cart.addCartItem(new CartItem(product, quantity));
     }
 }
