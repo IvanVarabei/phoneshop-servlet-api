@@ -27,7 +27,7 @@ public class RecentlyViewedServiceTest {
     @Mock
     private HttpSession session;
     private Queue<Product> recentProducts;
-    private RecentlyViewedService recentlyViewedService = RecentlyViewedService.getInstance();
+    private final RecentlyViewedService recentlyViewedService = RecentlyViewedService.getInstance();
 
     @Before
     public void setup() {

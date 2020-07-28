@@ -1,7 +1,6 @@
 package com.es.phoneshop.controller.servlet;
 
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
-import com.es.phoneshop.model.entity.Cart;
 import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.exception.OutOfStockException;
@@ -26,7 +25,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProductDetailsPageServletTest {
-   /* @Mock
+    @Mock
     private HttpServletRequest request;
     @Mock
     private HttpServletResponse response;
@@ -39,8 +38,6 @@ public class ProductDetailsPageServletTest {
     @Mock
     private Product product1;
     @Mock
-    private Cart cart;
-    @Mock
     private HttpSession session;
     @InjectMocks
     private final ProductDetailsPageServlet servlet = new ProductDetailsPageServlet();
@@ -49,6 +46,7 @@ public class ProductDetailsPageServletTest {
     public void setup() throws ItemNotFoundException {
         when(request.getPathInfo()).thenReturn("/1");
         when(dao.findProduct(1L)).thenReturn(product1);
+        when(product1.getId()).thenReturn(1L);
         when(request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp")).thenReturn(requestDispatcher);
         when(request.getSession()).thenReturn(session);
         when(request.getLocale()).thenReturn(Locale.ENGLISH);
@@ -75,6 +73,16 @@ public class ProductDetailsPageServletTest {
     }
 
     @Test
+    public void testDoPost() throws ServletException, IOException {
+        when(request.getParameter("quantity")).thenReturn("1");
+
+        servlet.doPost(request, response);
+
+        verify(response).sendRedirect(
+                "/phoneshop_servlet_api_war_exploded/products/1?message=Added to cart successfully");
+    }
+
+    @Test
     public void testDoPostWrongQuantity() throws ServletException, IOException {
         when(request.getParameter("quantity")).thenReturn("blabla");
 
@@ -87,35 +95,9 @@ public class ProductDetailsPageServletTest {
     }
 
     @Test
-    public void testDoPostCartNull() throws ServletException, IOException {
-        when(request.getParameter("quantity")).thenReturn("1");
-
-        servlet.doPost(request, response);
-
-        verify(session, times(2)).getAttribute("cart");
-        verify(session).setAttribute(eq("cart"), any(Cart.class));
-        verify(response).sendRedirect(
-                "/phoneshop_servlet_api_war_exploded/products/1?message=Added to cart successfully");
-    }
-
-    @Test
-    public void testDoPostCartNotNull() throws ServletException, IOException, OutOfStockException {
-        when(request.getParameter("quantity")).thenReturn("1");
-        when(session.getAttribute("cart")).thenReturn(cart);
-
-        servlet.doPost(request, response);
-
-        verify(session, times(2)).getAttribute("cart");
-        verify(cartService).add(cart, 1L, 1);
-        verify(response).sendRedirect(
-                "/phoneshop_servlet_api_war_exploded/products/1?message=Added to cart successfully");
-    }
-
-    @Test
     public void testDoPostOutOfStock() throws ServletException, IOException, OutOfStockException {
         when(request.getParameter("quantity")).thenReturn("1");
-        when(session.getAttribute("cart")).thenReturn(cart);
-        doThrow(OutOfStockException.class).when(cartService).add(cart, 1L, 1);
+        doThrow(OutOfStockException.class).when(cartService).add(session, product1, 1);
 
         servlet.doPost(request, response);
 
@@ -123,5 +105,5 @@ public class ProductDetailsPageServletTest {
         verify(request).setAttribute(eq("error"), String.format("Not enough stock. Available:%s", anyString()));
         verify(response, never()).sendRedirect(
                 "/phoneshop_servlet_api_war_exploded/products/1?message=Added to cart successfully");
-    }*/
+    }
 }
