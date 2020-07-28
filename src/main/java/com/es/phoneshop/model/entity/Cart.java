@@ -1,18 +1,13 @@
 package com.es.phoneshop.model.entity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Cart {
     private List<CartItem> cartItemList = new ArrayList<>();
 
     public List<CartItem> getCartItemList() {
-        return Collections.unmodifiableList(cartItemList);
-    }
-
-    public void addCartItem(CartItem item) {
-        cartItemList.add(item);
+        return cartItemList;
     }
 
     @Override

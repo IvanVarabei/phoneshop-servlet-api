@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -59,8 +60,10 @@ public class CartServiceTest {
     @Test
     public void testAdd() throws OutOfStockException {
         cartService.add(session, product3, 1);
+        List<CartItem> actual = cartItems;
+        List<CartItem> expected = List.of(cartItem1, cartItem2, new CartItem(product3, 1));
 
-        verify(cart).addCartItem(new CartItem(product3, 1));
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -70,7 +73,6 @@ public class CartServiceTest {
         cartService.add(session, product3, 1);
 
         verify(cartItem3).setQuantity(5);
-        verify(cart, never()).addCartItem(new CartItem(product3, 1));
     }
 
     @Test(expected = OutOfStockException.class)
@@ -80,7 +82,6 @@ public class CartServiceTest {
         cartService.add(session, product3, 2);
 
         verify(cartItem3, never()).setQuantity(6);
-        verify(cart, never()).addCartItem(new CartItem(product3, 2));
     }
 
     @Test

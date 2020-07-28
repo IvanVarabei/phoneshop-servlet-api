@@ -40,12 +40,10 @@ public class CartService {
     }
 
     private void updateCart(Cart cart, Product product, int quantity) {
-        for (CartItem cartItem : cart.getCartItemList()) {
-            if (cartItem.getProduct().equals(product)) {
-                cartItem.setQuantity(quantity + cartItem.getQuantity());
-                return;
-            }
-        }
-        cart.addCartItem(new CartItem(product, quantity));
+        cart.getCartItemList().stream()
+                .filter(cartItem -> cartItem.getProduct().equals(product))
+                .findAny()
+                .ifPresentOrElse(cartItem -> cartItem.setQuantity(quantity + cartItem.getQuantity()),
+                        () -> cart.getCartItemList().add(new CartItem(product, quantity)));
     }
 }

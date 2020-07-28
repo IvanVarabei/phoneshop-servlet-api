@@ -83,6 +83,17 @@ public class ProductDetailsPageServletTest {
     }
 
     @Test
+    public void testDoPostNonexistentProduct() throws ServletException, IOException {
+        when(request.getPathInfo()).thenReturn("/blabla");
+
+        servlet.doPost(request, response);
+
+        verify(request).setAttribute("message", "Product with code 'blabla' not found.");
+        verify(response, never()).sendRedirect(
+                "/phoneshop_servlet_api_war_exploded/products/1?message=Added to cart successfully");
+    }
+
+    @Test
     public void testDoPostWrongQuantity() throws ServletException, IOException {
         when(request.getParameter("quantity")).thenReturn("blabla");
 

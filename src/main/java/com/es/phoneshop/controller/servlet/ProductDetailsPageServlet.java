@@ -34,30 +34,35 @@ public class ProductDetailsPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<Product> product = extractProductOrSendError(req, resp);
-        if (product.isEmpty()) {
-            return;
-        }
-        req.setAttribute(REQUEST_ATTRIBUTE_PRODUCT, product.get());
+        Optional<Product> product = attachProductOrSendError(req, resp);
         req.getRequestDispatcher(PRODUCT_DETAILS_PATH).forward(req, resp);
-        recentlyViewedService.updateRecentlyViewedLine(req.getSession(), product.get());
+        if(!product.isEmpty()){
+            recentlyViewedService.updateRecentlyViewedLine(req.getSession(), product.get());
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<Product> product = extractProductOrSendError(req, resp);
-        Optional<Integer> quantity = extractQuantityOrForward(req, resp);
-        if (product.isEmpty() || quantity.isEmpty()) {
+        Optional<Product> product = attachProductOrSendError(req, resp);
+        if (product.isEmpty()) {
             return;
         }
-        addProductToCartOrForward(req, resp, product.get(), quantity.get());
+        Optional<Integer> quantity = extractQuantityOrForward(req, resp);
+        if (quantity.isEmpty()) {
+            return;
+        }
+        if (addProductToCartOrForward(req, resp, product.get(), quantity.get())) {
+            resp.sendRedirect(String.format(REDIRECT_AFTER_ADDING_TO_CART, req.getContextPath(), product.get().getId()));
+        }
     }
 
-    private Optional<Product> extractProductOrSendError(HttpServletRequest req, HttpServletResponse resp)
+    private Optional<Product> attachProductOrSendError(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         String productId = req.getPathInfo().substring(1);
         try {
-            return Optional.of(dao.findProduct(Long.valueOf(productId)));
+            Product product = dao.findProduct(Long.valueOf(productId));
+            req.setAttribute(REQUEST_ATTRIBUTE_PRODUCT, product);
+            return Optional.of(product);
         } catch (NumberFormatException | ItemNotFoundException e) {
             req.setAttribute(REQUEST_ATTRIBUTE_MESSAGE, String.format(ERROR_NOT_FOUND, productId));
             resp.sendError(NOT_FOUND_ERROR_CODE);
@@ -73,22 +78,22 @@ public class ProductDetailsPageServlet extends HttpServlet {
         } catch (NumberFormatException | ParseException e) {
             req.setAttribute(REQUEST_ATTRIBUTE_ADDING_TO_CART_MESSAGE, false);
             req.setAttribute(REQUEST_ATTRIBUTE_ERROR, ERROR_NOT_NUMBER);
-            doGet(req, resp);
+            req.getRequestDispatcher(PRODUCT_DETAILS_PATH).forward(req, resp);
             return Optional.empty();
         }
     }
 
-    private void addProductToCartOrForward
-            (HttpServletRequest req, HttpServletResponse resp, Product product, int quantity)
+    private boolean addProductToCartOrForward(
+            HttpServletRequest req, HttpServletResponse resp, Product product, int quantity)
             throws ServletException, IOException {
         try {
             cartService.add(req.getSession(), product, quantity);
+            return true;
         } catch (OutOfStockException e) {
             req.setAttribute(REQUEST_ATTRIBUTE_ADDING_TO_CART_MESSAGE, false);
             req.setAttribute(REQUEST_ATTRIBUTE_ERROR, String.format(ERROR_NOT_ENOUGH_STOCK, e.getAvailableAmount()));
-            doGet(req, resp);
-            return;
+            req.getRequestDispatcher(PRODUCT_DETAILS_PATH).forward(req, resp);
+            return false;
         }
-        resp.sendRedirect(String.format(REDIRECT_AFTER_ADDING_TO_CART, req.getContextPath(), product.getId()));
     }
 }
