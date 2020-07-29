@@ -35,8 +35,8 @@ public class ProductDetailsPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Optional<Product> product = attachProductOrSendError(req, resp);
-        req.getRequestDispatcher(PRODUCT_DETAILS_PATH).forward(req, resp);
         if(!product.isEmpty()){
+            req.getRequestDispatcher(PRODUCT_DETAILS_PATH).forward(req, resp);
             recentlyViewedService.updateRecentlyViewedLine(req.getSession(), product.get());
         }
     }
