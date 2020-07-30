@@ -6,46 +6,63 @@
 <html>
 <head>
     <title>${pageTitle}</title>
-    <link href='http://fonts.googleapis.com/css?family=Lobster+Two' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/styles/main.css">
+    <script src="${pageContext.servletContext.contextPath}/js/popupProcessing.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico"/>
 </head>
 <body>
-<div class="page">
-    <header>
-        <a href="${pageContext.servletContext.contextPath}">
-            <img src="${pageContext.servletContext.contextPath}/images/logo.svg" alt="logo"/>
-            PhoneShop
-        </a>
-    </header>
-    <main>
-        <h3>${not empty sessionScope.cart? sessionScope.cart : ''}</h3>
-        <jsp:doBody/>
-        <h3>${not empty sessionScope.recent? 'Recently viewed' : ''}</h3>
-        <div class="products-container">
-            <c:forEach var="product" items="${sessionScope.recent}">
-                <div class="item">
-                    <a href="${pageContext.servletContext.contextPath}/products/${product.id}" target="_blank">
-                        <div class="item-img">
-                            <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}"
-                                 alt="Phone" style="display: inline;">
-                        </div>
-                        <div class="item-info">
-                            <div class="good">
-                                <span class="good-name">${product.description}</span><br>
-                                <fmt:formatNumber value="${product.price}" type="currency"
-                                                  currencySymbol="${product.currency.symbol}"/>
-                            </div>
-                        </div>
-                    </a>
+<div class="wrapper">
+    <div class="content">
+        <header class="header">
+            <div class="container">
+                <div class="header_row">
+                    <div class="header_name">
+                        <a href="${pageContext.servletContext.contextPath}">phone shop</a></div>
+                    <form class="header_search"
+                          action="http://localhost:8000/phoneshop_servlet_api_war_exploded/products">
+                        <input class="header_input" name="query" value="${param.query}" placeholder="Search goods">
+                        <button class="header_search_button">
+                            <img src="${pageContext.request.contextPath}/images/search_icon.png" alt="">
+                        </button>
+                    </form>
+                    <div class="header_cart">
+                        <img src="${pageContext.request.contextPath}/images/icon.png" alt="">
+                    </div>
                 </div>
-            </c:forEach>
+            </div>
+        </header>
+        <jsp:doBody/>
+        <div class="previous">
+            <div class="container">
+                <div class="previous_title">${not empty sessionScope.recent? 'Recently viewed' : ''}</div>
+                <div class="previous_row">
+                    <c:forEach var="product" items="${sessionScope.recent}">
+                        <div class="previous_product">
+                            <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
+                                <img class="previous_img"
+                                     src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
+                                <div class="previous_name">${product.description}</div>
+                                <div class="previous_cost">
+                                    <fmt:formatNumber value="${product.price}" type="currency"
+                                                      currencySymbol="${product.currency.symbol}"/></div>
+                            </a>
+                        </div>
+                    </c:forEach>
+                </div>
+            </div>
         </div>
-    </main>
-    <footer>
-        <p>&copy; copyrighting 2020. Expert-Soft.</p>
-        <address>
-            Contact us address@gmail.com
-        </address>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer_row">
+                <div class="footer_text">&copy; copyrighting 2020. Expert-Soft.</div>
+                <div class="footer_pay">
+                    <div class="footer_text">Accepted payment methods</div>
+                    <img src="${pageContext.request.contextPath}/images/9-layers.png" alt="">
+                </div>
+            </div>
+        </div>
     </footer>
 </div>
 </body>

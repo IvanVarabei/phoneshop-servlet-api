@@ -5,58 +5,47 @@
 
 <jsp:useBean id="product" class="com.es.phoneshop.model.entity.Product" scope="request"/>
 <tags:master pageTitle='${product.description}'>
-    <p class="success">
-        <c:if test="${empty requestScope.show}">
-            ${param.message}
-        </c:if>
-    </p>
-    <p class="error">${requestScope.error}</p>
-    <form method="post">
-        <table>
-            <caption>Product details</caption>
-            <tr>
-                <td colspan="2"><img
-                        src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}"
-                        alt="image can not be found"></td>
-            </tr>
-            <tr>
-                <td>Price</td>
-                <td class="details"><fmt:formatNumber value="${product.price}" type="currency"
-                                                      currencySymbol="${product.currency.symbol}"/></td>
-            </tr>
-            <tr>
-                <td>Price history</td>
-                <td class="details">
-                    <c:forEach var="entry" items="${product.priceHistory}">
-                        ${entry.key} -
-                        <fmt:formatNumber value="${entry.value}" type="currency"
-                                          currencySymbol="${product.currency.symbol}"/><br>
-                    </c:forEach>
-                </td>
-            </tr>
-            <tr>
-                <td>Description</td>
-                <td class="details">${product.description}</td>
-            </tr>
-            <tr>
-                <td>Code</td>
-                <td class="details">${product.code}</td>
-            </tr>
-            <tr>
-                <td>Stock</td>
-                <td class="details">${product.stock}</td>
-            </tr>
-            <tr>
-                <td>Quantity</td>
-                <td>
-                    <label>
-                        <input class="details" type="text" name="quantity"
-                               value="${not empty requestScope.error? param.quantity : 1}">
-                    </label>
-                    <p class="details error">${requestScope.error}</p>
-                </td>
-            </tr>
-        </table>
-        <button>Add to cart!</button>
-    </form>
+    <c:if test="${not empty requestScope.error}">
+        <div class="add_info add_error">
+            <div class="container">
+                <div class="add_message">${requestScope.error}</div>
+            </div>
+        </div>
+    </c:if>
+    <c:if test="${requestScope.show != false and not empty param.message}">
+        <div class="add_info add_success">
+            <div class="container">
+                <div class="add_message">${param.message}</div>
+            </div>
+        </div>
+    </c:if>
+    <div class="details">
+        <div class="container">
+            <div class="details_name">${product.description}</div>
+            <div class="details_row">
+                <div class="details_info1">
+                    <img class="details_img" src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
+                    <div class="details_price"><fmt:formatNumber value="${product.price}" type="currency"
+                                                                 currencySymbol="${product.currency.symbol}"/></div>
+                </div>
+                <div class="details_info2">
+                    <div class="details_text">
+                        <p>Code: ${product.code}</p>
+                        <p>Stock: ${product.stock}</p>
+                        <p>Price history</p>
+                        <c:forEach var="entry" items="${product.priceHistory}">
+                            ${entry.key} -
+                            <fmt:formatNumber value="${entry.value}" type="currency"
+                                              currencySymbol="${product.currency.symbol}"/><br>
+                        </c:forEach>
+                    </div>
+                    <form class="details_form" method="post" >
+                        <button class="details_add">add to cart</button>
+                        <p class="details_invitation">Enter quantity:</p>
+                        <input class="details_quantity" type="text" name="quantity">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </tags:master>
