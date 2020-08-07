@@ -1,16 +1,26 @@
 package com.es.phoneshop.model.entity;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cart {
+public class Cart implements Serializable {
     private List<CartItem> cartItemList = new ArrayList<>();
+    private BigDecimal totalCost;
+
+    public BigDecimal getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(BigDecimal totalCost) {
+        this.totalCost = totalCost;
+    }
 
     public List<CartItem> getCartItemList() {
         return cartItemList;
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

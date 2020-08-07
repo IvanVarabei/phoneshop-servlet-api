@@ -23,7 +23,6 @@ public class ProductDetailsPageServlet extends HttpServlet {
     private static final String REQUEST_ATTRIBUTE_PRODUCT = "product";
     private static final String REQUEST_ATTRIBUTE_MESSAGE = "message";
     private static final String REQUEST_ATTRIBUTE_ERROR = "error";
-    private static final String REQUEST_ATTRIBUTE_ADDING_TO_CART_MESSAGE = "show";
     private static final String REQUEST_PARAM_QUANTITY = "quantity";
     private static final String REDIRECT_AFTER_ADDING_TO_CART = "%s/products/%s?message=Added to cart successfully";
     private static final String PRODUCT_DETAILS_PATH = "/WEB-INF/pages/productDetails.jsp";
@@ -76,7 +75,6 @@ public class ProductDetailsPageServlet extends HttpServlet {
             return Optional.of(NumberFormat.getInstance(
                     req.getLocale()).parse(req.getParameter(REQUEST_PARAM_QUANTITY)).intValue());
         } catch (NumberFormatException | ParseException e) {
-            req.setAttribute(REQUEST_ATTRIBUTE_ADDING_TO_CART_MESSAGE, false);
             req.setAttribute(REQUEST_ATTRIBUTE_ERROR, ERROR_NOT_NUMBER);
             req.getRequestDispatcher(PRODUCT_DETAILS_PATH).forward(req, resp);
             return Optional.empty();
@@ -90,7 +88,6 @@ public class ProductDetailsPageServlet extends HttpServlet {
             cartService.add(req.getSession(), product, quantity);
             return true;
         } catch (OutOfStockException e) {
-            req.setAttribute(REQUEST_ATTRIBUTE_ADDING_TO_CART_MESSAGE, false);
             req.setAttribute(REQUEST_ATTRIBUTE_ERROR, String.format(ERROR_NOT_ENOUGH_STOCK, e.getAvailableAmount()));
             req.getRequestDispatcher(PRODUCT_DETAILS_PATH).forward(req, resp);
             return false;

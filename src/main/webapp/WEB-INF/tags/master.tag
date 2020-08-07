@@ -20,36 +20,44 @@
                     <div class="header_name">
                         <a href="${pageContext.servletContext.contextPath}">phone shop</a></div>
                     <form class="header_search"
-                          action="http://localhost:8000/phoneshop_servlet_api_war_exploded/products">
+                          action="${pageContext.request.contextPath}/products">
                         <input class="header_input" name="query" value="${param.query}" placeholder="Search goods">
                         <button class="header_search_button">
                             <img src="${pageContext.request.contextPath}/images/search_icon.png" alt="">
                         </button>
                     </form>
                     <div class="header_cart">
-                        <img src="${pageContext.request.contextPath}/images/icon.png" alt="">
+                        <a href="${pageContext.request.contextPath}/cart">
+                            <img src="${pageContext.request.contextPath}/images/icon.png" alt="">
+                        <c:if test="${not empty sessionScope.cart.getCartItemList()}">
+                            ${sessionScope.cart.getCartItemList().size()} -
+                        <fmt:formatNumber value="${sessionScope.cart.totalCost}" type="currency"
+                                          currencySymbol="${sessionScope.cart.getCartItemList().get(0)
+                                          .getProduct().currency.symbol}"/>
+                        </c:if>
+                        </a>
                     </div>
                 </div>
             </div>
         </header>
         <jsp:doBody/>
-        <div class="previous">
-            <div class="container">
-                <div class="previous_title">${not empty sessionScope.recent? 'Recently viewed' : ''}</div>
-                <div class="previous_row">
-                    <c:forEach var="product" items="${sessionScope.recent}">
-                        <div class="previous_product">
-                            <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
-                                <img class="previous_img"
-                                     src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
-                                <div class="previous_name">${product.description}</div>
-                                <div class="previous_cost">
-                                    <fmt:formatNumber value="${product.price}" type="currency"
-                                                      currencySymbol="${product.currency.symbol}"/></div>
-                            </a>
-                        </div>
-                    </c:forEach>
-                </div>
+    </div>
+    <div class="previous">
+        <div class="container">
+            <div class="previous_title">${not empty sessionScope.recent? 'Recently viewed' : ''}</div>
+            <div class="previous_row">
+                <c:forEach var="product" items="${sessionScope.recent}">
+                    <div class="previous_product">
+                        <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
+                            <img class="previous_img"
+                                 src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
+                            <div class="previous_name">${product.description}</div>
+                            <div class="previous_cost">
+                                <fmt:formatNumber value="${product.price}" type="currency"
+                                                  currencySymbol="${product.currency.symbol}"/></div>
+                        </a>
+                    </div>
+                </c:forEach>
             </div>
         </div>
     </div>

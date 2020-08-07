@@ -1,7 +1,9 @@
 package com.es.phoneshop.model.entity;
 
-public class CartItem {
-    private final Product product;
+import java.io.Serializable;
+
+public class CartItem implements Serializable {
+    private Product product;
     private int quantity;
 
     public CartItem(Product product, int quantity) {
