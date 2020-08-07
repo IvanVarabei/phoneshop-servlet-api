@@ -6,9 +6,21 @@
 
 <jsp:useBean id="products" type="java.util.ArrayList" scope="request"/>
 <tags:master pageTitle="Product List">
-    <div class="photo">
-        <img src="${pageContext.request.contextPath}/images/image.png" alt="">
-    </div>
+    <div class="photo"><img src="${pageContext.request.contextPath}/images/image.png" alt=""></div>
+    <c:if test="${not empty requestScope.error}">
+        <div class="add_info add_error">
+            <div class="container">
+                <div class="add_message">${requestScope.error}</div>
+            </div>
+        </div>
+    </c:if>
+    <c:if test="${not empty param.message}">
+        <div class="add_info add_success">
+            <div class="container">
+                <div class="add_message">${param.message}</div>
+            </div>
+        </div>
+    </c:if>
     <div class="product">
         <div class="container">
             <div class="product_body">
@@ -38,10 +50,16 @@
                     <div class="news">
                         <div class="news_title">News</div>
                         <div class="news_item">
-                            <div class="news_body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam rerum non molestias et unde animi eligendi, harum ipsum debitis earum vel architecto obcaecati praesentium iure quam sint, corporis! Vero, voluptatibus.</div>
+                            <div class="news_body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam rerum
+                                non molestias et unde animi eligendi, harum ipsum debitis earum vel architecto obcaecati
+                                praesentium iure quam sint, corporis! Vero, voluptatibus.
+                            </div>
                         </div>
                         <div class="news_item">
-                            <div class="news_body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam rerum non molestias et unde animi eligendi, harum ipsum debitis earum vel architecto obcaecati praesentium iure quam sint, corporis! Vero, voluptatibus.</div>
+                            <div class="news_body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam rerum
+                                non molestias et unde animi eligendi, harum ipsum debitis earum vel architecto obcaecati
+                                praesentium iure quam sint, corporis! Vero, voluptatibus.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -57,7 +75,7 @@
                             <tags:sortLink sortField="price" sortOrder="desc"></tags:sortLink>
                         </div>
                     </div>
-                    <c:forEach var="product" items="${products}">
+                    <c:forEach var="product" items="${products}" varStatus="status">
                         <div class="product_product">
                             <div class="product_img">
                                 <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
@@ -73,8 +91,7 @@
                                 <fmt:formatNumber value="${product.price}" type="currency"
                                                   currencySymbol="${product.currency.symbol}"/>
                                 <div class="popupText" id="${product.id}">
-                                    Price history<br>
-                                        ${product.description}
+                                    Price history<br>${product.description}
                                     <table>
                                         <tr>
                                             <td>Start date</td>
@@ -83,14 +100,30 @@
                                         <c:forEach var="entry" items="${product.priceHistory}">
                                             <tr>
                                                 <td>${entry.key}</td>
-                                                <td>
-                                                    <fmt:formatNumber value="${entry.value}" type="currency"
-                                                                      currencySymbol="${product.currency.symbol}"/>
-                                                </td>
+                                                <td><fmt:formatNumber value="${entry.value}" type="currency"
+                                                                      currencySymbol="${product.currency.symbol}"/></td>
                                             </tr>
                                         </c:forEach>
                                     </table>
                                 </div>
+                            </div>
+                            <div class="product_adding_from_plp">
+                                <form method="post" action="${pageContext.servletContext.contextPath}/products?query=${
+                                    not empty param.query ? param.query : ''}&sortField=${
+                                    not empty param.sortField ? param.sortField : ''}&sortOrder=${
+                                    not empty param.sortOrder ? param.sortOrder : ''}">
+                                    <div class="product_add_row">
+                                        <div class="product_quantity">
+                                            <input class="product_quantity_input" name="quantity" value="${
+                                            not empty requestScope.error and product.id ==param.productId ?
+                                             param.quantity : 1}"/>
+                                            <input type="hidden" name="productId" value="${product.id}">
+                                        </div>
+                                        <div class="product_button">
+                                            <button class="product_quantity_button">Add to cart</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </c:forEach>
@@ -98,65 +131,4 @@
             </div>
         </div>
     </div>
-
-
-    <%--    <form>--%>
-    <%--        <label>--%>
-    <%--            <input name="query" value="${param.query}">--%>
-    <%--        </label>--%>
-    <%--        <input type="submit" value="Search">--%>
-    <%--    </form>--%>
-    <%--    <table>--%>
-    <%--        <thead>--%>
-    <%--        <tr>--%>
-    <%--            <td>Image</td>--%>
-    <%--            <td>Description--%>
-    <%--                <tags:sortLink sortField="description" sortOrder="asc" direction="up"></tags:sortLink>--%>
-    <%--                <tags:sortLink sortField="description" sortOrder="desc"></tags:sortLink>--%>
-    <%--            </td>--%>
-    <%--            <td>Price--%>
-    <%--                <tags:sortLink sortField="price" sortOrder="asc" direction="up"></tags:sortLink>--%>
-    <%--                <tags:sortLink sortField="price" sortOrder="desc"></tags:sortLink>--%>
-    <%--            </td>--%>
-    <%--        </tr>--%>
-    <%--        </thead>--%>
-    <%--        <c:forEach var="product" items="${products}">--%>
-    <%--            <tr>--%>
-    <%--                <td>--%>
-    <%--                    <a href="${pageContext.servletContext.contextPath}/products/${product.id}">--%>
-    <%--                        <img width="64px"--%>
-    <%--                             src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">--%>
-    <%--                    </a>--%>
-    <%--                </td>--%>
-    <%--                <td>--%>
-    <%--                    <a href="${pageContext.servletContext.contextPath}/products/${product.id}">${product.description}</a>--%>
-    <%--                </td>--%>
-    <%--                <td>--%>
-    <%--                    <span class="popup" onclick="changePopup(${product.id})">--%>
-    <%--                        <fmt:formatNumber value="${product.price}" type="currency"--%>
-    <%--                                          currencySymbol="${product.currency.symbol}"/>--%>
-    <%--                        <div class="popupText" id="${product.id}">--%>
-    <%--                            Price history<br>--%>
-    <%--                            ${product.description}--%>
-    <%--                            <table>--%>
-    <%--                                <tr>--%>
-    <%--                                    <td>Start date</td>--%>
-    <%--                                    <td>Price</td>--%>
-    <%--                                </tr>--%>
-    <%--                                <c:forEach var="entry" items="${product.priceHistory}">--%>
-    <%--                                    <tr>--%>
-    <%--                                               <td>${entry.key}</td>--%>
-    <%--                                        <td>--%>
-    <%--                                            <fmt:formatNumber value="${entry.value}" type="currency"--%>
-    <%--                                                              currencySymbol="${product.currency.symbol}"/>--%>
-    <%--                                        </td>--%>
-    <%--                                    </tr>--%>
-    <%--                                </c:forEach>--%>
-    <%--                            </table>--%>
-    <%--                        </div>--%>
-    <%--                    </span>--%>
-    <%--                </td>--%>
-    <%--            </tr>--%>
-    <%--        </c:forEach>--%>
-    <%--    </table>--%>
 </tags:master>
