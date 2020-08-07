@@ -67,8 +67,8 @@
                     </p>
                 </div>
             </form>
+            </c:if>
             <form id="deleteCartItem" method="post"></form>
         </div>
-        </c:if>
     </div>
 </tags:master>
