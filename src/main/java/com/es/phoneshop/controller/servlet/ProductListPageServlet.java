@@ -1,5 +1,8 @@
 package com.es.phoneshop.controller.servlet;
 
+import com.es.phoneshop.controller.value.ErrorInfo;
+import com.es.phoneshop.controller.value.RequestAttribute;
+import com.es.phoneshop.controller.value.RequestParam;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
@@ -18,42 +21,32 @@ import java.text.ParseException;
 import java.util.Optional;
 
 public class ProductListPageServlet extends HttpServlet {
-    private static final String SEARCH_QUERY_PARAM = "query";
-    private static final String SORT_FIELD_PARAM = "sortField";
-    private static final String SORT_ORDER_PARAM = "sortOrder";
-    private static final String PRODUCT_LIST_ATTRIBUTE = "products";
-    private static final String PRODUCT_LIST_PATH = "/WEB-INF/pages/productList.jsp";
-
-    private static final String ERROR_NOT_FOUND = "Product with code '%s' not found.";
-    private static final String ERROR_NOT_ENOUGH_STOCK = "Not enough stock. Available:%s";
-    private static final String ERROR_NOT_NUMBER = "Not a number";
-    private static final String REQUEST_ATTRIBUTE_PRODUCT = "product";
-    private static final String REQUEST_ATTRIBUTE_MESSAGE = "message";
-    private static final String REQUEST_ATTRIBUTE_ERROR = "error";
-    private static final String REQUEST_PARAM_QUANTITY = "quantity";
-    private static final String REDIRECT_AFTER_ADDING_TO_CART = "%s/products?query=%s&sortField=%s&sortOrder=%s&message=Added to cart successfully";
-    private static final int NOT_FOUND_ERROR_CODE = 404;
+    private static final String PRODUCT_LIST_JSP = "/WEB-INF/pages/productList.jsp";
+    private static final String REDIRECT_AFTER_ADDING_TO_CART =
+            "%s/products?query=%s&sortField=%s&sortOrder=%s&message=Added to cart successfully";
     private ArrayListProductDao dao = ArrayListProductDao.getInstance();
     private CartService cartService = CartService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String query = req.getParameter(SEARCH_QUERY_PARAM) != null ? req.getParameter(SEARCH_QUERY_PARAM) : "";
-        String sortFieldParam = req.getParameter(SORT_FIELD_PARAM);
-        String sortOrderParam = req.getParameter(SORT_ORDER_PARAM);
+        String query = req.getParameter(RequestParam.SEARCH_QUERY) != null ?
+                req.getParameter(RequestParam.SEARCH_QUERY) : "";
+        String sortFieldParam = req.getParameter(RequestParam.SORT_FIELD);
+        String sortOrderParam = req.getParameter(RequestParam.SORT_ORDER);
         SortField sortField = SortField.DEFAULT;
         SortOrder sortOrder = SortOrder.DEFAULT;
-        if ((sortFieldParam != null && !sortFieldParam.isEmpty()) && (sortOrderParam != null && !sortOrderParam.isEmpty())) {
+        if ((sortFieldParam != null && !sortFieldParam.isEmpty())
+                && (sortOrderParam != null && !sortOrderParam.isEmpty())) {
             sortField = SortField.valueOf(sortFieldParam.toUpperCase());
             sortOrder = SortOrder.valueOf(sortOrderParam.toUpperCase());
         }
-        req.setAttribute(PRODUCT_LIST_ATTRIBUTE, dao.findProducts(query, sortField, sortOrder));
-        req.getRequestDispatcher(PRODUCT_LIST_PATH).forward(req, resp);
+        req.setAttribute(RequestAttribute.PRODUCTS, dao.findProducts(query, sortField, sortOrder));
+        req.getRequestDispatcher(PRODUCT_LIST_JSP).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<Product> product = attachProductOrSendError(req, resp);
+        Optional<Product> product = findProductOrSendError(req, resp);
         if (product.isEmpty()) {
             return;
         }
@@ -62,34 +55,21 @@ public class ProductListPageServlet extends HttpServlet {
             return;
         }
         if (addProductToCartOrForward(req, resp, product.get(), quantity.get())) {
-            if ((req.getParameter(SEARCH_QUERY_PARAM) == null || req.getParameter(SEARCH_QUERY_PARAM).isEmpty())
-                    && (req.getParameter(SORT_FIELD_PARAM) == null || req.getParameter(SORT_FIELD_PARAM).isEmpty())
-                    && (req.getParameter(SORT_ORDER_PARAM) == null || req.getParameter(SORT_ORDER_PARAM).isEmpty())) {
-                resp.sendRedirect(String.format("%s/products?&message=Added to cart successfully", req.getContextPath()));
-                return;
-            }
-            if (req.getParameter(SORT_FIELD_PARAM) == null || req.getParameter(SORT_FIELD_PARAM).isEmpty()) {
-                resp.sendRedirect(String.format("%s/products?query=%s&message=Added to cart successfully", req.getContextPath(), req.getParameter(SEARCH_QUERY_PARAM)));
-            } else {
-                resp.sendRedirect(String.format(REDIRECT_AFTER_ADDING_TO_CART, req.getContextPath(),
-                        req.getParameter(SEARCH_QUERY_PARAM),
-                        req.getParameter(SORT_FIELD_PARAM), req.getParameter(SORT_ORDER_PARAM), product.get().getId()));
-            }
-        }else{
-
+            resp.sendRedirect(String.format(REDIRECT_AFTER_ADDING_TO_CART, req.getContextPath(),
+                    req.getParameter(RequestParam.SEARCH_QUERY), req.getParameter(RequestParam.SORT_FIELD),
+                    req.getParameter(RequestParam.SORT_ORDER)));
         }
     }
 
-    private Optional<Product> attachProductOrSendError(HttpServletRequest req, HttpServletResponse resp)
+    private Optional<Product> findProductOrSendError(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        String productId = req.getParameter("productId");
+        String productId = req.getParameter(RequestParam.PRODUCT_ID);
         try {
             Product product = dao.findProduct(Long.valueOf(productId));
-            req.setAttribute(REQUEST_ATTRIBUTE_PRODUCT, product);
             return Optional.of(product);
         } catch (NumberFormatException | ItemNotFoundException e) {
-            req.setAttribute(REQUEST_ATTRIBUTE_MESSAGE, String.format(ERROR_NOT_FOUND, productId));
-            resp.sendError(NOT_FOUND_ERROR_CODE);
+            req.setAttribute(RequestAttribute.MESSAGE, String.format(ErrorInfo.NOT_FOUND, productId));
+            resp.sendError(ErrorInfo.PAGE_NOT_FOUND_CODE);
             return Optional.empty();
         }
     }
@@ -98,9 +78,9 @@ public class ProductListPageServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             return Optional.of(NumberFormat.getInstance(
-                    req.getLocale()).parse(req.getParameter(REQUEST_PARAM_QUANTITY)).intValue());
+                    req.getLocale()).parse(req.getParameter(RequestParam.QUANTITY)).intValue());
         } catch (NumberFormatException | ParseException e) {
-            req.setAttribute(REQUEST_ATTRIBUTE_ERROR, ERROR_NOT_NUMBER);
+            req.setAttribute(RequestAttribute.ERROR, ErrorInfo.NOT_NUMBER);
             doGet(req, resp);
             return Optional.empty();
         }
@@ -113,7 +93,7 @@ public class ProductListPageServlet extends HttpServlet {
             cartService.add(req.getSession(), product, quantity);
             return true;
         } catch (OutOfStockException e) {
-            req.setAttribute(REQUEST_ATTRIBUTE_ERROR, String.format(ERROR_NOT_ENOUGH_STOCK, e.getAvailableAmount()));
+            req.setAttribute(RequestAttribute.ERROR, String.format(ErrorInfo.NOT_ENOUGH_STOCK, e.getAvailableAmount()));
             doGet(req, resp);
             return false;
         }

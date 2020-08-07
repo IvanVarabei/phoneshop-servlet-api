@@ -1,5 +1,8 @@
 package com.es.phoneshop.controller.servlet;
 
+import com.es.phoneshop.controller.value.ErrorInfo;
+import com.es.phoneshop.controller.value.RequestAttribute;
+import com.es.phoneshop.controller.value.RequestParam;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.exception.OutOfStockException;
@@ -17,7 +20,6 @@ import java.util.Map;
 
 public class CartPageServlet extends HttpServlet {
     private static final String CART_JSP = "/WEB-INF/pages/cart.jsp";
-    private static final String ERROR_NOT_ENOUGH_STOCK = "Not enough stock. Available:%s";
     private ArrayListProductDao dao = ArrayListProductDao.getInstance();
     private CartService cartService = CartService.getInstance();
 
@@ -28,8 +30,8 @@ public class CartPageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String[] productIds = req.getParameterValues("productId");
-        String[] quantities = req.getParameterValues("quantity");
+        String[] productIds = req.getParameterValues(RequestParam.PRODUCT_ID);
+        String[] quantities = req.getParameterValues(RequestParam.QUANTITY);
         Map<Long, String> errors = new HashMap<>();
         for (int i = 0; i < productIds.length; i++) {
             long productId = Long.parseLong(productIds[i]);
@@ -43,13 +45,13 @@ public class CartPageServlet extends HttpServlet {
         if (errors.isEmpty()) {
             resp.sendRedirect(req.getContextPath() + "/cart?message=Cart updated successfully");
         } else {
-            req.setAttribute("errors", errors);
+            req.setAttribute(RequestAttribute.ERRORS, errors);
             req.getRequestDispatcher(CART_JSP).forward(req, resp);
         }
     }
 
     private void handleError(Map<Long, String> errors, Long productId, Exception e) {
-        errors.put(productId, e.getClass().equals(ParseException.class) ? "Not a number" :
-                String.format(ERROR_NOT_ENOUGH_STOCK, ((OutOfStockException) e).getAvailableAmount()));
+        errors.put(productId, e.getClass().equals(ParseException.class) ? ErrorInfo.NOT_NUMBER :
+                String.format(ErrorInfo.NOT_ENOUGH_STOCK, ((OutOfStockException) e).getAvailableAmount()));
     }
 }

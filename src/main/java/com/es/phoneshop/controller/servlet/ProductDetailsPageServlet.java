@@ -1,5 +1,8 @@
 package com.es.phoneshop.controller.servlet;
 
+import com.es.phoneshop.controller.value.ErrorInfo;
+import com.es.phoneshop.controller.value.RequestAttribute;
+import com.es.phoneshop.controller.value.RequestParam;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
@@ -17,16 +20,8 @@ import java.text.ParseException;
 import java.util.Optional;
 
 public class ProductDetailsPageServlet extends HttpServlet {
-    private static final String ERROR_NOT_FOUND = "Product with code '%s' not found.";
-    private static final String ERROR_NOT_ENOUGH_STOCK = "Not enough stock. Available:%s";
-    private static final String ERROR_NOT_NUMBER = "Not a number";
-    private static final String REQUEST_ATTRIBUTE_PRODUCT = "product";
-    private static final String REQUEST_ATTRIBUTE_MESSAGE = "message";
-    private static final String REQUEST_ATTRIBUTE_ERROR = "error";
-    private static final String REQUEST_PARAM_QUANTITY = "quantity";
     private static final String REDIRECT_AFTER_ADDING_TO_CART = "%s/products/%s?message=Added to cart successfully";
-    private static final String PRODUCT_DETAILS_PATH = "/WEB-INF/pages/productDetails.jsp";
-    private static final int NOT_FOUND_ERROR_CODE = 404;
+    private static final String PRODUCT_DETAILS_JSP = "/WEB-INF/pages/productDetails.jsp";
     private ArrayListProductDao dao = ArrayListProductDao.getInstance();
     private CartService cartService = CartService.getInstance();
     private RecentlyViewedService recentlyViewedService = RecentlyViewedService.getInstance();
@@ -34,8 +29,8 @@ public class ProductDetailsPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Optional<Product> product = attachProductOrSendError(req, resp);
-        if(!product.isEmpty()){
-            req.getRequestDispatcher(PRODUCT_DETAILS_PATH).forward(req, resp);
+        if (product.isPresent()) {
+            req.getRequestDispatcher(PRODUCT_DETAILS_JSP).forward(req, resp);
             recentlyViewedService.updateRecentlyViewedLine(req.getSession(), product.get());
         }
     }
@@ -60,11 +55,11 @@ public class ProductDetailsPageServlet extends HttpServlet {
         String productId = req.getPathInfo().substring(1);
         try {
             Product product = dao.findProduct(Long.valueOf(productId));
-            req.setAttribute(REQUEST_ATTRIBUTE_PRODUCT, product);
+            req.setAttribute(RequestAttribute.PRODUCT, product);
             return Optional.of(product);
         } catch (NumberFormatException | ItemNotFoundException e) {
-            req.setAttribute(REQUEST_ATTRIBUTE_MESSAGE, String.format(ERROR_NOT_FOUND, productId));
-            resp.sendError(NOT_FOUND_ERROR_CODE);
+            req.setAttribute(RequestAttribute.MESSAGE, String.format(ErrorInfo.NOT_FOUND, productId));
+            resp.sendError(ErrorInfo.PAGE_NOT_FOUND_CODE);
             return Optional.empty();
         }
     }
@@ -73,10 +68,10 @@ public class ProductDetailsPageServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             return Optional.of(NumberFormat.getInstance(
-                    req.getLocale()).parse(req.getParameter(REQUEST_PARAM_QUANTITY)).intValue());
+                    req.getLocale()).parse(req.getParameter(RequestParam.QUANTITY)).intValue());
         } catch (NumberFormatException | ParseException e) {
-            req.setAttribute(REQUEST_ATTRIBUTE_ERROR, ERROR_NOT_NUMBER);
-            req.getRequestDispatcher(PRODUCT_DETAILS_PATH).forward(req, resp);
+            req.setAttribute(RequestAttribute.ERROR, ErrorInfo.NOT_NUMBER);
+            req.getRequestDispatcher(PRODUCT_DETAILS_JSP).forward(req, resp);
             return Optional.empty();
         }
     }
@@ -88,8 +83,8 @@ public class ProductDetailsPageServlet extends HttpServlet {
             cartService.add(req.getSession(), product, quantity);
             return true;
         } catch (OutOfStockException e) {
-            req.setAttribute(REQUEST_ATTRIBUTE_ERROR, String.format(ERROR_NOT_ENOUGH_STOCK, e.getAvailableAmount()));
-            req.getRequestDispatcher(PRODUCT_DETAILS_PATH).forward(req, resp);
+            req.setAttribute(RequestAttribute.ERROR, String.format(ErrorInfo.NOT_ENOUGH_STOCK, e.getAvailableAmount()));
+            req.getRequestDispatcher(PRODUCT_DETAILS_JSP).forward(req, resp);
             return false;
         }
     }
