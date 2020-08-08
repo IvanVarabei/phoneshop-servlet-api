@@ -13,60 +13,59 @@
     </c:if>
     <div class="cart">
         <div class="container">
-            <c:if test="${empty sessionScope.cart.getCartItemList()}">
-                <h2 class="title" align="center">Cart is empty</h2>
+            <c:if test="${empty sessionScope.cart.cartItemList}"><h2 class="title" align="center">Cart is empty</h2>
             </c:if>
-            <c:if test="${not empty sessionScope.cart.getCartItemList()}">
-            <form method="post" action="${pageContext.servletContext.contextPath}/cart">
-                <table class="cart_table">
-                    <thead>
-                    <tr>
-                        <td>Image</td>
-                        <td>Description</td>
-                        <td>Quantity</td>
-                        <td>Price</td>
-                    </tr>
-                    </thead>
-                    <c:forEach var="item" items="${sessionScope.cart.getCartItemList()}" varStatus="status">
+            <c:if test="${not empty sessionScope.cart.cartItemList}">
+                <form method="post" action="${pageContext.servletContext.contextPath}/cart">
+                    <table class="cart_table">
+                        <thead>
                         <tr>
-                            <td><a href="${pageContext.servletContext.contextPath}/products/${item.product.id}">
-                                <img width="64px"
-                                     src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${item.product.imageUrl}">
-                            </a>
-                            </td>
-                            <td><a href="${pageContext.servletContext.contextPath}/products/${item.product.id}">
-                                    ${item.product.description}</a>
-                            </td>
-                            <td><fmt:formatNumber value="${item.quantity}" var="quantity"/>
-                                <c:set var="error" value="${requestScope.errors[item.product.id]}"/>
-                                <input name="quantity"
-                                       value="${not empty error ? paramValues['quantity'][status.index] : item.quantity}"/>
-                                <c:if test="${not empty error}">
-                                    <div class="error">${requestScope.errors[item.product.id]}</div>
-                                </c:if>
-                                <input name="productId" type="hidden" value="${item.product.id}">
-                            </td>
-                            <td><fmt:formatNumber value="${item.product.price}" type="currency"
-                                                  currencySymbol="${item.product.currency.symbol}"/></td>
-                            <td>
-                                <button form="deleteCartItem" formaction=
-                                        "${pageContext.servletContext.contextPath}/cart/deleteCartItem/${item.product.id}"
-                                >delete
-                                </button>
-                            </td>
+                            <td>Image</td>
+                            <td>Description</td>
+                            <td>Quantity</td>
+                            <td>Price</td>
                         </tr>
-                    </c:forEach>
-                </table>
-                <div class="cart_info">
-                    <p>Total quantity : ${sessionScope.cart.getCartItemList().size()}</p>
-                    <p>Total cost : <fmt:formatNumber value="${sessionScope.cart.totalCost}" type="currency"
-                                                      currencySymbol="${sessionScope.cart.getCartItemList().get(0)
-                                                      .getProduct().currency.symbol}"/></p>
-                    <p>
-                        <button>Update</button>
-                    </p>
-                </div>
-            </form>
+                        </thead>
+                        <c:forEach var="item" items="${sessionScope.cart.cartItemList}" varStatus="status">
+                            <tr>
+                                <td><a href="${pageContext.servletContext.contextPath}/products/${item.product.id}">
+                                    <img width="64px"
+                                         src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${item.product.imageUrl}">
+                                </a>
+                                </td>
+                                <td><a href="${pageContext.servletContext.contextPath}/products/${item.product.id}">
+                                        ${item.product.description}</a>
+                                </td>
+                                <td><fmt:formatNumber value="${item.quantity}" var="quantity"/>
+                                    <c:set var="error" value="${requestScope.errors[item.product.id]}"/>
+                                    <input name="quantity"
+                                           value="${not empty error ? paramValues['quantity'][status.index] : item.quantity}"/>
+                                    <c:if test="${not empty error}">
+                                        <div class="error">${requestScope.errors[item.product.id]}</div>
+                                    </c:if>
+                                    <input name="productId" type="hidden" value="${item.product.id}">
+                                </td>
+                                <td><fmt:formatNumber value="${item.product.price}" type="currency"
+                                                      currencySymbol="${item.product.currency.symbol}"/></td>
+                                <td>
+                                    <button form="deleteCartItem" formaction=
+                                            "${pageContext.servletContext.contextPath}/cart/deleteCartItem/${item.product.id}"
+                                    >delete
+                                    </button>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                    <div class="cart_info">
+                        <p>Total quantity : ${sessionScope.cart.cartItemList.size()}</p>
+                        <p>Total cost : <fmt:formatNumber value="${sessionScope.cart.totalCost}" type="currency"
+                                                          currencySymbol="${sessionScope.cart.cartItemList.get(0)
+                                                      .product.currency.symbol}"/></p>
+                        <p>
+                            <button>Update</button>
+                        </p>
+                    </div>
+                </form>
             </c:if>
             <form id="deleteCartItem" method="post"></form>
         </div>

@@ -99,7 +99,6 @@ public class ProductDetailsPageServletTest {
 
         servlet.doPost(request, response);
 
-        verify(request).setAttribute("show", false);
         verify(request).setAttribute("error", "Not a number");
         verify(response, never()).sendRedirect(
                 "/phoneshop_servlet_api_war_exploded/products/1?message=Added to cart successfully");
@@ -112,7 +111,6 @@ public class ProductDetailsPageServletTest {
 
         servlet.doPost(request, response);
 
-        verify(request).setAttribute("show", false);
         verify(request).setAttribute(eq("error"), String.format("Not enough stock. Available:%s", anyString()));
         verify(response, never()).sendRedirect(
                 "/phoneshop_servlet_api_war_exploded/products/1?message=Added to cart successfully");

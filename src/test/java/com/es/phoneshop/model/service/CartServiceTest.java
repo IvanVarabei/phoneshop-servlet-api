@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,6 +21,9 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CartServiceTest {
+    private final BigDecimal price1 = BigDecimal.valueOf(1);
+    private final BigDecimal price2 = BigDecimal.valueOf(2);
+    private final BigDecimal price3 = BigDecimal.valueOf(3);
     @Mock
     private Cart cart;
     @Mock
@@ -27,13 +31,13 @@ public class CartServiceTest {
     @Mock
     private Product product2;
     @Mock
+    private Product product3;
+    @Mock
     private CartItem cartItem1;
     @Mock
     private CartItem cartItem2;
     @Mock
     private CartItem cartItem3;
-    @Mock
-    private Product product3;
     @Mock
     private HttpSession session;
     private List<CartItem> cartItems;
@@ -45,6 +49,8 @@ public class CartServiceTest {
         when(cartItem1.getProduct()).thenReturn(product1);
         when(cartItem2.getProduct()).thenReturn(product2);
         when(cartItem3.getProduct()).thenReturn(product3);
+        when(cartItem1.getQuantity()).thenReturn(1);
+        when(cartItem2.getQuantity()).thenReturn(1);
         when(cartItem3.getQuantity()).thenReturn(4);
         cartItems = new LinkedList<>();
         cartItems.add(cartItem1);
@@ -53,6 +59,9 @@ public class CartServiceTest {
         when(product1.getId()).thenReturn(1L);
         when(product2.getId()).thenReturn(2L);
         when(product3.getId()).thenReturn(3L);
+        when(product1.getPrice()).thenReturn(price1);
+        when(product2.getPrice()).thenReturn(price2);
+        when(product3.getPrice()).thenReturn(price3);
         when(product3.getStock()).thenReturn(5);
         when(session.getAttribute("cart")).thenReturn(cart);
     }
@@ -94,5 +103,22 @@ public class CartServiceTest {
         }
 
         verify(session).setAttribute(eq("cart"), any(Cart.class));
+    }
+
+    @Test(expected = OutOfStockException.class)
+    public void testUpdate() throws OutOfStockException {
+        cartService.update(session, product3, 0);
+    }
+
+    @Test
+    public void testDelete() {
+        cartItems.add(cartItem3);
+        cartService.delete(session, product2);
+        List<CartItem> actual = cartItems;
+        List<CartItem> expected = List.of(cartItem1, cartItem3);
+
+        assertEquals(expected, actual);
+        verify(session).getAttribute("cart");
+        verify(cart, times(2)).getCartItemList();
     }
 }
