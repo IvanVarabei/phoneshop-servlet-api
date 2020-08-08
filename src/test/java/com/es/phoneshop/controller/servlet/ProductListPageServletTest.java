@@ -4,6 +4,9 @@ import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
 import com.es.phoneshop.model.entity.Product;
+import com.es.phoneshop.model.exception.ItemNotFoundException;
+import com.es.phoneshop.model.exception.OutOfStockException;
+import com.es.phoneshop.model.service.CartService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +18,10 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import static org.mockito.Mockito.*;
 
@@ -29,20 +34,29 @@ public class ProductListPageServletTest {
     @Mock
     private RequestDispatcher requestDispatcher;
     @Mock
-    private ArrayListProductDao arrayListProductDao;
-    @Mock
     private Product product1;
     @Mock
     private Product product2;
+    @Mock
+    private ArrayListProductDao dao;
+    @Mock
+    private CartService cartService;
+    @Mock
+    private HttpSession session;
     @InjectMocks
     private final ProductListPageServlet servlet = new ProductListPageServlet();
 
     @Before
-    public void setup() {
+    public void setup() throws ItemNotFoundException {
+        when(request.getSession()).thenReturn(session);
+        when(request.getLocale()).thenReturn(Locale.ENGLISH);
         when(request.getParameter("query")).thenReturn("");
-        when(arrayListProductDao.findProducts("", SortField.DEFAULT, SortOrder.DEFAULT))
+        when(request.getParameter("productId")).thenReturn("1");
+        when(request.getParameter("quantity")).thenReturn("1");
+        when(dao.findProduct(1L)).thenReturn(product1);
+        when(dao.findProducts("", SortField.DEFAULT, SortOrder.DEFAULT))
                 .thenReturn(List.of(product1, product2));
-        when(arrayListProductDao.findProducts("", SortField.PRICE, SortOrder.ASC))
+        when(dao.findProducts("", SortField.PRICE, SortOrder.ASC))
                 .thenReturn(List.of(product2, product1));
         when(request.getRequestDispatcher("/WEB-INF/pages/productList.jsp")).thenReturn(requestDispatcher);
     }
@@ -64,5 +78,41 @@ public class ProductListPageServletTest {
 
         verify(request).setAttribute("products", List.of(product2, product1));
         verify(requestDispatcher, times(1)).forward(request, response);
+    }
+
+    @Test
+    public void testDoPost() throws ServletException, IOException, ItemNotFoundException, OutOfStockException {
+        servlet.doPost(request, response);
+
+        verify(dao).findProduct(1L);
+        verify(cartService).add(session, product1, 1);
+    }
+
+    @Test
+    public void testDoPostProductNotFound() throws ItemNotFoundException, ServletException, IOException {
+        when(dao.findProduct(1L)).thenThrow(ItemNotFoundException.class);
+
+        servlet.doPost(request, response);
+
+        verify(request).setAttribute("message", "Product with code '1' not found.");
+        verify(response).sendError(404);
+    }
+
+    @Test
+    public void testDoPostWrongQuantity() throws ServletException, IOException {
+        when(request.getParameter("quantity")).thenReturn("bla");
+
+        servlet.doPost(request, response);
+
+        verify(request).setAttribute("error", "Not a number");
+    }
+
+    @Test
+    public void testDoPostNotEnoughStock() throws ServletException, IOException, OutOfStockException {
+        doThrow(OutOfStockException.class).when(cartService).add(session, product1, 1);
+
+        servlet.doPost(request, response);
+
+        verify(request).setAttribute(eq("error"), anyString());
     }
 }

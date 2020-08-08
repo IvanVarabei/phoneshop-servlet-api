@@ -20,6 +20,7 @@ import java.util.Map;
 
 public class CartPageServlet extends HttpServlet {
     private static final String CART_JSP = "/WEB-INF/pages/cart.jsp";
+    private static final String REDIRECT_AFTER_UPDATING = "/cart?message=Cart updated successfully";
     private ArrayListProductDao dao = ArrayListProductDao.getInstance();
     private CartService cartService = CartService.getInstance();
 
@@ -43,7 +44,7 @@ public class CartPageServlet extends HttpServlet {
             }
         }
         if (errors.isEmpty()) {
-            resp.sendRedirect(req.getContextPath() + "/cart?message=Cart updated successfully");
+            resp.sendRedirect(req.getContextPath() + REDIRECT_AFTER_UPDATING);
         } else {
             req.setAttribute(RequestAttribute.ERRORS, errors);
             req.getRequestDispatcher(CART_JSP).forward(req, resp);

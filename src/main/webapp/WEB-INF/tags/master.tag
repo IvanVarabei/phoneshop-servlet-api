@@ -19,8 +19,7 @@
                 <div class="header_row">
                     <div class="header_name">
                         <a href="${pageContext.servletContext.contextPath}">phone shop</a></div>
-                    <form class="header_search"
-                          action="${pageContext.request.contextPath}/products">
+                    <form class="header_search" action="${pageContext.request.contextPath}/products">
                         <input class="header_input" name="query" value="${param.query}" placeholder="Search goods">
                         <button class="header_search_button">
                             <img src="${pageContext.request.contextPath}/images/search_icon.png" alt="">
@@ -29,12 +28,11 @@
                     <div class="header_cart">
                         <a href="${pageContext.request.contextPath}/cart">
                             <img src="${pageContext.request.contextPath}/images/icon.png" alt="">
-                        <c:if test="${not empty sessionScope.cart.getCartItemList()}">
-                            ${sessionScope.cart.getCartItemList().size()} -
-                        <fmt:formatNumber value="${sessionScope.cart.totalCost}" type="currency"
-                                          currencySymbol="${sessionScope.cart.getCartItemList().get(0)
-                                          .getProduct().currency.symbol}"/>
-                        </c:if>
+                            <c:if test="${not empty sessionScope.cart.cartItemList}">
+                                ${sessionScope.cart.cartItemList.size()} -
+                                <fmt:formatNumber value="${sessionScope.cart.totalCost}" type="currency"
+                                                  currencySymbol="${sessionScope.cart.cartItemList.get(0)
+                                          .product.currency.symbol}"/></c:if>
                         </a>
                     </div>
                 </div>
