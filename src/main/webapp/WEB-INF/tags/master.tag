@@ -25,16 +25,7 @@
                             <img src="${pageContext.request.contextPath}/images/search_icon.png" alt="">
                         </button>
                     </form>
-                    <div class="header_cart">
-                        <a href="${pageContext.request.contextPath}/cart">
-                            <img src="${pageContext.request.contextPath}/images/icon.png" alt="">
-                            <c:if test="${not empty sessionScope.cart.cartItemList}">
-                                ${sessionScope.cart.cartItemList.size()} -
-                                <fmt:formatNumber value="${sessionScope.cart.totalCost}" type="currency"
-                                                  currencySymbol="${sessionScope.cart.cartItemList.get(0)
-                                          .product.currency.symbol}"/></c:if>
-                        </a>
-                    </div>
+                    <jsp:include page="/cart/miniCart"/>
                 </div>
             </div>
         </header>
