@@ -1,8 +1,6 @@
 package com.es.phoneshop.controller.servlet;
 
-import com.es.phoneshop.controller.value.ErrorInfo;
-import com.es.phoneshop.controller.value.RequestAttribute;
-import com.es.phoneshop.controller.value.RequestParam;
+import com.es.phoneshop.controller.value.Const;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.exception.OutOfStockException;
@@ -31,8 +29,8 @@ public class CartPageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String[] productIds = req.getParameterValues(RequestParam.PRODUCT_ID);
-        String[] quantities = req.getParameterValues(RequestParam.QUANTITY);
+        String[] productIds = req.getParameterValues(Const.RequestParam.PRODUCT_ID);
+        String[] quantities = req.getParameterValues(Const.RequestParam.QUANTITY);
         Map<Long, String> errors = new HashMap<>();
         for (int i = 0; i < productIds.length; i++) {
             long productId = Long.parseLong(productIds[i]);
@@ -46,13 +44,13 @@ public class CartPageServlet extends HttpServlet {
         if (errors.isEmpty()) {
             resp.sendRedirect(req.getContextPath() + REDIRECT_AFTER_UPDATING);
         } else {
-            req.setAttribute(RequestAttribute.ERRORS, errors);
+            req.setAttribute(Const.RequestAttribute.ERRORS, errors);
             req.getRequestDispatcher(CART_JSP).forward(req, resp);
         }
     }
 
     private void handleError(Map<Long, String> errors, Long productId, Exception e) {
-        errors.put(productId, e.getClass().equals(ParseException.class) ? ErrorInfo.NOT_NUMBER :
-                String.format(ErrorInfo.NOT_ENOUGH_STOCK, ((OutOfStockException) e).getAvailableAmount()));
+        errors.put(productId, e.getClass().equals(ParseException.class) ? Const.ErrorInfo.NOT_NUMBER :
+                String.format(Const.ErrorInfo.NOT_ENOUGH_STOCK, ((OutOfStockException) e).getAvailableAmount()));
     }
 }

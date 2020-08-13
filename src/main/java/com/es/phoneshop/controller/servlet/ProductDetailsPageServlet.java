@@ -1,8 +1,6 @@
 package com.es.phoneshop.controller.servlet;
 
-import com.es.phoneshop.controller.value.ErrorInfo;
-import com.es.phoneshop.controller.value.RequestAttribute;
-import com.es.phoneshop.controller.value.RequestParam;
+import com.es.phoneshop.controller.value.Const;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
@@ -55,11 +53,11 @@ public class ProductDetailsPageServlet extends HttpServlet {
         String productId = req.getPathInfo().substring(1);
         try {
             Product product = dao.findProduct(Long.valueOf(productId));
-            req.setAttribute(RequestAttribute.PRODUCT, product);
+            req.setAttribute(Const.RequestAttribute.PRODUCT, product);
             return Optional.of(product);
         } catch (NumberFormatException | ItemNotFoundException e) {
-            req.setAttribute(RequestAttribute.MESSAGE, String.format(ErrorInfo.NOT_FOUND, productId));
-            resp.sendError(ErrorInfo.PAGE_NOT_FOUND_CODE);
+            req.setAttribute(Const.RequestAttribute.MESSAGE, String.format(Const.ErrorInfo.NOT_FOUND, productId));
+            resp.sendError(Const.ErrorInfo.PAGE_NOT_FOUND_CODE);
             return Optional.empty();
         }
     }
@@ -68,9 +66,9 @@ public class ProductDetailsPageServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             return Optional.of(NumberFormat.getInstance(
-                    req.getLocale()).parse(req.getParameter(RequestParam.QUANTITY)).intValue());
+                    req.getLocale()).parse(req.getParameter(Const.RequestParam.QUANTITY)).intValue());
         } catch (NumberFormatException | ParseException e) {
-            req.setAttribute(RequestAttribute.ERROR, ErrorInfo.NOT_NUMBER);
+            req.setAttribute(Const.RequestAttribute.ERROR, Const.ErrorInfo.NOT_NUMBER);
             req.getRequestDispatcher(PRODUCT_DETAILS_JSP).forward(req, resp);
             return Optional.empty();
         }
@@ -83,7 +81,8 @@ public class ProductDetailsPageServlet extends HttpServlet {
             cartService.add(req.getSession(), product, quantity);
             return true;
         } catch (OutOfStockException e) {
-            req.setAttribute(RequestAttribute.ERROR, String.format(ErrorInfo.NOT_ENOUGH_STOCK, e.getAvailableAmount()));
+            req.setAttribute(Const.RequestAttribute.ERROR,
+                    String.format(Const.ErrorInfo.NOT_ENOUGH_STOCK, e.getAvailableAmount()));
             req.getRequestDispatcher(PRODUCT_DETAILS_JSP).forward(req, resp);
             return false;
         }
