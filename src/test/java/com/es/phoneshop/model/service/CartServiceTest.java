@@ -118,7 +118,7 @@ public class CartServiceTest {
         List<CartItem> expected = List.of(cartItem1, cartItem3);
 
         assertEquals(expected, actual);
-        verify(session).getAttribute("cart");
+        verify(session , times(2)).getAttribute("cart");
         verify(cart, times(2)).getCartItemList();
     }
 }

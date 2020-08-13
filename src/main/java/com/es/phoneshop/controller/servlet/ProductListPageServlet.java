@@ -1,8 +1,6 @@
 package com.es.phoneshop.controller.servlet;
 
-import com.es.phoneshop.controller.value.ErrorInfo;
-import com.es.phoneshop.controller.value.RequestAttribute;
-import com.es.phoneshop.controller.value.RequestParam;
+import com.es.phoneshop.controller.value.Const;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
@@ -29,10 +27,10 @@ public class ProductListPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String query = req.getParameter(RequestParam.SEARCH_QUERY) != null ?
-                req.getParameter(RequestParam.SEARCH_QUERY) : "";
-        String sortFieldParam = req.getParameter(RequestParam.SORT_FIELD);
-        String sortOrderParam = req.getParameter(RequestParam.SORT_ORDER);
+        String query = req.getParameter(Const.RequestParam.SEARCH_QUERY) != null ?
+                req.getParameter(Const.RequestParam.SEARCH_QUERY) : "";
+        String sortFieldParam = req.getParameter(Const.RequestParam.SORT_FIELD);
+        String sortOrderParam = req.getParameter(Const.RequestParam.SORT_ORDER);
         SortField sortField = SortField.DEFAULT;
         SortOrder sortOrder = SortOrder.DEFAULT;
         if ((sortFieldParam != null && !sortFieldParam.isEmpty())
@@ -40,7 +38,7 @@ public class ProductListPageServlet extends HttpServlet {
             sortField = SortField.valueOf(sortFieldParam.toUpperCase());
             sortOrder = SortOrder.valueOf(sortOrderParam.toUpperCase());
         }
-        req.setAttribute(RequestAttribute.PRODUCTS, dao.findProducts(query, sortField, sortOrder));
+        req.setAttribute(Const.RequestAttribute.PRODUCTS, dao.findProducts(query, sortField, sortOrder));
         req.getRequestDispatcher(PRODUCT_LIST_JSP).forward(req, resp);
     }
 
@@ -56,20 +54,20 @@ public class ProductListPageServlet extends HttpServlet {
         }
         if (addProductToCartOrForward(req, resp, product.get(), quantity.get())) {
             resp.sendRedirect(String.format(REDIRECT_AFTER_ADDING_TO_CART, req.getContextPath(),
-                    req.getParameter(RequestParam.SEARCH_QUERY), req.getParameter(RequestParam.SORT_FIELD),
-                    req.getParameter(RequestParam.SORT_ORDER)));
+                    req.getParameter(Const.RequestParam.SEARCH_QUERY), req.getParameter(Const.RequestParam.SORT_FIELD),
+                    req.getParameter(Const.RequestParam.SORT_ORDER)));
         }
     }
 
     private Optional<Product> findProductOrSendError(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        String productId = req.getParameter(RequestParam.PRODUCT_ID);
+        String productId = req.getParameter(Const.RequestParam.PRODUCT_ID);
         try {
             Product product = dao.findProduct(Long.valueOf(productId));
             return Optional.of(product);
         } catch (NumberFormatException | ItemNotFoundException e) {
-            req.setAttribute(RequestAttribute.MESSAGE, String.format(ErrorInfo.NOT_FOUND, productId));
-            resp.sendError(ErrorInfo.PAGE_NOT_FOUND_CODE);
+            req.setAttribute(Const.RequestAttribute.MESSAGE, String.format(Const.ErrorInfo.NOT_FOUND, productId));
+            resp.sendError(Const.ErrorInfo.PAGE_NOT_FOUND_CODE);
             return Optional.empty();
         }
     }
@@ -78,9 +76,9 @@ public class ProductListPageServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             return Optional.of(NumberFormat.getInstance(
-                    req.getLocale()).parse(req.getParameter(RequestParam.QUANTITY)).intValue());
+                    req.getLocale()).parse(req.getParameter(Const.RequestParam.QUANTITY)).intValue());
         } catch (NumberFormatException | ParseException e) {
-            req.setAttribute(RequestAttribute.ERROR, ErrorInfo.NOT_NUMBER);
+            req.setAttribute(Const.RequestAttribute.ERROR, Const.ErrorInfo.NOT_NUMBER);
             doGet(req, resp);
             return Optional.empty();
         }
@@ -93,7 +91,8 @@ public class ProductListPageServlet extends HttpServlet {
             cartService.add(req.getSession(), product, quantity);
             return true;
         } catch (OutOfStockException e) {
-            req.setAttribute(RequestAttribute.ERROR, String.format(ErrorInfo.NOT_ENOUGH_STOCK, e.getAvailableAmount()));
+            req.setAttribute(Const.RequestAttribute.ERROR,
+                    String.format(Const.ErrorInfo.NOT_ENOUGH_STOCK, e.getAvailableAmount()));
             doGet(req, resp);
             return false;
         }
