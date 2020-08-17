@@ -1,6 +1,5 @@
 package com.es.phoneshop.controller.servlet;
 
-import com.es.phoneshop.controller.value.Const;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
@@ -8,6 +7,7 @@ import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.exception.OutOfStockException;
 import com.es.phoneshop.model.service.CartService;
+import com.es.phoneshop.value.Const;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ProductListPageServlet extends HttpServlet {
@@ -27,8 +28,7 @@ public class ProductListPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String query = req.getParameter(Const.RequestParam.SEARCH_QUERY) != null ?
-                req.getParameter(Const.RequestParam.SEARCH_QUERY) : "";
+        String query = Objects.toString(req.getParameter(Const.RequestParam.SEARCH_QUERY), "");
         String sortFieldParam = req.getParameter(Const.RequestParam.SORT_FIELD);
         String sortOrderParam = req.getParameter(Const.RequestParam.SORT_ORDER);
         SortField sortField = SortField.DEFAULT;

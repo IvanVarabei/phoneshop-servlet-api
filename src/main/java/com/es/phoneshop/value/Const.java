@@ -1,4 +1,4 @@
-package com.es.phoneshop.controller.value;
+package com.es.phoneshop.value;
 
 public class Const {
     public static class ErrorInfo {
@@ -17,6 +17,7 @@ public class Const {
         public static final String ERRORS = "errors";
         public static final String PRODUCT = "product";
         public static final String PRODUCTS = "products";
+        public static final String CART = "cart";
 
         private RequestAttribute() {
         }

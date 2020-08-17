@@ -13,9 +13,9 @@
     </c:if>
     <div class="cart">
         <div class="container">
-            <c:if test="${empty sessionScope.cart.cartItemList}"><h2 class="title" align="center">Cart is empty</h2>
+            <c:if test="${empty requestScope.cart.cartItemList}"><h2 class="title" align="center">Cart is empty</h2>
             </c:if>
-            <c:if test="${not empty sessionScope.cart.cartItemList}">
+            <c:if test="${not empty requestScope.cart.cartItemList}">
                 <form method="post" action="${pageContext.servletContext.contextPath}/cart">
                     <table class="cart_table">
                         <thead>
@@ -26,7 +26,7 @@
                             <td>Price</td>
                         </tr>
                         </thead>
-                        <c:forEach var="item" items="${sessionScope.cart.cartItemList}" varStatus="status">
+                        <c:forEach var="item" items="${requestScope.cart.cartItemList}" varStatus="status">
                             <tr>
                                 <td><a href="${pageContext.servletContext.contextPath}/products/${item.product.id}">
                                     <img width="64px"
@@ -57,9 +57,9 @@
                         </c:forEach>
                     </table>
                     <div class="cart_info">
-                        <p>Total quantity : ${sessionScope.cart.cartItemList.size()}</p>
-                        <p>Total cost : <fmt:formatNumber value="${sessionScope.cart.totalCost}" type="currency"
-                                                          currencySymbol="${sessionScope.cart.cartItemList.get(0)
+                        <p>Total quantity : ${requestScope.cart.cartItemList.size()}</p>
+                        <p>Total cost : <fmt:formatNumber value="${requestScope.cart.totalCost}" type="currency"
+                                                          currencySymbol="${requestScope.cart.cartItemList.get(0)
                                                       .product.currency.symbol}"/></p>
                         <p>
                             <button>Update</button>
