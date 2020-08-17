@@ -1,12 +1,12 @@
 package com.es.phoneshop.controller.servlet;
 
-import com.es.phoneshop.controller.value.Const;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.exception.OutOfStockException;
 import com.es.phoneshop.model.service.CartService;
 import com.es.phoneshop.model.service.RecentlyViewedService;
+import com.es.phoneshop.value.Const;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

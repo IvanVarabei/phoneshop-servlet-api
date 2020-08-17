@@ -1,5 +1,7 @@
 package com.es.phoneshop.controller.servlet;
 
+import com.es.phoneshop.value.Const;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,11 +13,12 @@ public class MiniCartServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute(Const.RequestAttribute.CART, req.getSession().getAttribute(Const.RequestAttribute.CART));
         req.getRequestDispatcher(MINI_CART_JSP).include(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(MINI_CART_JSP).include(req, resp);
+        doGet(req, resp);
     }
 }

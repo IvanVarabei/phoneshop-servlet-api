@@ -4,13 +4,12 @@ import com.es.phoneshop.model.entity.Cart;
 import com.es.phoneshop.model.entity.CartItem;
 import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.exception.OutOfStockException;
+import com.es.phoneshop.value.Const;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 
 public class CartService {
-    private static final String SESSION_ATTRIBUTE_CART = "cart";
-
     private CartService() {
     }
 
@@ -29,9 +28,6 @@ public class CartService {
                 .findAny()
                 .map(CartItem::getQuantity)
                 .orElse(0);
-        if (product.getStock() - cartAmount < quantity || quantity <= 0) {
-            throw new OutOfStockException(product.getStock() - cartAmount);
-        }
         update(session, product, quantity + cartAmount);
     }
 
@@ -61,9 +57,9 @@ public class CartService {
     }
 
     private Cart extractCartOrCreateNewOne(HttpSession session) {
-        if (session.getAttribute(SESSION_ATTRIBUTE_CART) == null) {
-            session.setAttribute(SESSION_ATTRIBUTE_CART, new Cart());
+        if (session.getAttribute(Const.RequestAttribute.CART) == null) {
+            session.setAttribute(Const.RequestAttribute.CART, new Cart());
         }
-        return (Cart) session.getAttribute(SESSION_ATTRIBUTE_CART);
+        return (Cart) session.getAttribute(Const.RequestAttribute.CART);
     }
 }
