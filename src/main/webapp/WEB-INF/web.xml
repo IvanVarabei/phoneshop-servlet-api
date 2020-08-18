@@ -59,6 +59,15 @@
         <url-pattern>/cart/miniCart</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>recentlyViewed</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.RecentlyViewedServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>recentlyViewed</servlet-name>
+        <url-pattern>/recentlyViewed</url-pattern>
+    </servlet-mapping>
+
     <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/pages/error404.jsp</location>
