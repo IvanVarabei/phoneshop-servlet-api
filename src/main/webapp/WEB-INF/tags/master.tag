@@ -31,25 +31,7 @@
         </header>
         <jsp:doBody/>
     </div>
-    <div class="previous">
-        <div class="container">
-            <div class="previous_title">${not empty sessionScope.recent? 'Recently viewed' : ''}</div>
-            <div class="previous_row">
-                <c:forEach var="product" items="${sessionScope.recent}">
-                    <div class="previous_product">
-                        <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
-                            <img class="previous_img"
-                                 src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
-                            <div class="previous_name">${product.description}</div>
-                            <div class="previous_cost">
-                                <fmt:formatNumber value="${product.price}" type="currency"
-                                                  currencySymbol="${product.currency.symbol}"/></div>
-                        </a>
-                    </div>
-                </c:forEach>
-            </div>
-        </div>
-    </div>
+    <jsp:include page="/recentlyViewed"/>
     <footer class="footer">
         <div class="container">
             <div class="footer_row">

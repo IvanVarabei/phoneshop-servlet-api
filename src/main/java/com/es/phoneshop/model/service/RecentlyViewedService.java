@@ -1,13 +1,13 @@
 package com.es.phoneshop.model.service;
 
 import com.es.phoneshop.model.entity.Product;
+import com.es.phoneshop.value.Const;
 
 import javax.servlet.http.HttpSession;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class RecentlyViewedService {
-    private static final String SESSION_ATTRIBUTE_RECENT = "recent";
     private static final int RECENT_VIEWED_AMOUNT = 3;
 
     private RecentlyViewedService() {
@@ -23,14 +23,14 @@ public class RecentlyViewedService {
     }
 
     public void updateRecentlyViewedLine(HttpSession session, Product product) {
-        Queue<Product> recent = session.getAttribute(SESSION_ATTRIBUTE_RECENT) == null ? new LinkedList<>() :
-                (Queue<Product>) session.getAttribute(SESSION_ATTRIBUTE_RECENT);
+        Queue<Product> recent = session.getAttribute(Const.RequestAttribute.RECENT) == null ? new LinkedList<>() :
+                (Queue<Product>) session.getAttribute(Const.RequestAttribute.RECENT);
         if (!recent.contains(product)) {
             recent.offer(product);
         }
         if (recent.size() > RECENT_VIEWED_AMOUNT) {
             recent.poll();
         }
-        session.setAttribute(SESSION_ATTRIBUTE_RECENT, recent);
+        session.setAttribute(Const.RequestAttribute.RECENT, recent);
     }
 }
