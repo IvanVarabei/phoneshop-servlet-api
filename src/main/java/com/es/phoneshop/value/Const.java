@@ -19,6 +19,8 @@ public class Const {
         public static final String PRODUCTS = "products";
         public static final String CART = "cart";
         public static final String RECENT = "recent";
+        public static final String ORDER = "recent";
+        public static final String PAY_METHODS = "paymentMethods";
 
         private RequestAttribute() {
         }
@@ -30,6 +32,7 @@ public class Const {
         public static final String SORT_FIELD = "sortField";
         public static final String SORT_ORDER = "sortOrder";
         public static final String PRODUCT_ID = "productId";
+        public static final String PAY_METHOD = "paymentMethod";
 
         private RequestParam() {
         }

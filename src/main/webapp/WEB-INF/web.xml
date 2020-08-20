@@ -68,6 +68,15 @@
         <url-pattern>/recentlyViewed</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>checkoutPageServlet</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.CheckoutPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>checkoutPageServlet</servlet-name>
+        <url-pattern>/checkout</url-pattern>
+    </servlet-mapping>
+
     <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/pages/error404.jsp</location>
