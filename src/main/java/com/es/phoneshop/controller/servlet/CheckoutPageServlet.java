@@ -23,8 +23,7 @@ public class CheckoutPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Cart cart = req.getSession().getAttribute(Const.RequestAttribute.CART) == null ? new Cart() :
-                (Cart) req.getSession().getAttribute(Const.RequestAttribute.CART);
+        Cart cart = extractCartOrSetNewOne(req);
         req.setAttribute("order", orderService.getOrder(cart));
         req.setAttribute(Const.RequestAttribute.PAY_METHODS, orderService.getPaymentMethods());
         req.getRequestDispatcher(CHECKOUT_JSP).forward(req, resp);
@@ -32,9 +31,7 @@ public class CheckoutPageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Cart cart = req.getSession().getAttribute(Const.RequestAttribute.CART) == null ? new Cart() :
-                (Cart) req.getSession().getAttribute(Const.RequestAttribute.CART);
-        Order order = orderService.getOrder(cart);
+        Order order = orderService.getOrder(extractCartOrSetNewOne(req));
         Map<String, String> errors = new HashMap<>();
         setRequiredParameter(req, "firstName", errors, order::setFirstName);
         setRequiredParameter(req, "lastName", errors, order::setLastName);
@@ -48,7 +45,7 @@ public class CheckoutPageServlet extends HttpServlet {
                               Order order) throws IOException, ServletException {
         if (errorAttributes.isEmpty()) {
             orderService.placeOrder(order);
-            //cartService.clearCart();
+            cartService.clearCart(extractCartOrSetNewOne(req));
             resp.sendRedirect(req.getContextPath() + "/order/overview/" + order.getSecureId());
         } else {
             req.setAttribute(Const.RequestAttribute.ERRORS, errorAttributes);
@@ -75,5 +72,10 @@ public class CheckoutPageServlet extends HttpServlet {
         } else {
             order.setPaymentMethod(PaymentMethod.valueOf(value));
         }
+    }
+
+    private Cart extractCartOrSetNewOne(HttpServletRequest req){
+        return req.getSession().getAttribute(Const.RequestAttribute.CART) == null ? new Cart() :
+                (Cart) req.getSession().getAttribute(Const.RequestAttribute.CART);
     }
 }

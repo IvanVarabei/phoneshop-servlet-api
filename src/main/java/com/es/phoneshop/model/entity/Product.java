@@ -7,7 +7,7 @@ import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Product implements Serializable {
+public class Product implements Serializable, StorageItem {
     private Long id;
     private String code;
     private String description;
@@ -38,10 +38,12 @@ public class Product implements Serializable {
         this.imageUrl = imageUrl;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }

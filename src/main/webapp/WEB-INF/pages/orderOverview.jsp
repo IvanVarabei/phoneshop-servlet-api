@@ -48,17 +48,14 @@
 			</div>
 			<div>
 				<div>Your details</div>
-				<form method="post">
-					<table>
-						<tags:orderOverviewRow name="firstName" label="First Name" order="${requestScope.order}"/>
-						<tags:orderOverviewRow name="lastName" label="Last Name" order="${requestScope.order}"/>
-						<tags:orderOverviewRow name="phone" label="Phone" order="${requestScope.order}"/>
-						<tags:orderOverviewRow name="deliveryDate" label="Delivery Date" order="${requestScope.order}"/>
-						<tags:orderOverviewRow name="deliveryAddress" label="Delivery Address" order="${requestScope.order}"/>
-						<tags:orderOverviewRow name="paymentMethod" label="Payment method" order="${requestScope.order}"/>
-					</table>
-					<button>Place order</button>
-				</form>
+				<table>
+					<tags:orderOverviewRow name="firstName" label="First Name" order="${requestScope.order}"/>
+					<tags:orderOverviewRow name="lastName" label="Last Name" order="${requestScope.order}"/>
+					<tags:orderOverviewRow name="phone" label="Phone" order="${requestScope.order}"/>
+					<tags:orderOverviewRow name="deliveryDate" label="Delivery Date" order="${requestScope.order}"/>
+					<tags:orderOverviewRow name="deliveryAddress" label="Delivery Address" order="${requestScope.order}"/>
+					<tags:orderOverviewRow name="paymentMethod" label="Payment method" order="${requestScope.order}"/>
+				</table>
 			</div>
 		</div>
 	</div>

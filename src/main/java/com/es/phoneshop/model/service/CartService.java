@@ -49,6 +49,10 @@ public class CartService {
         refreshCart(cart);
     }
 
+    public void clearCart(Cart cart){
+        cart.getCartItemList().clear();
+    }
+
     private void refreshCart(Cart cart) {
         cart.setTotalCost(cart.getCartItemList().stream()
                 .map(cartItem -> cartItem
