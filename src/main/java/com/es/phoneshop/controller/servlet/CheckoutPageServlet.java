@@ -48,12 +48,13 @@ public class CheckoutPageServlet extends HttpServlet {
                               Order order) throws IOException, ServletException {
         if (errorAttributes.isEmpty()) {
             orderService.placeOrder(order);
-            resp.sendRedirect(req.getContextPath() + "/overview/" + order.getSecureId());
+            //cartService.clearCart();
+            resp.sendRedirect(req.getContextPath() + "/order/overview/" + order.getSecureId());
         } else {
             req.setAttribute(Const.RequestAttribute.ERRORS, errorAttributes);
-            req.setAttribute(Const.RequestAttribute.ORDER, order);
+            req.setAttribute("order", order);
             req.setAttribute(Const.RequestAttribute.PAY_METHODS, orderService.getPaymentMethods());
-            doGet(req, resp);
+            req.getRequestDispatcher(CHECKOUT_JSP).forward(req, resp);
         }
     }
 

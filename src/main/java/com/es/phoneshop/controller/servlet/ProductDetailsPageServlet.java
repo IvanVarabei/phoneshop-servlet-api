@@ -56,7 +56,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
             req.setAttribute(Const.RequestAttribute.PRODUCT, product);
             return Optional.of(product);
         } catch (NumberFormatException | ItemNotFoundException e) {
-            req.setAttribute(Const.RequestAttribute.MESSAGE, String.format(Const.ErrorInfo.NOT_FOUND, productId));
+            req.setAttribute(Const.RequestAttribute.MESSAGE, String.format(Const.ErrorInfo.PRODUCT_NOT_FOUND, productId));
             resp.sendError(Const.ErrorInfo.PAGE_NOT_FOUND_CODE);
             return Optional.empty();
         }

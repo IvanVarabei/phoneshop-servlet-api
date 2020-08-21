@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
+<jsp:useBean id="order" type="com.es.phoneshop.model.entity.Order" scope="request"/>
 <tags:master pageTitle="Checkout">
 	<div class="cart">
 		<div class="container">
@@ -16,7 +17,7 @@
 					<td>Price</td>
 				</tr>
 				</thead>
-				<c:forEach var="item" items="${requestScope.order.items}">
+				<c:forEach var="item" items="${order.cartItemList}">
 					<tr>
 						<td><a href="${pageContext.servletContext.contextPath}/products/${item.product.id}">
 							<img width="64px"
@@ -35,44 +36,46 @@
 				</c:forEach>
 			</table>
 			<div class="cart_info">
-				<p>Total quantity : ${requestScope.order.items.size()}</p>
-				<p>Cart subtotal : <fmt:formatNumber value="${requestScope.order.subtotal}" type="currency"
-																						 currencySymbol="${requestScope.order.items.get(0)
+				<p>Total quantity : ${order.cartItemList.size()}</p>
+				<p>Cart subtotal : <fmt:formatNumber value="${order.subtotal}" type="currency"
+																						 currencySymbol="${order.cartItemList.get(0)
                                                       .product.currency.symbol}"/></p>
-				<p>Delivery costs : <fmt:formatNumber value="${requestScope.order.deliveryCost}" type="currency"
-																							currencySymbol="${requestScope.order.items.get(0)
+				<p>Delivery costs : <fmt:formatNumber value="${order.deliveryCost}" type="currency"
+																							currencySymbol="${order.cartItemList.get(0)
                                                       .product.currency.symbol}"/></p>
-				<p>Cart total : <fmt:formatNumber value="${requestScope.order.totalCost}" type="currency"
-																					currencySymbol="${requestScope.order.items.get(0)
+				<p>Cart total : <fmt:formatNumber value="${order.totalCost}" type="currency"
+																					currencySymbol="${order.cartItemList.get(0)
                                                       .product.currency.symbol}"/></p>
 			</div>
 			<div>
 				<div>Your details</div>
 				<form method="post">
 					<table>
-						<tags:orderFormRow name="firstName" label="First Name" order="${requestScope.order}"
+						<tags:orderFormRow name="firstName" label="First Name" order="${order}"
 															 errors="${requestScope.errors}"/>
-						<tags:orderFormRow name="lastName" label="Last Name" order="${requestScope.order}"
+						<tags:orderFormRow name="lastName" label="Last Name" order="${order}"
 															 errors="${requestScope.errors}"/>
-						<tags:orderFormRow name="phone" label="Phone" order="${requestScope.order}"
+						<tags:orderFormRow name="phone" label="Phone" order="${order}"
 															 errors="${requestScope.errors}"/>
-						<tags:orderFormRow name="deliveryDate" label="Delivery Date" order="${requestScope.order}"
+						<tags:orderFormRow name="deliveryDate" label="Delivery Date" order="${order}"
 															 errors="${requestScope.errors}"/>
-						<tags:orderFormRow name="deliveryAddress" label="Delivery Address" order="${requestScope.order}"
+						<tags:orderFormRow name="deliveryAddress" label="Delivery Address" order="${order}"
 															 errors="${requestScope.errors}"/>
 						<tr>
 							<td>Payment method<span style="color:red">*</span></td>
 							<td>
-								<select name="paymentMethod" >
+								<select name="paymentMethod">
 									<option>${param['paymentMethod']}</option>
 									<c:forEach var="paymentMethod" items="${requestScope.paymentMethods}">
-										<option>${paymentMethod}</option>
+										<c:if test="${paymentMethod != param['paymentMethod']}">
+											<option>${paymentMethod}</option>
+										</c:if>
 									</c:forEach>
 								</select>
-<%--								<c:set var="error" value="${requestScope.errors['paymentMethod']}"/>--%>
-<%--								<c:if test="${not empty error}">--%>
-<%--									<div class="error">${error}</div>--%>
-<%--								</c:if>--%>
+								<c:set var="error" value="${requestScope.errors['paymentMethod']}"/>
+								<c:if test="${not empty error}">
+									<div class="error">${error}</div>
+								</c:if>
 							</td>
 						</tr>
 					</table>

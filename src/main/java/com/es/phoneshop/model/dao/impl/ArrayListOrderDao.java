@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ArrayListOrderDao implements OrderDao {
     private List<Order> orderList = new ArrayList<>();
+    private long orderId;
 
     private ArrayListOrderDao(){}
 
@@ -20,11 +21,17 @@ public class ArrayListOrderDao implements OrderDao {
         return ArrayListOrderDaoHolder.ARRAY_LIST_ORDER_DAO_INSTANCE;
     }
 
-//    @Override
-//    public synchronized Order getOrder(Long id) throws OrderNotFoundException {
-//        return orderList.stream().filter(o -> o.getId().equals(id)).findAny()
-//                .orElseThrow(OrderNotFoundException::new);
-//    }
+    @Override
+    public synchronized Order findOrder(Long id) throws OrderNotFoundException {
+        return orderList.stream().filter(o -> o.getId().equals(id)).findAny()
+                .orElseThrow(OrderNotFoundException::new);
+    }
+
+    @Override
+    public Order findOrderBySecureId(String id) throws OrderNotFoundException {
+        return orderList.stream().filter(o -> o.getSecureId().equals(id)).findAny()
+                .orElseThrow(OrderNotFoundException::new);
+    }
 
     @Override
     public synchronized void save(Order order) {
@@ -32,7 +39,7 @@ public class ArrayListOrderDao implements OrderDao {
         if(id != null){
             orderList.remove(order);
         }else{
-            order.setId(333333l);
+            order.setId(++orderId);
         }
         orderList.add(order);
     }

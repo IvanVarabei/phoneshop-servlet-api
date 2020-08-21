@@ -18,7 +18,7 @@
             <div class="container">
                 <div class="header_row">
                     <div class="header_name">
-                        <a href="${pageContext.servletContext.contextPath}">phone shop</a></div>
+                        <a href="/">phone shop</a></div>
                     <form class="header_search" action="${pageContext.request.contextPath}/products">
                         <input class="header_input" name="query" value="${param.query}" placeholder="Search goods">
                         <button class="header_search_button">

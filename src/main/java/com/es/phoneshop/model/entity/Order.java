@@ -7,10 +7,10 @@ import java.util.List;
 public class Order extends Cart {
     private Long id;
     private String secureId;
-    private List<CartItem> items;
+
     private BigDecimal subtotal;
     private BigDecimal deliveryCost;
-    private BigDecimal totalCost;
+
     private String firstName;
     private String lastName;
     private String phone;
@@ -37,14 +37,6 @@ public class Order extends Cart {
         this.secureId = secureId;
     }
 
-    public List<CartItem> getItems() {
-        return items;
-    }
-
-    public void setItems(List<CartItem> items) {
-        this.items = items;
-    }
-
     public BigDecimal getSubtotal() {
         return subtotal;
     }
@@ -59,16 +51,6 @@ public class Order extends Cart {
 
     public void setDeliveryCost(BigDecimal deliveryCost) {
         this.deliveryCost = deliveryCost;
-    }
-
-    @Override
-    public BigDecimal getTotalCost() {
-        return totalCost;
-    }
-
-    @Override
-    public void setTotalCost(BigDecimal totalCost) {
-        this.totalCost = totalCost;
     }
 
     public String getFirstName() {

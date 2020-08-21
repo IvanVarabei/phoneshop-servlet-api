@@ -77,6 +77,15 @@
         <url-pattern>/checkout</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>OrderOverviewPageServlet</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.OrderOverviewPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderOverviewPageServlet</servlet-name>
+        <url-pattern>/order/overview/*</url-pattern>
+    </servlet-mapping>
+
     <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/pages/error404.jsp</location>

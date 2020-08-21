@@ -2,7 +2,8 @@ package com.es.phoneshop.value;
 
 public class Const {
     public static class ErrorInfo {
-        public static final String NOT_FOUND = "Product with code '%s' not found.";
+        public static final String PRODUCT_NOT_FOUND = "Product with code '%s' not found.";
+        public static final String ORDER_NOT_FOUND = "Order with code '%s' not found.";
         public static final String NOT_ENOUGH_STOCK = "Not enough stock. Available:%s";
         public static final String NOT_NUMBER = "Not a number";
         public static final int PAGE_NOT_FOUND_CODE = 404;

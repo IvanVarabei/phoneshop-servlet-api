@@ -6,6 +6,7 @@ import com.es.phoneshop.model.entity.Cart;
 import com.es.phoneshop.model.entity.CartItem;
 import com.es.phoneshop.model.entity.Order;
 import com.es.phoneshop.model.entity.PaymentMethod;
+import com.es.phoneshop.model.exception.OrderNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -27,9 +28,9 @@ public class OrderService {
         return OrderServiceHolder.ORDER_SERVICE_HOLDER;
     }
 
-    public Order getOrder(Cart cart){
+    public Order getOrder(Cart cart){//ok
         Order order = new Order();
-        order.setItems(cart.getCartItemList().stream().map(cartItem -> {
+        order.setCartItemList(cart.getCartItemList().stream().map(cartItem -> {
             try{
                 return cartItem.clone();
             }catch (CloneNotSupportedException e){
@@ -45,6 +46,14 @@ public class OrderService {
     public void placeOrder(Order order){
         order.setSecureId(UUID.randomUUID().toString());
         orderDao.save(order);
+    }
+
+    public Order findOrder(Long id) throws OrderNotFoundException {
+        return orderDao.findOrder(id);
+    }
+
+    public Order findOrderBySecureId(String id) throws OrderNotFoundException {
+        return orderDao.findOrderBySecureId(id);
     }
 
     public List<PaymentMethod> getPaymentMethods(){
