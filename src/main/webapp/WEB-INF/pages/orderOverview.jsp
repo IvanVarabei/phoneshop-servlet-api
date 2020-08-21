@@ -6,8 +6,8 @@
 <tags:master pageTitle="Overview">
 	<div class="cart">
 		<div class="container">
-			<div>Overview</div>
 			<table class="cart_table">
+				<caption>Order overview</caption>
 				<thead>
 				<tr>
 					<td>Image</td>
@@ -46,9 +46,9 @@
 																					currencySymbol="${requestScope.order.cartItemList.get(0)
                                                       .product.currency.symbol}"/></p>
 			</div>
-			<div>
-				<div>Your details</div>
-				<table>
+			<div class="overviewTable">
+				<table class="cart_table">
+					<caption>Your details</caption>
 					<tags:orderOverviewRow name="firstName" label="First Name" order="${requestScope.order}"/>
 					<tags:orderOverviewRow name="lastName" label="Last Name" order="${requestScope.order}"/>
 					<tags:orderOverviewRow name="phone" label="Phone" order="${requestScope.order}"/>

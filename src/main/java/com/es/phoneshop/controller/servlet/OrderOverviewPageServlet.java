@@ -18,7 +18,7 @@ public class OrderOverviewPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String secureId = req.getPathInfo().substring(1);
         try {
-            req.setAttribute("order", orderService.findOrderBySecureId(secureId));
+            req.setAttribute(Const.RequestAttribute.ORDER, orderService.findOrderBySecureId(secureId));
             req.getRequestDispatcher(ORDER_OVERVIEW_JSP).forward(req, resp);
         } catch (OrderNotFoundException e) {
             req.setAttribute(Const.RequestAttribute.MESSAGE, String.format(Const.ErrorInfo.ORDER_NOT_FOUND, secureId));

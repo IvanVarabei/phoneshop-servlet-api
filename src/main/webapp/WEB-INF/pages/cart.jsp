@@ -67,7 +67,7 @@
                     </div>
                 </form>
                 <form action="${pageContext.servletContext.contextPath}/checkout">
-                    <button>Checkout</button>
+                    <button class="checkoutButton">Checkout</button>
                 </form>
             </c:if>
             <form id="deleteCartItem" method="post"></form>

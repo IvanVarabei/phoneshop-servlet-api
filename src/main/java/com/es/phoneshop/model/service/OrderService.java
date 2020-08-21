@@ -3,7 +3,6 @@ package com.es.phoneshop.model.service;
 import com.es.phoneshop.model.dao.OrderDao;
 import com.es.phoneshop.model.dao.impl.ArrayListOrderDao;
 import com.es.phoneshop.model.entity.Cart;
-import com.es.phoneshop.model.entity.CartItem;
 import com.es.phoneshop.model.entity.Order;
 import com.es.phoneshop.model.entity.PaymentMethod;
 import com.es.phoneshop.model.exception.OrderNotFoundException;
@@ -28,7 +27,7 @@ public class OrderService {
         return OrderServiceHolder.ORDER_SERVICE_HOLDER;
     }
 
-    public Order getOrder(Cart cart){//ok
+    public Order createOrder(Cart cart){
         Order order = new Order();
         order.setCartItemList(cart.getCartItemList().stream().map(cartItem -> {
             try{

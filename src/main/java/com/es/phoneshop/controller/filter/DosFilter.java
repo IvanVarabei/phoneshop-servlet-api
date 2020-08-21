@@ -1,6 +1,7 @@
 package com.es.phoneshop.controller.filter;
 
 import com.es.phoneshop.model.service.DosProtectionService;
+import com.es.phoneshop.value.Const;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,7 @@ public class DosFilter implements Filter {
         if (dosProtectionService.isAllowed(req.getRemoteAddr())) {
             filterChain.doFilter(req, resp);
         } else {
-            ((HttpServletResponse) resp).setStatus(429);
+            ((HttpServletResponse) resp).setStatus(Const.ErrorInfo.TOO_MANY_REQUESTS_CODE);
         }
     }
 

@@ -7,8 +7,8 @@
 <tags:master pageTitle="Checkout">
 	<div class="cart">
 		<div class="container">
-			<div>Checkout</div>
 			<table class="cart_table">
+				<caption>Checkout</caption>
 				<thead>
 				<tr>
 					<td>Image</td>
@@ -48,23 +48,23 @@
                                                       .product.currency.symbol}"/></p>
 			</div>
 			<div>
-				<div>Your details</div>
 				<form method="post">
-					<table>
+					<table class="cart_table">
+						<caption>Your details</caption>
 						<tags:orderFormRow name="firstName" label="First Name" order="${order}"
 															 errors="${requestScope.errors}"/>
 						<tags:orderFormRow name="lastName" label="Last Name" order="${order}"
 															 errors="${requestScope.errors}"/>
 						<tags:orderFormRow name="phone" label="Phone" order="${order}"
 															 errors="${requestScope.errors}"/>
-						<tags:orderFormRow name="deliveryDate" label="Delivery Date" order="${order}"
+						<tags:orderFormRow name="deliveryDate" label="Delivery Date (yyyy-MM-dd)" order="${order}"
 															 errors="${requestScope.errors}"/>
 						<tags:orderFormRow name="deliveryAddress" label="Delivery Address" order="${order}"
 															 errors="${requestScope.errors}"/>
 						<tr>
 							<td>Payment method<span style="color:red">*</span></td>
 							<td>
-								<select name="paymentMethod">
+								<select class="select" name="paymentMethod">
 									<option>${param['paymentMethod']}</option>
 									<c:forEach var="paymentMethod" items="${requestScope.paymentMethods}">
 										<c:if test="${paymentMethod != param['paymentMethod']}">
@@ -79,7 +79,7 @@
 							</td>
 						</tr>
 					</table>
-					<button>Place order</button>
+					<button class="checkoutButton">Place order</button>
 				</form>
 			</div>
 		</div>

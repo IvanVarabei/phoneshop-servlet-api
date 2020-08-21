@@ -1,12 +1,18 @@
 package com.es.phoneshop.value;
 
 public class Const {
+    private Const() {
+    }
+
     public static class ErrorInfo {
         public static final String PRODUCT_NOT_FOUND = "Product with code '%s' not found.";
         public static final String ORDER_NOT_FOUND = "Order with code '%s' not found.";
-        public static final String NOT_ENOUGH_STOCK = "Not enough stock. Available:%s";
-        public static final String NOT_NUMBER = "Not a number";
+        public static final String NOT_ENOUGH_STOCK = "Not enough stock. Available:%s.";
+        public static final String NOT_NUMBER = "Not a number.";
+        public static final String VALUE_IS_REQUIRED = "Value is required.";
+        public static final String INVALID_DATE_VALUE = "Invalid date value.";
         public static final int PAGE_NOT_FOUND_CODE = 404;
+        public static final int TOO_MANY_REQUESTS_CODE = 429;
 
         private ErrorInfo() {
         }
@@ -20,7 +26,7 @@ public class Const {
         public static final String PRODUCTS = "products";
         public static final String CART = "cart";
         public static final String RECENT = "recent";
-        public static final String ORDER = "recent";
+        public static final String ORDER = "order";
         public static final String PAY_METHODS = "paymentMethods";
 
         private RequestAttribute() {
@@ -34,6 +40,11 @@ public class Const {
         public static final String SORT_ORDER = "sortOrder";
         public static final String PRODUCT_ID = "productId";
         public static final String PAY_METHOD = "paymentMethod";
+        public static final String FIRST_NAME = "firstName";
+        public static final String LAST_NAME = "lastName";
+        public static final String PHONE = "phone";
+        public static final String DELIVERY_ADDRESS = "deliveryAddress";
+        public static final String DELIVERY_DATE = "deliveryDate";
 
         private RequestParam() {
         }
