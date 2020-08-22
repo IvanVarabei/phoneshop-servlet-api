@@ -45,7 +45,7 @@ public class ProductDetailsPageServletTest {
     @Before
     public void setup() throws ItemNotFoundException {
         when(request.getPathInfo()).thenReturn("/1");
-        when(dao.findProduct(1L)).thenReturn(product1);
+        when(dao.find(1L)).thenReturn(product1);
         when(product1.getId()).thenReturn(1L);
         when(request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp")).thenReturn(requestDispatcher);
         when(request.getSession()).thenReturn(session);
@@ -99,7 +99,7 @@ public class ProductDetailsPageServletTest {
 
         servlet.doPost(request, response);
 
-        verify(request).setAttribute("error", "Not a number");
+        verify(request).setAttribute("error", "Not a number.");
         verify(response, never()).sendRedirect(
                 "/phoneshop_servlet_api_war_exploded/products/1?message=Added to cart successfully");
     }

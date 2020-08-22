@@ -10,7 +10,7 @@ public class Const {
         public static final String NOT_ENOUGH_STOCK = "Not enough stock. Available:%s.";
         public static final String NOT_NUMBER = "Not a number.";
         public static final String VALUE_IS_REQUIRED = "Value is required.";
-        public static final String INVALID_DATE_VALUE = "Invalid date value.";
+        public static final String INVALID_VALUE = "Invalid value.";
         public static final int PAGE_NOT_FOUND_CODE = 404;
         public static final int TOO_MANY_REQUESTS_CODE = 429;
 

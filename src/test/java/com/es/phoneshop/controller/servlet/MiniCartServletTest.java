@@ -37,16 +37,8 @@ public class MiniCartServletTest {
     }
 
     @Test
-    public void testDoGet() throws ServletException, IOException {
-        servlet.doGet(request, response);
-
-        verify(request).setAttribute(eq("cart"), any());
-        verify(requestDispatcher).include(request, response);
-    }
-
-    @Test
-    public void testDoPost() throws ServletException, IOException {
-        servlet.doPost(request, response);
+    public void testService() throws ServletException, IOException {
+        servlet.service(request, response);
 
         verify(request).setAttribute(eq("cart"), any());
         verify(requestDispatcher).include(request, response);

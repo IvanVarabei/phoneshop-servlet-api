@@ -36,7 +36,7 @@ public class CartPageServlet extends HttpServlet {
             long productId = Long.parseLong(productIds[i]);
             try {
                 int quantity = NumberFormat.getInstance(req.getLocale()).parse(quantities[i]).intValue();
-                cartService.update(req.getSession(), dao.findProduct(productId), quantity);
+                cartService.update(req.getSession(), dao.find(productId), quantity);
             } catch (ItemNotFoundException | OutOfStockException | ParseException e) {
                 handleError(errors, productId, e);
             }

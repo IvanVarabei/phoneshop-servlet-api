@@ -1,6 +1,6 @@
 package com.es.phoneshop.controller.servlet;
 
-import com.es.phoneshop.model.exception.OrderNotFoundException;
+import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.service.OrderService;
 import com.es.phoneshop.value.Const;
 
@@ -20,7 +20,7 @@ public class OrderOverviewPageServlet extends HttpServlet {
         try {
             req.setAttribute(Const.RequestAttribute.ORDER, orderService.findOrderBySecureId(secureId));
             req.getRequestDispatcher(ORDER_OVERVIEW_JSP).forward(req, resp);
-        } catch (OrderNotFoundException e) {
+        } catch (ItemNotFoundException e) {
             req.setAttribute(Const.RequestAttribute.MESSAGE, String.format(Const.ErrorInfo.ORDER_NOT_FOUND, secureId));
             resp.sendError(Const.ErrorInfo.PAGE_NOT_FOUND_CODE);
         }

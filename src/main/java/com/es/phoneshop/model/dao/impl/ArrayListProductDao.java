@@ -5,7 +5,6 @@ import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
 import com.es.phoneshop.model.entity.Product;
-import com.es.phoneshop.model.exception.ItemNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -30,18 +29,6 @@ public class ArrayListProductDao extends ArrayListGeneralDao<Product> implements
 
     public static ArrayListProductDao getInstance() {
         return SingletonHolder.HOLDER_INSTANCE;
-    }
-
-    protected void setPhoneList(List<Product> phoneList) {
-        this.items = phoneList;
-    }
-
-    @Override
-    public synchronized Product findProduct(Long id) throws ItemNotFoundException {
-        return items.stream()
-                .filter(product -> product.getId().equals(id))
-                .findAny()
-                .orElseThrow(ItemNotFoundException::new);
     }
 
     @Override

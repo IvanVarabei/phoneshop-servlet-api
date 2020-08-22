@@ -63,7 +63,7 @@ public class ProductListPageServlet extends HttpServlet {
             throws IOException {
         String productId = req.getParameter(Const.RequestParam.PRODUCT_ID);
         try {
-            Product product = dao.findProduct(Long.valueOf(productId));
+            Product product = dao.find(Long.valueOf(productId));
             return Optional.of(product);
         } catch (NumberFormatException | ItemNotFoundException e) {
             req.setAttribute(Const.RequestAttribute.MESSAGE, String.format(Const.ErrorInfo.PRODUCT_NOT_FOUND, productId));

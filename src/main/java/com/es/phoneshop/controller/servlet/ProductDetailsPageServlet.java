@@ -52,7 +52,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
             throws IOException {
         String productId = req.getPathInfo().substring(1);
         try {
-            Product product = dao.findProduct(Long.valueOf(productId));
+            Product product = dao.find(Long.valueOf(productId));
             req.setAttribute(Const.RequestAttribute.PRODUCT, product);
             return Optional.of(product);
         } catch (NumberFormatException | ItemNotFoundException e) {

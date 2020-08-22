@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -120,5 +121,13 @@ public class CartServiceTest {
         assertEquals(expected, actual);
         verify(session , times(2)).getAttribute("cart");
         verify(cart, times(2)).getCartItemList();
+    }
+
+    @Test
+    public void testClearCart() {
+        cartItems.add(cartItem3);
+        cartService.clearCart(cart);
+
+        assertTrue(cartItems.isEmpty());
     }
 }

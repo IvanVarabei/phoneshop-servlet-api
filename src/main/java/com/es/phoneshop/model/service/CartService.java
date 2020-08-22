@@ -21,8 +21,8 @@ public class CartService {
         return CartServiceHolder.CART_SERVICE_INSTANCE;
     }
 
-    public synchronized void add(HttpSession session, Product product, int quantity) throws OutOfStockException {
-        Cart cart = extractCartOrCreateNewOne(session);
+    public void add(HttpSession session, Product product, int quantity) throws OutOfStockException {
+        Cart cart = extractCartOrSetNewOne(session);
         int cartAmount = cart.getCartItemList().stream()
                 .filter(p -> p.getProduct().getId().equals(product.getId()))
                 .findAny()
@@ -31,8 +31,8 @@ public class CartService {
         update(session, product, quantity + cartAmount);
     }
 
-    public synchronized void update(HttpSession session, Product product, int quantity) throws OutOfStockException {
-        Cart cart = extractCartOrCreateNewOne(session);
+    public void update(HttpSession session, Product product, int quantity) throws OutOfStockException {
+        Cart cart = extractCartOrSetNewOne(session);
         if (product.getStock() < quantity || quantity <= 0) {
             throw new OutOfStockException(product.getStock());
         }
@@ -43,8 +43,8 @@ public class CartService {
         refreshCart(cart);
     }
 
-    public synchronized void delete(HttpSession session, Product product) {
-        Cart cart = extractCartOrCreateNewOne(session);
+    public void delete(HttpSession session, Product product) {
+        Cart cart = extractCartOrSetNewOne(session);
         cart.getCartItemList().removeIf(cartItem -> cartItem.getProduct().equals(product));
         refreshCart(cart);
     }
@@ -53,17 +53,17 @@ public class CartService {
         cart.getCartItemList().clear();
     }
 
+    public Cart extractCartOrSetNewOne(HttpSession session) {
+        if (session.getAttribute(Const.RequestAttribute.CART) == null) {
+            session.setAttribute(Const.RequestAttribute.CART, new Cart());
+        }
+        return (Cart) session.getAttribute(Const.RequestAttribute.CART);
+    }
+
     private void refreshCart(Cart cart) {
         cart.setTotalCost(cart.getCartItemList().stream()
                 .map(cartItem -> cartItem
                         .getProduct().getPrice().multiply(new BigDecimal(cartItem.getQuantity())))
                 .reduce(BigDecimal::add).orElse(BigDecimal.valueOf(0)));
-    }
-
-    private Cart extractCartOrCreateNewOne(HttpSession session) {
-        if (session.getAttribute(Const.RequestAttribute.CART) == null) {
-            session.setAttribute(Const.RequestAttribute.CART, new Cart());
-        }
-        return (Cart) session.getAttribute(Const.RequestAttribute.CART);
     }
 }

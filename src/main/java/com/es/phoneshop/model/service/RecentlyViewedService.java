@@ -14,8 +14,7 @@ public class RecentlyViewedService {
     }
 
     private static class RecentlyViewedServiceHolder {
-        private static final RecentlyViewedService RECENTLY_VIEWED_SERVICE_INSTANCE =
-                new RecentlyViewedService();
+        private static final RecentlyViewedService RECENTLY_VIEWED_SERVICE_INSTANCE = new RecentlyViewedService();
     }
 
     public static RecentlyViewedService getInstance() {
