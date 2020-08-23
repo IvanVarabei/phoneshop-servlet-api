@@ -1,6 +1,5 @@
 package com.es.phoneshop.model.dao;
 
-import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.entity.StorageItem;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 
