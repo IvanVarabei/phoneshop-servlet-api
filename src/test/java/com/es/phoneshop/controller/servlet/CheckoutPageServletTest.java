@@ -58,7 +58,7 @@ public class CheckoutPageServletTest {
         when(req.getParameter("phone")).thenReturn("+375297324595");
         when(req.getParameter("deliveryDate")).thenReturn("1999-10-22");
         when(req.getParameter("deliveryAddress")).thenReturn("Minsk");
-        when(req.getParameter("paymentMethod")).thenReturn(PaymentMethod.CACHE.toString());
+        when(req.getParameter("paymentMethod")).thenReturn(PaymentMethod.CASH.toString());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class CheckoutPageServletTest {
         verify(order).setPhone("+375297324595");
         verify(order).setDeliveryDate(LocalDate.of(1999, 10, 22));
         verify(order).setDeliveryAddress("Minsk");
-        verify(order).setPaymentMethod(PaymentMethod.CACHE);
+        verify(order).setPaymentMethod(PaymentMethod.CASH);
         verify(orderService).placeOrder(order);
         verify(cartService).clearCart(cart);
         verify(resp).sendRedirect(anyString());
