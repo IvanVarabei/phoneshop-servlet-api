@@ -1,5 +1,6 @@
 package com.es.phoneshop.model.service;
 
+import com.es.phoneshop.model.service.impl.DefaultDosProtectionService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,8 +10,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DosProtectionServiceTest {
-    private DosProtectionService dosProtectionService = DosProtectionService.getInstance();
+public class DefaultDosProtectionServiceTest {
+    private DosProtectionService dosProtectionService = DefaultDosProtectionService.getInstance();
 
     @Before
     public void setup() {

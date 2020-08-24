@@ -1,11 +1,10 @@
 package com.es.phoneshop.model.service;
 
 import com.es.phoneshop.model.dao.OrderDao;
-import com.es.phoneshop.model.entity.Cart;
-import com.es.phoneshop.model.entity.CartItem;
-import com.es.phoneshop.model.entity.Order;
-import com.es.phoneshop.model.entity.PaymentMethod;
+import com.es.phoneshop.model.dao.ProductDao;
+import com.es.phoneshop.model.entity.*;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
+import com.es.phoneshop.model.service.impl.DefaultOrderService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,9 +20,11 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class OrderServiceTest {
+public class DefaultOrderServiceTest {
     @Mock
-    private OrderDao dao;
+    private OrderDao orderDao;
+    @Mock
+    private ProductDao productDao;
     @Mock
     private Cart cart;
     @Mock
@@ -31,11 +32,15 @@ public class OrderServiceTest {
     @Mock
     private CartItem cartItem2;
     @Mock
+    private Product product1;
+    @Mock
+    private Product product2;
+    @Mock
     private Order order;
     private final BigDecimal cartTotalCost = BigDecimal.valueOf(3);
     private List<CartItem> cartItemList;
     @InjectMocks
-    private OrderService orderService = OrderService.getInstance();
+    private OrderService orderService = DefaultOrderService.getInstance();
 
     @Before
     public void setup() throws CloneNotSupportedException {
@@ -46,6 +51,13 @@ public class OrderServiceTest {
         when(cartItem2.clone()).thenReturn(cartItem2);
         when(cart.getCartItemList()).thenReturn(cartItemList);
         when(cart.getTotalCost()).thenReturn(cartTotalCost);
+        when(cartItem1.getProduct()).thenReturn(product1);
+        when(cartItem2.getProduct()).thenReturn(product2);
+        when(product1.getStock()).thenReturn(3);
+        when(product2.getStock()).thenReturn(3);
+        when(cartItem1.getQuantity()).thenReturn(1);
+        when(cartItem2.getQuantity()).thenReturn(1);
+        when(order.getCartItemList()).thenReturn(cartItemList);
     }
 
     @Test
@@ -73,8 +85,9 @@ public class OrderServiceTest {
         orderService.placeOrder(order);
 
         verify(order).setSecureId(anyString());
-        verify(dao).save(order);
-        verify(dao).subtractProductQuantityRegardingPlacedOrder(order);
+        verify(orderDao).save(order);
+        verify(productDao).updateProductStock(product1, 2);
+        verify(productDao).updateProductStock(product2, 2);
     }
 
     @Test
@@ -90,13 +103,13 @@ public class OrderServiceTest {
     public void testFindOrderById() throws ItemNotFoundException {
         orderService.findOrder(1L);
 
-        verify(dao).find(1L);
+        verify(orderDao).find(1L);
     }
 
     @Test
     public void testFindOrderBySecureId() throws ItemNotFoundException {
         orderService.findOrderBySecureId("id");
 
-        verify(dao).findOrderBySecureId("id");
+        verify(orderDao).findOrderBySecureId("id");
     }
 }

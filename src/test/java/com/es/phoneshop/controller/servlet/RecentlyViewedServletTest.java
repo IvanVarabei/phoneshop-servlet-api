@@ -37,8 +37,16 @@ public class RecentlyViewedServletTest {
     }
 
     @Test
-    public void testService() throws ServletException, IOException {
-        servlet.service(request, response);
+    public void testDoGet() throws ServletException, IOException {
+        servlet.doGet(request, response);
+
+        verify(request).setAttribute(eq("recent"), any());
+        verify(requestDispatcher).include(request, response);
+    }
+
+    @Test
+    public void testDoPost() throws ServletException, IOException {
+        servlet.doPost(request, response);
 
         verify(request).setAttribute(eq("recent"), any());
         verify(requestDispatcher).include(request, response);

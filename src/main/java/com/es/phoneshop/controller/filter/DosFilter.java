@@ -1,6 +1,7 @@
 package com.es.phoneshop.controller.filter;
 
 import com.es.phoneshop.model.service.DosProtectionService;
+import com.es.phoneshop.model.service.impl.DefaultDosProtectionService;
 import com.es.phoneshop.value.Const;
 
 import javax.servlet.*;
@@ -8,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class DosFilter implements Filter {
-    private DosProtectionService dosProtectionService = DosProtectionService.getInstance();
+    private DosProtectionService dosProtectionService = DefaultDosProtectionService.getInstance();
 
     @Override
     public void init(FilterConfig filterConfig) {

@@ -1,5 +1,6 @@
 package com.es.phoneshop.controller.servlet;
 
+import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
@@ -7,6 +8,7 @@ import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.exception.OutOfStockException;
 import com.es.phoneshop.model.service.CartService;
+import com.es.phoneshop.model.service.impl.DefaultCartService;
 import com.es.phoneshop.value.Const;
 
 import javax.servlet.ServletException;
@@ -23,8 +25,8 @@ public class ProductListPageServlet extends HttpServlet {
     private static final String PRODUCT_LIST_JSP = "/WEB-INF/pages/productList.jsp";
     private static final String REDIRECT_AFTER_ADDING_TO_CART =
             "%s/products?query=%s&sortField=%s&sortOrder=%s&message=Added to cart successfully";
-    private ArrayListProductDao dao = ArrayListProductDao.getInstance();
-    private CartService cartService = CartService.getInstance();
+    private ProductDao productDao = ArrayListProductDao.getInstance();
+    private CartService cartService = DefaultCartService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,7 +40,7 @@ public class ProductListPageServlet extends HttpServlet {
             sortField = SortField.valueOf(sortFieldParam.toUpperCase());
             sortOrder = SortOrder.valueOf(sortOrderParam.toUpperCase());
         }
-        req.setAttribute(Const.RequestAttribute.PRODUCTS, dao.findProducts(query, sortField, sortOrder));
+        req.setAttribute(Const.RequestAttribute.PRODUCTS, productDao.findProducts(query, sortField, sortOrder));
         req.getRequestDispatcher(PRODUCT_LIST_JSP).forward(req, resp);
     }
 
@@ -63,7 +65,7 @@ public class ProductListPageServlet extends HttpServlet {
             throws IOException {
         String productId = req.getParameter(Const.RequestParam.PRODUCT_ID);
         try {
-            Product product = dao.find(Long.valueOf(productId));
+            Product product = productDao.find(Long.valueOf(productId));
             return Optional.of(product);
         } catch (NumberFormatException | ItemNotFoundException e) {
             req.setAttribute(Const.RequestAttribute.MESSAGE, String.format(Const.ErrorInfo.PRODUCT_NOT_FOUND, productId));

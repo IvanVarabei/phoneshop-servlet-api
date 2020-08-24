@@ -1,11 +1,10 @@
 package com.es.phoneshop.model.dao.impl;
 
-import com.es.phoneshop.model.dao.ArrayListGeneralDao;
 import com.es.phoneshop.model.dao.OrderDao;
 import com.es.phoneshop.model.entity.Order;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 
-public class ArrayListOrderDao extends ArrayListGeneralDao<Order> implements OrderDao {
+public class ArrayListOrderDao extends ArrayListGenericDao<Order> implements OrderDao {
     private ArrayListOrderDao() {
     }
 
@@ -21,11 +20,5 @@ public class ArrayListOrderDao extends ArrayListGeneralDao<Order> implements Ord
     public synchronized Order findOrderBySecureId(String id) throws ItemNotFoundException {
         return items.stream().filter(o -> o.getSecureId().equals(id)).findAny()
                 .orElseThrow(ItemNotFoundException::new);
-    }
-
-    @Override
-    public synchronized void subtractProductQuantityRegardingPlacedOrder(Order order) {
-        order.getCartItemList().forEach(cartItem ->
-                cartItem.getProduct().setStock(cartItem.getProduct().getStock() - cartItem.getQuantity()));
     }
 }

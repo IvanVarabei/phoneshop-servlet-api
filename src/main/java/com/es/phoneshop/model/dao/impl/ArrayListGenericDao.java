@@ -1,12 +1,13 @@
-package com.es.phoneshop.model.dao;
+package com.es.phoneshop.model.dao.impl;
 
+import com.es.phoneshop.model.dao.GenericDao;
 import com.es.phoneshop.model.entity.StorageItem;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArrayListGeneralDao<T extends StorageItem> {
+public class ArrayListGenericDao<T extends StorageItem> implements GenericDao<T> {
     protected List<T> items = new ArrayList<>();
     protected long id;
 

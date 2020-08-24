@@ -1,67 +1,20 @@
 package com.es.phoneshop.model.service;
 
-import com.es.phoneshop.model.dao.OrderDao;
-import com.es.phoneshop.model.dao.impl.ArrayListOrderDao;
 import com.es.phoneshop.model.entity.Cart;
 import com.es.phoneshop.model.entity.Order;
 import com.es.phoneshop.model.entity.PaymentMethod;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
-public class OrderService {
-    private static final int DELIVERY_COST = 11;
-    private OrderDao orderDao = ArrayListOrderDao.getInstance();
+public interface OrderService {
+    Order createOrder(Cart cart);
 
-    private OrderService() {
-    }
+    void placeOrder(Order order);
 
-    private static class OrderServiceHolder {
-        private static final OrderService ORDER_SERVICE_HOLDER = new OrderService();
-    }
+    Order findOrder(Long id) throws ItemNotFoundException;
 
-    public static OrderService getInstance() {
-        return OrderServiceHolder.ORDER_SERVICE_HOLDER;
-    }
+    Order findOrderBySecureId(String id) throws ItemNotFoundException;
 
-    public Order createOrder(Cart cart) {
-        Order order = new Order();
-        order.setCartItemList(cart.getCartItemList().stream().map(cartItem -> {
-            try {
-                return cartItem.clone();
-            } catch (CloneNotSupportedException e) {
-                throw new RuntimeException(e);
-            }
-        }).collect(Collectors.toList()));
-        order.setSubtotal(cart.getTotalCost());
-        order.setDeliveryCost(calculateDeliveryCost());
-        order.setTotalCost(order.getSubtotal().add(order.getDeliveryCost()));
-        return order;
-    }
-
-    public void placeOrder(Order order) {
-        order.setSecureId(UUID.randomUUID().toString());
-        orderDao.save(order);
-        orderDao.subtractProductQuantityRegardingPlacedOrder(order);
-    }
-
-    public Order findOrder(Long id) throws ItemNotFoundException {
-        return orderDao.find(id);
-    }
-
-    public Order findOrderBySecureId(String id) throws ItemNotFoundException {
-        return orderDao.findOrderBySecureId(id);
-    }
-
-    public List<PaymentMethod> getPaymentMethods() {
-        return Arrays.asList(PaymentMethod.values());
-    }
-
-    private BigDecimal calculateDeliveryCost() {
-        return new BigDecimal(DELIVERY_COST);
-    }
+    List<PaymentMethod> getPaymentMethods();
 }

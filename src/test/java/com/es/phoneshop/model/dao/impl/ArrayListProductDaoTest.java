@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -231,5 +232,13 @@ public class ArrayListProductDaoTest {
         List<Product> actual = dao.findProducts("", SortField.DESCRIPTION, SortOrder.ASC);
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testUpdateProductStock() {
+        productList.add(product1);
+        dao.updateProductStock(product1, 3);
+
+        verify(product1).setStock(3);
     }
 }

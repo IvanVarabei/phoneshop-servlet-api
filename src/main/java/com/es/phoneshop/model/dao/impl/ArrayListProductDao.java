@@ -1,6 +1,5 @@
 package com.es.phoneshop.model.dao.impl;
 
-import com.es.phoneshop.model.dao.ArrayListGeneralDao;
 import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
@@ -14,7 +13,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ArrayListProductDao extends ArrayListGeneralDao<Product> implements ProductDao {
+public class ArrayListProductDao extends ArrayListGenericDao<Product> implements ProductDao {
     private static final String BLANK = "\\p{Blank}";
 
     private ArrayListProductDao() {
@@ -46,6 +45,11 @@ public class ArrayListProductDao extends ArrayListGeneralDao<Product> implements
             return search(query).sorted(comparator).collect(Collectors.toList());
         }
         return search(query).collect(Collectors.toList());
+    }
+
+    @Override
+    public synchronized void updateProductStock(Product product, int stockValue){
+        items.stream().filter(i -> i.getId().equals(product.getId())).findAny().get().setStock(stockValue);
     }
 
     private <U> U defineSortField(Product p, SortField sortField) {

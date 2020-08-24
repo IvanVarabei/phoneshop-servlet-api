@@ -4,6 +4,7 @@ import com.es.phoneshop.model.entity.Cart;
 import com.es.phoneshop.model.entity.CartItem;
 import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.exception.OutOfStockException;
+import com.es.phoneshop.model.service.impl.DefaultCartService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CartServiceTest {
+public class DefaultCartServiceTest {
     private final BigDecimal price1 = BigDecimal.valueOf(1);
     private final BigDecimal price2 = BigDecimal.valueOf(2);
     private final BigDecimal price3 = BigDecimal.valueOf(3);
@@ -43,7 +44,7 @@ public class CartServiceTest {
     private HttpSession session;
     private List<CartItem> cartItems;
     @InjectMocks
-    private CartService cartService = CartService.getInstance();
+    private CartService cartService = DefaultCartService.getInstance();
 
     @Before
     public void setup() {
@@ -119,7 +120,7 @@ public class CartServiceTest {
         List<CartItem> expected = List.of(cartItem1, cartItem3);
 
         assertEquals(expected, actual);
-        verify(session , times(2)).getAttribute("cart");
+        verify(session, times(2)).getAttribute("cart");
         verify(cart, times(2)).getCartItemList();
     }
 
