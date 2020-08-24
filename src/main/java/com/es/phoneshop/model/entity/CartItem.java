@@ -2,7 +2,7 @@ package com.es.phoneshop.model.entity;
 
 import java.io.Serializable;
 
-public class CartItem implements Serializable {
+public class CartItem implements Serializable, Cloneable {
     private Product product;
     private int quantity;
 
@@ -21,6 +21,11 @@ public class CartItem implements Serializable {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public CartItem clone() throws CloneNotSupportedException{
+        return (CartItem) super.clone();
     }
 
     @Override

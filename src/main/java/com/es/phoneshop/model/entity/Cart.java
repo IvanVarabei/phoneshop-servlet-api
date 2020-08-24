@@ -21,6 +21,11 @@ public class Cart implements Serializable {
         return cartItemList;
     }
 
+    public void setCartItemList(List<CartItem> cartItemList) {
+        this.cartItemList = cartItemList;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

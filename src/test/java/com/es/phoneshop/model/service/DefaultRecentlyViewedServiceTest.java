@@ -1,6 +1,7 @@
 package com.es.phoneshop.model.service;
 
 import com.es.phoneshop.model.entity.Product;
+import com.es.phoneshop.model.service.impl.DefaultRecentlyViewedService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,7 @@ import java.util.Queue;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RecentlyViewedServiceTest {
+public class DefaultRecentlyViewedServiceTest {
     @Mock
     private Product product1;
     @Mock
@@ -27,7 +28,7 @@ public class RecentlyViewedServiceTest {
     @Mock
     private HttpSession session;
     private Queue<Product> recentProducts;
-    private final RecentlyViewedService recentlyViewedService = RecentlyViewedService.getInstance();
+    private final RecentlyViewedService recentlyViewedService = DefaultRecentlyViewedService.getInstance();
 
     @Before
     public void setup() {

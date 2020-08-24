@@ -50,8 +50,8 @@ public class CartPageServletTest {
         when(request.getRequestDispatcher("/WEB-INF/pages/cart.jsp")).thenReturn(requestDispatcher);
         when(request.getParameterValues("productId")).thenReturn(new String[]{"1", "2"});
         when(request.getParameterValues("quantity")).thenReturn(new String[]{"1", "2"});
-        when(dao.findProduct(1L)).thenReturn(product1);
-        when(dao.findProduct(2L)).thenReturn(product2);
+        when(dao.find(1L)).thenReturn(product1);
+        when(dao.find(2L)).thenReturn(product2);
     }
 
     @Test

@@ -35,7 +35,7 @@ public class DeleteCartItemServletTest {
     @Before
     public void setup() throws ItemNotFoundException {
         when(request.getPathInfo()).thenReturn("/1");
-        when(dao.findProduct(1L)).thenReturn(product1);
+        when(dao.find(1L)).thenReturn(product1);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class DeleteCartItemServletTest {
 
     @Test
     public void testDoPostItemNotFound() throws IOException, ItemNotFoundException {
-        doThrow(ItemNotFoundException.class).when(dao).findProduct(1L);
+        doThrow(ItemNotFoundException.class).when(dao).find(1L);
 
         servlet.doPost(request, response);
 

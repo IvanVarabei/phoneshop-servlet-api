@@ -68,6 +68,24 @@
         <url-pattern>/recentlyViewed</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>checkoutPageServlet</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.CheckoutPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>checkoutPageServlet</servlet-name>
+        <url-pattern>/checkout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OrderOverviewPageServlet</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.OrderOverviewPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderOverviewPageServlet</servlet-name>
+        <url-pattern>/order/overview/*</url-pattern>
+    </servlet-mapping>
+
     <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/pages/error404.jsp</location>
@@ -77,5 +95,14 @@
         <exception-type>java.lang.Throwable</exception-type>
         <location>/WEB-INF/pages/error500.jsp</location>
     </error-page>
+    
+    <filter>
+        <filter-name>dosFilter</filter-name>
+        <filter-class>com.es.phoneshop.controller.filter.DosFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>dosFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
 </web-app>

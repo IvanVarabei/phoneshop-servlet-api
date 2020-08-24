@@ -1,6 +1,6 @@
 package com.es.phoneshop.controller.listener;
 
-import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.model.dao.ProductDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +10,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -21,9 +22,9 @@ public class ProductDemoDataServletContextListenerTest {
     @Mock
     private ServletContext servletContext;
     @Mock
-    private ArrayListProductDao arrayListProductDao;
+    private ProductDao productDao;
     @InjectMocks
-    private final ProductDemoDataServletContextListener listener = new ProductDemoDataServletContextListener();
+    private final ServletContextListener listener = new ProductDemoDataServletContextListener();
 
     @Before
     public void setup() {
@@ -35,7 +36,7 @@ public class ProductDemoDataServletContextListenerTest {
     public void testContextInitialized() {
         listener.contextInitialized(servletContextEvent);
 
-        verify(arrayListProductDao, atLeastOnce()).save(any());
+        verify(productDao, atLeastOnce()).save(any());
     }
 
     @Test
@@ -44,6 +45,6 @@ public class ProductDemoDataServletContextListenerTest {
 
         listener.contextInitialized(servletContextEvent);
 
-        verify(arrayListProductDao, never()).save(any());
+        verify(productDao, never()).save(any());
     }
 }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -35,7 +36,7 @@ public class ArrayListProductDaoTest {
     @Before
     public void setup() {
         productList = new ArrayList<>();
-        dao.setPhoneList(productList);
+        dao.setItems(productList);
 
         when(product1.getId()).thenReturn(1L);
         when(product1.getPrice()).thenReturn(new BigDecimal(100));
@@ -103,7 +104,7 @@ public class ArrayListProductDaoTest {
     public void testFindProduct() throws ItemNotFoundException {
         productList.add(product1);
         productList.add(product2);
-        Product actual = dao.findProduct(2L);
+        Product actual = dao.find(2L);
         Product expected = product2;
 
         assertEquals(expected, actual);
@@ -111,7 +112,7 @@ public class ArrayListProductDaoTest {
 
     @Test(expected = ItemNotFoundException.class)
     public void testFindProductWhichDoesNotExist() throws ItemNotFoundException {
-        dao.findProduct(-1L);
+        dao.find(-1L);
     }
 
     @Test
@@ -231,5 +232,13 @@ public class ArrayListProductDaoTest {
         List<Product> actual = dao.findProducts("", SortField.DESCRIPTION, SortOrder.ASC);
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testUpdateProductStock() {
+        productList.add(product1);
+        dao.updateProductStock(product1, 3);
+
+        verify(product1).setStock(3);
     }
 }

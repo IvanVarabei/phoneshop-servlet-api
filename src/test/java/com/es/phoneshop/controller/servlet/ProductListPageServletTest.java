@@ -1,6 +1,6 @@
 package com.es.phoneshop.controller.servlet;
 
-import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
 import com.es.phoneshop.model.entity.Product;
@@ -38,7 +38,7 @@ public class ProductListPageServletTest {
     @Mock
     private Product product2;
     @Mock
-    private ArrayListProductDao dao;
+    private ProductDao productDao;
     @Mock
     private CartService cartService;
     @Mock
@@ -53,10 +53,10 @@ public class ProductListPageServletTest {
         when(request.getParameter("query")).thenReturn("");
         when(request.getParameter("productId")).thenReturn("1");
         when(request.getParameter("quantity")).thenReturn("1");
-        when(dao.findProduct(1L)).thenReturn(product1);
-        when(dao.findProducts("", SortField.DEFAULT, SortOrder.DEFAULT))
+        when(productDao.find(1L)).thenReturn(product1);
+        when(productDao.findProducts("", SortField.DEFAULT, SortOrder.DEFAULT))
                 .thenReturn(List.of(product1, product2));
-        when(dao.findProducts("", SortField.PRICE, SortOrder.ASC))
+        when(productDao.findProducts("", SortField.PRICE, SortOrder.ASC))
                 .thenReturn(List.of(product2, product1));
         when(request.getRequestDispatcher("/WEB-INF/pages/productList.jsp")).thenReturn(requestDispatcher);
     }
@@ -84,13 +84,13 @@ public class ProductListPageServletTest {
     public void testDoPost() throws ServletException, IOException, ItemNotFoundException, OutOfStockException {
         servlet.doPost(request, response);
 
-        verify(dao).findProduct(1L);
+        verify(productDao).find(1L);
         verify(cartService).add(session, product1, 1);
     }
 
     @Test
     public void testDoPostProductNotFound() throws ItemNotFoundException, ServletException, IOException {
-        when(dao.findProduct(1L)).thenThrow(ItemNotFoundException.class);
+        when(productDao.find(1L)).thenThrow(ItemNotFoundException.class);
 
         servlet.doPost(request, response);
 
@@ -104,7 +104,7 @@ public class ProductListPageServletTest {
 
         servlet.doPost(request, response);
 
-        verify(request).setAttribute("error", "Not a number");
+        verify(request).setAttribute("error", "Not a number.");
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.es.phoneshop.controller.listener;
 
+import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.entity.Product;
 
@@ -11,7 +12,7 @@ import java.util.*;
 
 public class ProductDemoDataServletContextListener implements ServletContextListener {
     private static final String CONTEXT_PARAM_VARIABLE = "isInsertDemoData";
-    private ArrayListProductDao arrayListProductDao = ArrayListProductDao.getInstance();
+    private ProductDao arrayListProductDao = ArrayListProductDao.getInstance();
 
     @Override
     public void contextInitialized(ServletContextEvent event) {

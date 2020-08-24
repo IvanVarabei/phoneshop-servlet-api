@@ -1,9 +1,11 @@
 package com.es.phoneshop.controller.servlet;
 
+import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.exception.OutOfStockException;
 import com.es.phoneshop.model.service.CartService;
+import com.es.phoneshop.model.service.impl.DefaultCartService;
 import com.es.phoneshop.value.Const;
 
 import javax.servlet.ServletException;
@@ -19,8 +21,8 @@ import java.util.Map;
 public class CartPageServlet extends HttpServlet {
     private static final String CART_JSP = "/WEB-INF/pages/cart.jsp";
     private static final String REDIRECT_AFTER_UPDATING = "/cart?message=Cart updated successfully";
-    private ArrayListProductDao dao = ArrayListProductDao.getInstance();
-    private CartService cartService = CartService.getInstance();
+    private ProductDao dao = ArrayListProductDao.getInstance();
+    private CartService cartService = DefaultCartService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,7 +38,7 @@ public class CartPageServlet extends HttpServlet {
             long productId = Long.parseLong(productIds[i]);
             try {
                 int quantity = NumberFormat.getInstance(req.getLocale()).parse(quantities[i]).intValue();
-                cartService.update(req.getSession(), dao.findProduct(productId), quantity);
+                cartService.update(req.getSession(), dao.find(productId), quantity);
             } catch (ItemNotFoundException | OutOfStockException | ParseException e) {
                 handleError(errors, productId, e);
             }

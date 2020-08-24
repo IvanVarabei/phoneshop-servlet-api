@@ -4,10 +4,8 @@ import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
 import com.es.phoneshop.model.entity.Product;
-import com.es.phoneshop.model.exception.ItemNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -15,10 +13,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ArrayListProductDao implements ProductDao {
+public class ArrayListProductDao extends ArrayListGenericDao<Product> implements ProductDao {
     private static final String BLANK = "\\p{Blank}";
-    private static long productIdCounter;
-    private List<Product> phoneList = new ArrayList<>();
 
     private ArrayListProductDao() {
     }
@@ -34,31 +30,9 @@ public class ArrayListProductDao implements ProductDao {
         return SingletonHolder.HOLDER_INSTANCE;
     }
 
-    protected void setPhoneList(List<Product> phoneList) {
-        this.phoneList = phoneList;
-    }
-
-    @Override
-    public synchronized Product findProduct(Long id) throws ItemNotFoundException {
-        return phoneList.stream()
-                .filter(product -> product.getId().equals(id))
-                .findAny()
-                .orElseThrow(ItemNotFoundException::new);
-    }
-
-    @Override
-    public synchronized void save(Product product) {
-        if (product.getId() != null && phoneList.removeIf(p -> product.getId().equals(p.getId()))) {
-            phoneList.add(product);
-            return;
-        }
-        product.setId(++productIdCounter);
-        phoneList.add(product);
-    }
-
     @Override
     public synchronized void delete(Long id) {
-        phoneList.removeIf(p -> id.equals(p.getId()));
+        items.removeIf(p -> id.equals(p.getId()));
     }
 
     @Override
@@ -73,12 +47,17 @@ public class ArrayListProductDao implements ProductDao {
         return search(query).collect(Collectors.toList());
     }
 
+    @Override
+    public synchronized void updateProductStock(Product product, int stockValue){
+        items.stream().filter(i -> i.getId().equals(product.getId())).findAny().get().setStock(stockValue);
+    }
+
     private <U> U defineSortField(Product p, SortField sortField) {
         return (U) (SortField.DESCRIPTION == sortField ? p.getDescription() : p.getPrice());
     }
 
     private Stream<Product> search(String query) {
-        return phoneList.stream()
+        return items.stream()
                 .filter(getPriceAndStockPredicate(StringUtils.isBlank(query)))
                 .filter(p -> Arrays.stream(query.split(BLANK)).anyMatch(p.getDescription()::contains))
                 .sorted(Comparator.comparing(p -> Arrays.stream(query.split(BLANK))
