@@ -22,4 +22,10 @@ public class ArrayListOrderDao extends ArrayListGeneralDao<Order> implements Ord
         return items.stream().filter(o -> o.getSecureId().equals(id)).findAny()
                 .orElseThrow(ItemNotFoundException::new);
     }
+
+    @Override
+    public synchronized void subtractProductQuantityRegardingPlacedOrder(Order order) {
+        order.getCartItemList().forEach(cartItem ->
+                cartItem.getProduct().setStock(cartItem.getProduct().getStock() - cartItem.getQuantity()));
+    }
 }

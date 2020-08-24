@@ -46,6 +46,7 @@ public class OrderService {
     public void placeOrder(Order order) {
         order.setSecureId(UUID.randomUUID().toString());
         orderDao.save(order);
+        orderDao.subtractProductQuantityRegardingPlacedOrder(order);
     }
 
     public Order findOrder(Long id) throws ItemNotFoundException {

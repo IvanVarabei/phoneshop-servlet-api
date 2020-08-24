@@ -21,7 +21,7 @@ public class DeleteCartItemServlet extends HttpServlet {
             cartService.delete(req.getSession(), dao.find(Long.valueOf(req.getPathInfo().substring(1))));
             resp.sendRedirect(req.getContextPath() + REDIRECT_AFTER_DELETING_FROM_CART);
         } catch (ItemNotFoundException | NumberFormatException e) {
-            log("Unexpected : ItemNotFoundException | NumberFormatException");
+            e.printStackTrace();
         }
     }
 }

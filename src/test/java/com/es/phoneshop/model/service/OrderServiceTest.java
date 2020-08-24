@@ -74,6 +74,7 @@ public class OrderServiceTest {
 
         verify(order).setSecureId(anyString());
         verify(dao).save(order);
+        verify(dao).subtractProductQuantityRegardingPlacedOrder(order);
     }
 
     @Test

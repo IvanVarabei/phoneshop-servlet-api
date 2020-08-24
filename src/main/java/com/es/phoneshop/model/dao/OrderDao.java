@@ -9,4 +9,6 @@ public interface OrderDao {
     Order findOrderBySecureId(String id) throws ItemNotFoundException;
 
     void save(Order order);
+
+    void subtractProductQuantityRegardingPlacedOrder(Order order);
 }
