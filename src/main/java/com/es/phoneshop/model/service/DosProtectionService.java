@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DosProtectionService {
-    private static final long THRESHOLD = 20;
+    private static final long THRESHOLD = 200;
     private static final long HISTORY_LIFESPAN = 60_000;
     private Map<String, Long> users = new ConcurrentHashMap<>();
     long historyClearingTime;
