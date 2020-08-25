@@ -47,6 +47,32 @@
                     </form>
                 </div>
             </div>
+            <p>Product reviews:</p>
+            <jsp:useBean id="productReviews" type="java.util.List" scope="request"/>
+            <c:if test="${productReviews.isEmpty()}"><p>There are no reviews!</p></c:if>
+            <c:forEach var="review" items="${productReviews}">
+                <p><b>Author: ${review.author}</b></p>
+                <p> Rating: ${review.rating}</p>
+                <p> Comment: ${review.comment}</p>
+            </c:forEach>
+            <form method="post" action="${pageContext.servletContext.contextPath}/productReview/${product.id}">
+                <h3>Post a review: </h3>
+                <p>Name:<input class="checkoutInput" name="name" value="${not empty param.name ? param.name : ''}"/></p>
+                <c:if test="${not empty requestScope.reviewErrors['nameError']}">
+                    <p class="error">${requestScope.reviewErrors.nameError}</p>
+                </c:if>
+                <label>Rating:</label>
+                <input type="radio" name="rating" value="1" ${param.rating == 1 ? 'checked' : ''}/>1
+                <input type="radio" name="rating" value="2" ${param.rating == 2 ? 'checked' : ''}/>2
+                <input type="radio" name="rating" value="3" ${param.rating == 3 ? 'checked' : ''}/>3
+                <input type="radio" name="rating" value="4" ${param.rating == 4 ? 'checked' : ''}/>4
+                <input type="radio" name="rating" value="5" ${param.rating == 5 ? 'checked' : empty param.rating ? 'checked' : ''}/>5
+                <p>Comment:<input class="checkoutInput" name="comment" value="${not empty param.comment ? param.comment : ''}"/></p>
+                <c:if test="${not empty requestScope.reviewErrors.commentError}">
+                    <p class="error">${requestScope.reviewErrors.commentError}</p>
+                </c:if>
+                <button class="details_add">POST</button>
+            </form>
         </div>
     </div>
 </tags:master>

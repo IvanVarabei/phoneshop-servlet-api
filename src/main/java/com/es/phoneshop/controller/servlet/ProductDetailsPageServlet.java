@@ -1,8 +1,11 @@
 package com.es.phoneshop.controller.servlet;
 
 import com.es.phoneshop.model.dao.ProductDao;
+import com.es.phoneshop.model.dao.ProductReviewDao;
 import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.model.dao.impl.ArrayListProductReviewDao;
 import com.es.phoneshop.model.entity.Product;
+import com.es.phoneshop.model.entity.ProductReview;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.exception.OutOfStockException;
 import com.es.phoneshop.model.service.CartService;
@@ -18,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Optional;
 
 public class ProductDetailsPageServlet extends HttpServlet {
@@ -25,6 +29,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
     private static final String PRODUCT_DETAILS_JSP = "/WEB-INF/pages/productDetails.jsp";
     private ProductDao productDao = ArrayListProductDao.getInstance();
     private CartService cartService = DefaultCartService.getInstance();
+    private ProductReviewDao productReviewDao = ArrayListProductReviewDao.getInstance();
     private RecentlyViewedService recentlyViewedService = DefaultRecentlyViewedService.getInstance();
 
     @Override
@@ -57,6 +62,8 @@ public class ProductDetailsPageServlet extends HttpServlet {
         try {
             Product product = productDao.find(Long.valueOf(productId));
             req.setAttribute(Const.RequestAttribute.PRODUCT, product);
+            List<ProductReview> productReviews = productReviewDao.findApprovedProductReviews(Long.valueOf(productId));
+            req.setAttribute("productReviews", productReviews);
             return Optional.of(product);
         } catch (NumberFormatException | ItemNotFoundException e) {
             req.setAttribute(Const.RequestAttribute.MESSAGE, String.format(Const.ErrorInfo.PRODUCT_NOT_FOUND, productId));

@@ -86,6 +86,28 @@
         <url-pattern>/order/overview/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>productReview</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.ProductReviewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>productReview</servlet-name>
+        <url-pattern>/productReview/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>productReviewModeration</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.ModerationProductReviewPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>productReviewModeration</servlet-name>
+        <url-pattern>/productReviewModeration</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>productReviewModeration</servlet-name>
+        <url-pattern>/productReviewModeration/*</url-pattern>
+    </servlet-mapping>
+
     <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/pages/error404.jsp</location>
