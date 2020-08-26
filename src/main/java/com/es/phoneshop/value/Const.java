@@ -28,6 +28,7 @@ public class Const {
         public static final String RECENT = "recent";
         public static final String ORDER = "order";
         public static final String PAY_METHODS = "paymentMethods";
+        public static final String SEARCH_ERRORS = "searchErrors";
 
         private RequestAttribute() {
         }
@@ -45,6 +46,12 @@ public class Const {
         public static final String PHONE = "phone";
         public static final String DELIVERY_ADDRESS = "deliveryAddress";
         public static final String DELIVERY_DATE = "deliveryDate";
+        public static final String PRODUCT_CODE = "productCode";
+        public static final String MIN_PRICE = "minPrice";
+        public static final String MAX_PRICE = "maxPrice";
+        public static final String MIN_STOCK = "minStock";
+
+
 
         private RequestParam() {
         }
