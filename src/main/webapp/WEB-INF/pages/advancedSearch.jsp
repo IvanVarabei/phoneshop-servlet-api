@@ -6,7 +6,7 @@
 <tags:master pageTitle="Advanced search">
 	<div class="cart">
 		<div class="container">
-			<form method="post">
+			<form >
 				<p>Product code :<input class="checkoutInput" name="productCode" value="${not empty param.productCode ? param.productCode : ''}"/></p>
 				<p>Min price :<input class="checkoutInput" name="minPrice" value="${not empty param.minPrice ? param.minPrice : ''}"/></p>
 				<c:if test="${not empty requestScope.searchErrors['minPriceError']}">

@@ -18,7 +18,7 @@ public class DefaultAdvancedSearchService implements AdvancedSearchService {
         private static final DefaultAdvancedSearchService INSTANCE = new DefaultAdvancedSearchService();
     }
 
-    public static DefaultAdvancedSearchService getInstance(){
+    public static DefaultAdvancedSearchService getInstance() {
         return DefaultAdvancedSearchServiceHolder.INSTANCE;
     }
 
@@ -62,10 +62,8 @@ public class DefaultAdvancedSearchService implements AdvancedSearchService {
         }
         if (productCode == null || productCode.isEmpty() && minPrice != null && maxPrice == null && minStock != null) {
             return productDao.findByMinPriceMinStock(minPrice, minStock);
-        }
-        if (productCode == null || productCode.isEmpty() && minPrice != null && maxPrice != null && minStock != null) {
+        } else {
             return productDao.findByPriceMinStock(minPrice, maxPrice, minStock);
         }
-        return null;
     }
 }
