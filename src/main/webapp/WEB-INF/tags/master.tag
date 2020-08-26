@@ -25,6 +25,8 @@
                             <img src="${pageContext.request.contextPath}/images/search_icon.png" alt="">
                         </button>
                     </form>
+                    <div class="header_name">
+                        <a href="${pageContext.request.contextPath}/advancedSearch">Advanced search</a></div>
                     <jsp:include page="/cart/miniCart"/>
                 </div>
             </div>

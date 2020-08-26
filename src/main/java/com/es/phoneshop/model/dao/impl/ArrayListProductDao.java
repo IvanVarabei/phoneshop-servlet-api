@@ -48,8 +48,88 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
     }
 
     @Override
-    public synchronized void updateProductStock(Product product, int stockValue){
+    public synchronized void updateProductStock(Product product, int stockValue) {
         items.stream().filter(i -> i.getId().equals(product.getId())).findAny().get().setStock(stockValue);
+    }
+
+    public synchronized List<Product> findByCode(String productCode) {
+        return items.stream().filter(i -> i.getCode().equals(productCode)).collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByPrice(Double minPrice, Double maxPrice) {
+        return items.stream()
+                .filter(i -> i.getPrice().doubleValue() <= maxPrice && i.getPrice().doubleValue() >= minPrice)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByMinPrice(Double minPrice) {
+        return items.stream().filter(i -> i.getPrice().doubleValue() >= minPrice).collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByMaxPrice(Double maxPrice) {
+        return items.stream().filter(i -> i.getPrice().doubleValue() <= maxPrice).collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByMinStock(Integer minStock) {
+        return items.stream().filter(i -> i.getStock() >= minStock).collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByCodePriceMinStock(
+            String productCode, Double minPrice, Double maxPrice, Integer minStock) {
+        return items.stream()
+                .filter(i -> i.getCode().equals(productCode))
+                .filter(i -> i.getStock() >= minStock)
+                .filter(i -> i.getPrice().doubleValue() <= maxPrice && i.getPrice().doubleValue() >= minPrice)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByCodeMinPrice(String productCode, Double minPrice) {
+        return items.stream()
+                .filter(i -> i.getCode().equals(productCode))
+                .filter(i -> i.getPrice().doubleValue() >= minPrice)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByCodeMaxPrice(String productCode, Double maxPrice) {
+        return items.stream()
+                .filter(i -> i.getCode().equals(productCode))
+                .filter(i -> i.getPrice().doubleValue() <= maxPrice)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByCodePrice(String productCode, Double minPrice, Double maxPrice) {
+        return items.stream()
+                .filter(i -> i.getCode().equals(productCode))
+                .filter(i -> i.getPrice().doubleValue() <= maxPrice && i.getPrice().doubleValue() >= minPrice)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByCodeMinStock(String productCode, Integer minStock) {
+        return items.stream()
+                .filter(i -> i.getCode().equals(productCode))
+                .filter(i -> i.getStock() >= minStock)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByMaxPriceMinStock(Double maxPrice, Integer minStock) {
+        return items.stream()
+                .filter(i -> i.getStock() >= minStock)
+                .filter(i -> i.getPrice().doubleValue() <= maxPrice)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByMinPriceMinStock(Double minPrice, Integer minStock) {
+        return items.stream()
+                .filter(i -> i.getStock() >= minStock)
+                .filter(i -> i.getPrice().doubleValue() >= minPrice)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized List<Product> findByPriceMinStock(Double minPrice, Double maxPrice, Integer minStock) {
+        return items.stream()
+                .filter(i -> i.getStock() >= minStock)
+                .filter(i -> i.getPrice().doubleValue() <= maxPrice && i.getPrice().doubleValue() >= minPrice)
+                .collect(Collectors.toList());
     }
 
     private <U> U defineSortField(Product p, SortField sortField) {

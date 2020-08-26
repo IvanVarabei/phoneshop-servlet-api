@@ -86,15 +86,32 @@
         <url-pattern>/order/overview/*</url-pattern>
     </servlet-mapping>
 
+
+
+
+    <servlet>
+        <servlet-name>AdvancedSearch</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.AdvancedSearchPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdvancedSearch</servlet-name>
+        <url-pattern>/advancedSearch</url-pattern>
+    </servlet-mapping>
+
+
+
+
+
+
     <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/pages/error404.jsp</location>
     </error-page>
 
-    <error-page>
-        <exception-type>java.lang.Throwable</exception-type>
-        <location>/WEB-INF/pages/error500.jsp</location>
-    </error-page>
+<!--    <error-page>-->
+<!--        <exception-type>java.lang.Throwable</exception-type>-->
+<!--        <location>/WEB-INF/pages/error500.jsp</location>-->
+<!--    </error-page>-->
     
     <filter>
         <filter-name>dosFilter</filter-name>
