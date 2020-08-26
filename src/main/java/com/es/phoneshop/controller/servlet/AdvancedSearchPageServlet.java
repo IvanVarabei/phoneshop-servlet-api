@@ -5,6 +5,8 @@ import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.dao.sort.SortField;
 import com.es.phoneshop.model.dao.sort.SortOrder;
 import com.es.phoneshop.model.entity.Product;
+import com.es.phoneshop.model.service.AdvancedSearchService;
+import com.es.phoneshop.model.service.impl.DefaultAdvancedSearchService;
 import com.es.phoneshop.value.Const;
 
 import javax.servlet.ServletException;
@@ -18,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AdvancedSearchPageServlet extends HttpServlet {
-    private ArrayListProductDao productDao = ArrayListProductDao.getInstance();
+    private AdvancedSearchService advancedSearchService = DefaultAdvancedSearchService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -57,56 +59,11 @@ public class AdvancedSearchPageServlet extends HttpServlet {
             }
         }
         if (searchErrors.isEmpty()) {
-            req.setAttribute("products", searchProducts(productCode, minPrice, maxPrice, minStock));
+            req.setAttribute("products", advancedSearchService
+                    .searchAdvancedProducts(productCode, minPrice, maxPrice, minStock));
         } else {
             req.setAttribute("searchErrors", searchErrors);
         }
         req.getRequestDispatcher("/WEB-INF/pages/advancedSearch.jsp").forward(req, resp);
-    }
-
-    private List<Product> searchProducts(String productCode, Double minPrice, Double maxPrice, Integer minStock) {
-        if (productCode == null || productCode.isEmpty() && minPrice == null && maxPrice == null && minStock == null) {
-            return productDao.findProducts("", SortField.DEFAULT, SortOrder.DEFAULT);
-        }
-        if (productCode != null && !productCode.isEmpty() && minPrice == null && maxPrice == null && minStock == null) {
-            return productDao.findByCode(productCode);
-        }
-        if (productCode == null || productCode.isEmpty() && minPrice != null && maxPrice == null && minStock == null) {
-            return productDao.findByMinPrice(minPrice);
-        }
-        if (productCode == null || productCode.isEmpty() && minPrice == null && maxPrice != null && minStock == null) {
-            return productDao.findByMaxPrice(minPrice);
-        }
-        if (productCode == null || productCode.isEmpty() && minPrice != null && maxPrice != null && minStock == null) {
-            return productDao.findByPrice(minPrice, maxPrice);
-        }
-        if (productCode == null || productCode.isEmpty() && minPrice == null && maxPrice == null && minStock != null) {
-            return productDao.findByMinStock(minStock);
-        }
-        if (productCode != null && !productCode.isEmpty() && minPrice != null && maxPrice != null && minStock != null) {
-            return productDao.findByCodePriceMinStock(productCode, minPrice, maxPrice, minStock);
-        }
-        if (productCode != null && !productCode.isEmpty() && minPrice != null && maxPrice == null && minStock == null) {
-            return productDao.findByCodeMinPrice(productCode, minPrice);
-        }
-        if (productCode != null && !productCode.isEmpty() && minPrice == null && maxPrice != null && minStock == null) {
-            return productDao.findByCodeMaxPrice(productCode, maxPrice);
-        }
-        if (productCode != null && !productCode.isEmpty() && minPrice != null && maxPrice != null && minStock == null) {
-            return productDao.findByCodePrice(productCode, minPrice, maxPrice);
-        }
-        if (productCode != null && !productCode.isEmpty() && minPrice == null && maxPrice == null && minStock != null) {
-            return productDao.findByCodeMinStock(productCode, minStock);
-        }
-        if (productCode == null || productCode.isEmpty() && minPrice == null && maxPrice != null && minStock != null) {
-            return productDao.findByMaxPriceMinStock(maxPrice, minStock);
-        }
-        if (productCode == null || productCode.isEmpty() && minPrice != null && maxPrice == null && minStock != null) {
-            return productDao.findByMinPriceMinStock(minPrice, minStock);
-        }
-        if (productCode == null || productCode.isEmpty() && minPrice != null && maxPrice != null && minStock != null) {
-            return productDao.findByPriceMinStock(minPrice, maxPrice, minStock);
-        }
-        return null;
     }
 }
