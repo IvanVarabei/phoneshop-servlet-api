@@ -23,30 +23,9 @@ public class AdvancedSearchPageServlet extends HttpServlet {
         String potentialMaxPrice = req.getParameter(Const.RequestParam.MAX_PRICE);
         String potentialMinStock = req.getParameter(Const.RequestParam.MIN_STOCK);
         Map<String, String> searchErrors = new HashMap<>();
-        Double minPrice = null;
-        Double maxPrice = null;
-        Integer minStock = null;
-        if (potentialMinPrice != null && !potentialMinPrice.isEmpty()) {
-            try {
-                minPrice = Double.parseDouble(potentialMinPrice);
-            } catch (NumberFormatException e) {
-                searchErrors.put("minPriceError", Const.ErrorInfo.NOT_NUMBER);
-            }
-        }
-        if (potentialMaxPrice != null && !potentialMaxPrice.isEmpty()) {
-            try {
-                maxPrice = Double.parseDouble(potentialMaxPrice);
-            } catch (NumberFormatException e) {
-                searchErrors.put("maxPriceError", Const.ErrorInfo.NOT_NUMBER);
-            }
-        }
-        if (potentialMinStock != null && !potentialMinStock.isEmpty()) {
-            try {
-                minStock = Integer.parseInt(potentialMinStock);
-            } catch (NumberFormatException e) {
-                searchErrors.put("minStockError", Const.ErrorInfo.NOT_NUMBER);
-            }
-        }
+        Double minPrice = extractDouble(potentialMinPrice, "minPriceError", searchErrors);
+        Double maxPrice = extractDouble(potentialMaxPrice, "maxPriceError", searchErrors);
+        Integer minStock = extractInteger(potentialMinStock, "minStockError", searchErrors);
         if (searchErrors.isEmpty()) {
             req.setAttribute(Const.RequestAttribute.PRODUCTS, advancedSearchService
                     .searchAdvancedProducts(productCode, minPrice, maxPrice, minStock));
@@ -54,5 +33,27 @@ public class AdvancedSearchPageServlet extends HttpServlet {
             req.setAttribute(Const.RequestAttribute.SEARCH_ERRORS, searchErrors);
         }
         req.getRequestDispatcher(ADVANCED_SEARCH_JSP).forward(req, resp);
+    }
+
+    private Double extractDouble(String potentialDouble, String errorName, Map<String, String> searchErrors) {
+        if (potentialDouble != null && !potentialDouble.isEmpty()) {
+            try {
+                return Double.parseDouble(potentialDouble);
+            } catch (NumberFormatException e) {
+                searchErrors.put(errorName, Const.ErrorInfo.NOT_NUMBER);
+            }
+        }
+        return null;
+    }
+
+    private Integer extractInteger(String potentialInteger, String errorName, Map<String, String> searchErrors) {
+        if (potentialInteger != null && !potentialInteger.isEmpty()) {
+            try {
+                return Integer.parseInt(potentialInteger);
+            } catch (NumberFormatException e) {
+                searchErrors.put(errorName, Const.ErrorInfo.NOT_NUMBER);
+            }
+        }
+        return null;
     }
 }
