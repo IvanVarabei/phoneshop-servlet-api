@@ -23,9 +23,9 @@ public class AdvancedSearchPageServlet extends HttpServlet {
         String potentialMaxPrice = req.getParameter(Const.RequestParam.MAX_PRICE);
         String potentialMinStock = req.getParameter(Const.RequestParam.MIN_STOCK);
         Map<String, String> searchErrors = new HashMap<>();
-        Double minPrice = extractDouble(potentialMinPrice, "minPriceError", searchErrors);
-        Double maxPrice = extractDouble(potentialMaxPrice, "maxPriceError", searchErrors);
-        Integer minStock = extractInteger(potentialMinStock, "minStockError", searchErrors);
+        Double minPrice = extractDouble(potentialMinPrice, Const.ErrorInfo.MIN_PRICE_ERROR, searchErrors);
+        Double maxPrice = extractDouble(potentialMaxPrice, Const.ErrorInfo.MAX_PRICE_ERROR, searchErrors);
+        Integer minStock = extractInteger(potentialMinStock, Const.ErrorInfo.MIN_STOCK_ERROR, searchErrors);
         if (searchErrors.isEmpty()) {
             req.setAttribute(Const.RequestAttribute.PRODUCTS, advancedSearchService
                     .searchAdvancedProducts(productCode, minPrice, maxPrice, minStock));

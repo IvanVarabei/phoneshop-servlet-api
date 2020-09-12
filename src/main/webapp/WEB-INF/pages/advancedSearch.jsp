@@ -29,7 +29,7 @@
 				<div class="product_product">
 					<div class="product_img">
 						<a href="${pageContext.servletContext.contextPath}/products/${product.id}">
-							<img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
+							<img src="${product.imageUrl}">
 						</a>
 					</div>
 					<div class="product_name">

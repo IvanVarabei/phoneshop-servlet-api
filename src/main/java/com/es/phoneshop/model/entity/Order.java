@@ -160,8 +160,8 @@ public class Order extends Cart implements StorageItem {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Order{");
-        sb.append("id=").append(id);
+        final StringBuilder sb = new StringBuilder(super.toString());
+        sb.append("Order{id=").append(id);
         sb.append(", secureId='").append(secureId).append('\'');
         sb.append(", subtotal=").append(subtotal);
         sb.append(", deliveryCost=").append(deliveryCost);

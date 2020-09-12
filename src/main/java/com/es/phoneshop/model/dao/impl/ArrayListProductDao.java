@@ -20,14 +20,14 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
     }
 
     private static class SingletonHolder {
-        public static final ArrayListProductDao HOLDER_INSTANCE = new ArrayListProductDao();
+        public static final ArrayListProductDao ARRAY_LIST_PRODUCT_DAO_INSTANCE = new ArrayListProductDao();
 
         private SingletonHolder() {
         }
     }
 
     public static ArrayListProductDao getInstance() {
-        return SingletonHolder.HOLDER_INSTANCE;
+        return SingletonHolder.ARRAY_LIST_PRODUCT_DAO_INSTANCE;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
 
     @Override
     public synchronized void updateProductStock(Product product, int stockValue) {
-        items.stream().filter(i -> i.getId().equals(product.getId())).findAny().get().setStock(stockValue);
+        items.stream().filter(i -> i.getId().equals(product.getId())).findAny().ifPresent(p -> p.setStock(stockValue));
     }
 
     @Override

@@ -15,11 +15,12 @@ public class DefaultRecentlyViewedService implements RecentlyViewedService {
     }
 
     private static class RecentlyViewedServiceHolder {
-        private static final DefaultRecentlyViewedService RECENTLY_VIEWED_SERVICE_INSTANCE = new DefaultRecentlyViewedService();
+        private static final DefaultRecentlyViewedService DEFAULT_RECENTLY_VIEWED_SERVICE_INSTANCE =
+                new DefaultRecentlyViewedService();
     }
 
     public static DefaultRecentlyViewedService getInstance() {
-        return RecentlyViewedServiceHolder.RECENTLY_VIEWED_SERVICE_INSTANCE;
+        return RecentlyViewedServiceHolder.DEFAULT_RECENTLY_VIEWED_SERVICE_INSTANCE;
     }
 
     public void updateRecentlyViewedLine(HttpSession session, Product product) {

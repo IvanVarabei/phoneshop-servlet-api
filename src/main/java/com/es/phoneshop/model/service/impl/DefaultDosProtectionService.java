@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultDosProtectionService implements DosProtectionService {
-    private static final long THRESHOLD = 20;
+    private static final long THRESHOLD = 100;
     private static final long HISTORY_LIFESPAN = 60_000;
     private Map<String, Long> users = new ConcurrentHashMap<>();
     private long historyClearingTime;
@@ -15,11 +15,12 @@ public class DefaultDosProtectionService implements DosProtectionService {
     }
 
     private static class DosProtectionServiceHolder {
-        private static final DefaultDosProtectionService DOS_PROTECTION_SERVICE_INSTANCE = new DefaultDosProtectionService();
+        private static final DefaultDosProtectionService DEFAULT_DOS_PROTECTION_SERVICE_INSTANCE =
+                new DefaultDosProtectionService();
     }
 
     public static DefaultDosProtectionService getInstance() {
-        return DosProtectionServiceHolder.DOS_PROTECTION_SERVICE_INSTANCE;
+        return DosProtectionServiceHolder.DEFAULT_DOS_PROTECTION_SERVICE_INSTANCE;
     }
 
     @Override

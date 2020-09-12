@@ -52,10 +52,10 @@ public class CartItem implements Serializable, Cloneable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("product=");
-        sb.append(product.getDescription());
+        final StringBuilder sb = new StringBuilder("CartItem{");
+        sb.append(product);
         sb.append(", quantity=").append(quantity);
-        sb.append("; ");
+        sb.append('}');
         return sb.toString();
     }
 }
