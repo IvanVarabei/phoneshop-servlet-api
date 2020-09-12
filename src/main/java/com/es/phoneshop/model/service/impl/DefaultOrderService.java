@@ -25,11 +25,11 @@ public class DefaultOrderService implements OrderService {
     }
 
     private static class OrderServiceHolder {
-        private static final DefaultOrderService ORDER_SERVICE_HOLDER = new DefaultOrderService();
+        private static final DefaultOrderService DEFAULT_ORDER_SERVICE_INSTANCE = new DefaultOrderService();
     }
 
     public static DefaultOrderService getInstance() {
-        return OrderServiceHolder.ORDER_SERVICE_HOLDER;
+        return OrderServiceHolder.DEFAULT_ORDER_SERVICE_INSTANCE;
     }
 
     @Override

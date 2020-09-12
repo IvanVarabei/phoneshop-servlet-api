@@ -44,10 +44,12 @@ public class Cart implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Cart:");
+        final StringBuilder sb = new StringBuilder("Cart{");
         for (CartItem item : cartItemList) {
             sb.append(item.toString());
         }
+        sb.append(", totalCost=").append(totalCost);
+        sb.append('}');
         return sb.toString();
     }
 }

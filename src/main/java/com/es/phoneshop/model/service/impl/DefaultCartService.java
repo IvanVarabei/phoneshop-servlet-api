@@ -15,11 +15,11 @@ public class DefaultCartService implements CartService {
     }
 
     private static class CartServiceHolder {
-        private static final DefaultCartService CART_SERVICE_INSTANCE = new DefaultCartService();
+        private static final DefaultCartService DEFAULT_CART_SERVICE_INSTANCE = new DefaultCartService();
     }
 
     public static DefaultCartService getInstance() {
-        return CartServiceHolder.CART_SERVICE_INSTANCE;
+        return CartServiceHolder.DEFAULT_CART_SERVICE_INSTANCE;
     }
 
     @Override

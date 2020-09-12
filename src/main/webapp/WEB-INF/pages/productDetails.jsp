@@ -25,7 +25,7 @@
             <div class="details_row">
                 <div class="details_info1">
                     <img class="details_img"
-                         src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
+                         src="${product.imageUrl}">
                     <div class="details_price"><fmt:formatNumber value="${product.price}" type="currency"
                                                                  currencySymbol="${product.currency.symbol}"/></div>
                 </div>

@@ -11,6 +11,9 @@ public class Const {
         public static final String NOT_NUMBER = "Not a number.";
         public static final String VALUE_IS_REQUIRED = "Value is required.";
         public static final String INVALID_VALUE = "Invalid value.";
+        public static final String MIN_PRICE_ERROR = "minPriceError";
+        public static final String MAX_PRICE_ERROR = "maxPriceError";
+        public static final String MIN_STOCK_ERROR = "minStockError";
         public static final int PAGE_NOT_FOUND_CODE = 404;
         public static final int TOO_MANY_REQUESTS_CODE = 429;
 
@@ -28,6 +31,7 @@ public class Const {
         public static final String RECENT = "recent";
         public static final String ORDER = "order";
         public static final String PAY_METHODS = "paymentMethods";
+        public static final String SEARCH_ERRORS = "searchErrors";
 
         private RequestAttribute() {
         }
@@ -45,6 +49,10 @@ public class Const {
         public static final String PHONE = "phone";
         public static final String DELIVERY_ADDRESS = "deliveryAddress";
         public static final String DELIVERY_DATE = "deliveryDate";
+        public static final String PRODUCT_CODE = "productCode";
+        public static final String MIN_PRICE = "minPrice";
+        public static final String MAX_PRICE = "maxPrice";
+        public static final String MIN_STOCK = "minStock";
 
         private RequestParam() {
         }

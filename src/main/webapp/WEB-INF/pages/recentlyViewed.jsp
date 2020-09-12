@@ -11,8 +11,7 @@
             <c:forEach var="product" items="${recent}">
                 <div class="previous_product">
                     <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
-                        <img class="previous_img"
-                             src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
+                        <img class="previous_img" src="${product.imageUrl}">
                         <div class="previous_name">${product.description}</div>
                         <div class="previous_cost">
                             <fmt:formatNumber value="${product.price}" type="currency"

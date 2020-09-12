@@ -12,4 +12,6 @@ public interface ProductDao extends GenericDao<Product> {
     List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder);
 
     void updateProductStock(Product product, int stockValue);
+
+    List<Product> findByFields(String productCode, Double minPrice, Double maxPrice, Integer minStock);
 }

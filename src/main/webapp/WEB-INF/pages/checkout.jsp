@@ -20,8 +20,7 @@
 				<c:forEach var="item" items="${order.cartItemList}">
 					<tr>
 						<td><a href="${pageContext.servletContext.contextPath}/products/${item.product.id}">
-							<img width="64px"
-									 src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${item.product.imageUrl}">
+							<img width="64px" src="${item.product.imageUrl}">
 						</a>
 						</td>
 						<td><a href="${pageContext.servletContext.contextPath}/products/${item.product.id}">
