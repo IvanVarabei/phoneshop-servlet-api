@@ -5,9 +5,17 @@
 
 <jsp:useBean id="productReviews" type="java.util.List" scope="request"/>
 <tags:master pageTitle="Moderation">
-	<p>Product reviews moderation page.</p>
-	<p>${param.message}</p>
-	<c:if test="${productReviews.isEmpty()}">There are no reviews.</c:if>
+	<c:if test="${not empty param.message}">
+		<div class="add_info add_success">
+			<div class="container">
+				<div class="add_message">${param.message}</div>
+			</div>
+		</div>
+	</c:if>
+	<div class="cart">
+	<div class="container">
+	<p class="title" align="center">Product reviews moderation page</p>
+	<div align="center"><c:if test="${productReviews.isEmpty()}">There are no reviews</c:if></div>
 	<c:if test="${!productReviews.isEmpty()}">
 	<form method="post">
 		<table class="cart_table">
@@ -40,4 +48,6 @@
 		</table>
 	</form>
 	</c:if>
+	</div>
+	</div>
 </tags:master>

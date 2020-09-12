@@ -1,11 +1,12 @@
 package com.es.phoneshop.model.entity;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements StorageItem, Serializable {
+    private Long id;
     private String login;
     private String password;
     private Role role;
-
-    public User(){}
 
     public User(String login, String password, Role role) {
         this.login = login;
@@ -13,8 +14,18 @@ public class User {
         this.role = role;
     }
 
-    public enum Role{
+    public enum Role {
         USER, ADMIN
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -43,19 +54,29 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         User user = (User) o;
-
-        if (login != null ? !login.equals(user.login) : user.login != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (id != null ? !id.equals(user.id) : user.id != null) {
+            return false;
+        }
+        if (login != null ? !login.equals(user.login) : user.login != null) {
+            return false;
+        }
+        if (password != null ? !password.equals(user.password) : user.password != null) {
+            return false;
+        }
         return role == user.role;
     }
 
     @Override
     public int hashCode() {
-        int result = login != null ? login.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
@@ -64,7 +85,8 @@ public class User {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
-        sb.append("login='").append(login).append('\'');
+        sb.append("id=").append(id);
+        sb.append(", login='").append(login).append('\'');
         sb.append(", password='").append(password).append('\'');
         sb.append(", role=").append(role);
         sb.append('}');

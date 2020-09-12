@@ -28,17 +28,16 @@ public class RegisterServlet extends HttpServlet {
             req.setAttribute("message", "You entered different passwords.");
             req.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(req, resp);
         } else {
-            try {
+            if(dao.ifExist(login, password1)){
+                req.setAttribute("message", "Such a user already exists. Try another login.");
+                req.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(req, resp);
+            }else{
                 dao.save(new User(login, password1, User.Role.USER));
                 HttpSession session = req.getSession();
                 session.setAttribute("login", login);
                 session.setAttribute("password", password1);
                 resp.sendRedirect("index.jsp");
-            } catch (UserAlreadyExistException e) {
-                req.setAttribute("message", "Such a user already exists. Try another login.");
-                req.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(req, resp);
             }
-
         }
     }
 }

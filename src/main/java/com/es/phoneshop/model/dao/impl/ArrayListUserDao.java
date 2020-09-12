@@ -2,33 +2,20 @@ package com.es.phoneshop.model.dao.impl;
 
 import com.es.phoneshop.model.entity.User;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
-import com.es.phoneshop.model.exception.UserAlreadyExistException;
 
-import java.util.ArrayList;
-
-public class ArrayListUserDao {
-    private ArrayList<User> items = new ArrayList<>();
-
+public class ArrayListUserDao extends ArrayListGenericDao<User>{
     private ArrayListUserDao() {
     }
 
-    private static class SingletonHolder {
-        public static final ArrayListUserDao HOLDER_INSTANCE = new ArrayListUserDao();
+    private static class ArrayListUserDaoHolder {
+        public static final ArrayListUserDao ARRAY_LIST_USER_DAO_INSTANCE = new ArrayListUserDao();
 
-        private SingletonHolder() {
+        private ArrayListUserDaoHolder() {
         }
     }
 
     public static ArrayListUserDao getInstance() {
-        return ArrayListUserDao.SingletonHolder.HOLDER_INSTANCE;
-    }
-
-    public synchronized void save(User user) throws UserAlreadyExistException {
-        if (items.stream().anyMatch(u -> u.getLogin().equals(user.getLogin()))) {
-            throw new UserAlreadyExistException();
-        } else {
-            items.add(user);
-        }
+        return ArrayListUserDaoHolder.ARRAY_LIST_USER_DAO_INSTANCE;
     }
 
     public synchronized User find(String login) throws ItemNotFoundException {
