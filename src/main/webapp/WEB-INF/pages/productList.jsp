@@ -79,7 +79,7 @@
                         <div class="product_product">
                             <div class="product_img">
                                 <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
-                                    <img src="${product.imageUrl}">
+                                    <img width="235" height="235" src="${product.imageUrl}">
                                 </a>
                             </div>
                             <div class="product_name">

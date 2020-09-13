@@ -148,6 +148,33 @@
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>deleteProduct</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.DeleteProductServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteProduct</servlet-name>
+        <url-pattern>/deleteProduct/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>createProduct</servlet-name>
+        <servlet-class>com.es.phoneshop.controller.servlet.CreateProductServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>createProduct</servlet-name>
+        <url-pattern>/createProduct</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>adminMenu</servlet-name>
+        <jsp-file>/WEB-INF/pages/adminMenu.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>adminMenu</servlet-name>
+        <url-pattern>/adminMenu</url-pattern>
+    </servlet-mapping>
+
     <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/pages/error404.jsp</location>

@@ -92,8 +92,8 @@ public class Product implements Serializable, StorageItem {
         return priceHistory;
     }
 
-    public void setPriceHistory(LinkedHashMap<LocalDate, BigDecimal> priceHistory) {
-        this.priceHistory = priceHistory;
+    public void setPriceHistory(LocalDate date, BigDecimal price) {
+        priceHistory.put(date, price);
     }
 
     public String getImageUrl() {

@@ -6,6 +6,8 @@ import com.es.phoneshop.model.dao.sort.SortOrder;
 import com.es.phoneshop.model.entity.Product;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -48,8 +50,8 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
     }
 
     @Override
-    public synchronized void updateProductStock(Product product, int stockValue) {
-        items.stream().filter(i -> i.getId().equals(product.getId())).findAny().ifPresent(p -> p.setStock(stockValue));
+    public synchronized void updateProductStock(long productId, int stockValue) {
+        items.stream().filter(i -> i.getId().equals(productId)).findAny().ifPresent(p -> p.setStock(stockValue));
     }
 
     @Override
@@ -61,6 +63,29 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
                 .filter(i -> minPrice == null || i.getPrice().doubleValue() >= minPrice)
                 .filter(i -> maxPrice == null || i.getPrice().doubleValue() <= maxPrice)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateProductCode(Long productId, String code) {
+        items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p-> p.setCode(code));
+    }
+
+    public void updateProductDescription(Long productId, String description) {
+        items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p-> p.setDescription(description));
+    }
+
+
+    public synchronized void updateProductPrice(long productId, double price) {
+        items.stream().filter(i -> i.getId().equals(productId)).findAny()
+                .filter(p -> p.getPrice().doubleValue() != price)
+                .ifPresent(p -> {
+                    p.setPrice(BigDecimal.valueOf(price));
+                    p.setPriceHistory(LocalDate.now(),BigDecimal.valueOf(price));
+                });
+    }
+
+    public void updateProductImageUrl(Long productId, String imageUrl) {
+        items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p-> p.setImageUrl(imageUrl));
     }
 
     private <U> U defineSortField(Product p, SortField sortField) {

@@ -52,7 +52,7 @@ public class DefaultOrderService implements OrderService {
     public void placeOrder(Order order) {
         order.setSecureId(UUID.randomUUID().toString());
         orderDao.save(order);
-        order.getCartItemList().forEach(cartItem -> productDao.updateProductStock(cartItem.getProduct(),
+        order.getCartItemList().forEach(cartItem -> productDao.updateProductStock(cartItem.getProduct().getId(),
                 cartItem.getProduct().getStock() - cartItem.getQuantity()));
     }
 

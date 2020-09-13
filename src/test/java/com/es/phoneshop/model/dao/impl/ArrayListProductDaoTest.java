@@ -237,7 +237,7 @@ public class ArrayListProductDaoTest {
     @Test
     public void testUpdateProductStock() {
         productList.add(product1);
-        dao.updateProductStock(product1, 3);
+        dao.updateProductStock(product1.getId(), 3);
 
         verify(product1).setStock(3);
     }

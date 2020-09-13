@@ -25,9 +25,6 @@
 							<img src="${pageContext.request.contextPath}/images/search_icon.png" alt="">
 						</button>
 					</form>
-					<div class="header_name">
-						<a href="${pageContext.request.contextPath}/advancedSearch">Advanced search</a></div>
-					<div><a href="${pageContext.request.contextPath}/productReviewModeration">Moderation</a></div>
 					<jsp:include page="/cart/miniCart"/>
 				</div>
 			</div>
@@ -39,6 +36,7 @@
 		<div class="container">
 			<div class="footer_row">
 				<div class="footer_text">&copy; copyrighting 2020. Expert-Soft.</div>
+				<div><a href="${pageContext.request.contextPath}/adminMenu">admin menu</a></div>
 				<div class="footer_pay">
 					<div class="footer_text">Accepted payment methods</div>
 					<img src="${pageContext.request.contextPath}/images/9-layers.png" alt="">
