@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AdvancedSearchPageServlet extends HttpServlet {
-    private static final String ADVANCED_SEARCH_JSP = "/WEB-INF/pages/advancedSearch.jsp";
+public class EditProductPageServlet extends HttpServlet {
+    private static final String ADVANCED_SEARCH_JSP = "/WEB-INF/pages/editProduct.jsp";
     private ProductService productService = DefaultProductService.getInstance();
     private ArrayListProductDao productDao = ArrayListProductDao.getInstance();
     Pattern intNotNegativePattern = Pattern.compile("^\\d+$");

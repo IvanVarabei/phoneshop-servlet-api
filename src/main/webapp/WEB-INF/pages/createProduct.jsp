@@ -3,9 +3,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<tags:master pageTitle="Cart">
+<tags:master pageTitle="create product">
 	<div class="editing">
 		<div class="container">
+			<div class="title">Admin page. Create product.</div>
 			<form method="post">
 				<table>
 					<tr>
@@ -19,7 +20,11 @@
 					<tr>
 						<td>Product code :</td>
 						<td><input class="checkoutInput" name="productCode"
-											 value="${not empty param.productCode ? param.productCode : ''}"/></td>
+											 value="${not empty param.productCode ? param.productCode : ''}"/>
+							<c:if test="${not empty requestScope.errors['productCodeError']}">
+								<p class="error">${requestScope.errors.productCodeError}</p>
+							</c:if>
+						</td>
 					</tr>
 					<tr>
 						<td>Description :</td>

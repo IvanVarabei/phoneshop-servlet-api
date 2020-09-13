@@ -6,9 +6,11 @@
 <tags:master pageTitle="admin menu">
 	<div class="cart">
 		<div class="container">
-			<div class="title" align="center"><a href="${pageContext.request.contextPath}/advancedSearch">edit products</a></div>
-			<div class="title" align="center"><a href="${pageContext.request.contextPath}/createProduct">create product</a></div>
-			<div class="title" align="center"><a href="${pageContext.request.contextPath}/productReviewModeration">moderate comments</a></div>
+			<div class="title">Admin Menu</div>
+			<hr>
+			<div class="title"><a href="${pageContext.request.contextPath}/editProduct">edit products</a></div>
+			<div class="title"><a href="${pageContext.request.contextPath}/createProduct">create product</a></div>
+			<div class="title"><a href="${pageContext.request.contextPath}/productReviewModeration">moderate comments</a></div>
 		</div>
 	</div>
 </tags:master>

@@ -14,6 +14,7 @@
 	</c:if>
 	<div class="editing">
 		<div class="container">
+			<div class="title">Admin page. Edit products.</div>
 			<form>
 				<table>
 					<tr>

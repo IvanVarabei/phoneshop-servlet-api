@@ -14,6 +14,6 @@ public class DeleteProductServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         long productId = Long.parseLong(req.getPathInfo().substring(1));
         productDao.delete(productId);
-        resp.sendRedirect(req.getContextPath() + "/advancedSearch?" + req.getQueryString());
+        resp.sendRedirect(req.getContextPath() + "/editProduct?" + req.getQueryString());
     }
 }

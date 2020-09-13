@@ -14,9 +14,13 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class CreateProductServlet extends HttpServlet {
+public class CreateProductPageServlet extends HttpServlet {
     private ProductService productService = DefaultProductService.getInstance();
+    Pattern intNotNegativePattern = Pattern.compile("^\\d+$");
+    Pattern notNegativePattern = Pattern.compile("^\\d+[.,]?\\d*$");
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -25,41 +29,50 @@ public class CreateProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String imageUrl = req.getParameter("imageUrl");
-        String productCode = req.getParameter(Const.RequestParam.PRODUCT_CODE);
-        String description = req.getParameter("description");
+        String potentialImageUrl = req.getParameter("imageUrl");
+        String potentialProductCode = req.getParameter(Const.RequestParam.PRODUCT_CODE);
+        String potentialDescription = req.getParameter("description");
         String potentialPrice = req.getParameter("price");
         String potentialStock = req.getParameter("stock");
         Map<String, String> errors = new HashMap<>();
+        String imageUrl = handlePotentialString(potentialImageUrl, "imageUrlError", errors);
+        String productCode = handlePotentialString(potentialProductCode, "productCodeError", errors);
+        String description = handlePotentialString(potentialDescription, "descriptionError", errors);
         Double price = extractDouble(potentialPrice, "priceError", errors);
         Integer stock = extractInteger(potentialStock, "stockError", errors);
         if (!errors.isEmpty()) {
             req.setAttribute("errors", errors);
+            req.getRequestDispatcher("WEB-INF/pages/createProduct.jsp").forward(req, resp);
         } else {
             productService.saveProduct(imageUrl, productCode, description, BigDecimal.valueOf(price), stock);
+            resp.sendRedirect(req.getContextPath() + req.getServletPath());
         }
-        req.getRequestDispatcher("WEB-INF/pages/createProduct.jsp").forward(req, resp);
+    }
+
+    private String handlePotentialString(String potentialString, String errorName, Map<String, String> searchErrors) {
+        if (potentialString != null && !potentialString.isEmpty()) {
+            return potentialString;
+        } else {
+            searchErrors.put(errorName, "can not be empty");
+            return null;
+        }
     }
 
     private Double extractDouble(String potentialDouble, String errorName, Map<String, String> searchErrors) {
-        if (potentialDouble != null) {
-            try {
-                return Double.parseDouble(potentialDouble);
-            } catch (NumberFormatException e) {
-                searchErrors.put(errorName, Const.ErrorInfo.NOT_NUMBER);
-            }
+        Matcher matcher = notNegativePattern.matcher(potentialDouble);
+        if (matcher.find()) {
+            return Double.parseDouble(matcher.group());
         }
+        searchErrors.put("priceError", "must be non negative");
         return null;
     }
 
     private Integer extractInteger(String potentialInteger, String errorName, Map<String, String> searchErrors) {
-        if (potentialInteger != null) {
-            try {
-                return Integer.parseInt(potentialInteger);
-            } catch (NumberFormatException e) {
-                searchErrors.put(errorName, Const.ErrorInfo.NOT_NUMBER);
-            }
+        Matcher matcher = intNotNegativePattern.matcher(potentialInteger);
+        if (matcher.find()) {
+            return Integer.parseInt(matcher.group());
         }
+            searchErrors.put("stockError", "must be non negative int");
         return null;
     }
 }

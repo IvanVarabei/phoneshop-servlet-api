@@ -219,9 +219,10 @@ body {
 }
 
 .title {
+    text-align: center;
     color: #445161;
     font-size: 30px;
-    line-height: 36px;
+    line-height: 56px;
 }
 
 .footer {
@@ -708,4 +709,11 @@ body {
 .editingInput{
     border: 2px solid #ededed;
     width: 80px;
+}
+hr {
+    border: 0;
+    clear:both;
+    display:block;
+    background-color: #445161;;
+    height: 2px;
 }

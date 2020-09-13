@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class LoginServlet extends HttpServlet {
+public class LoginPageServlet extends HttpServlet {
     private ArrayListUserDao dao = ArrayListUserDao.getInstance();
 
     @Override

@@ -55,6 +55,7 @@
                 <p> Rating: ${review.rating}</p>
                 <p> Comment: ${review.comment}</p>
             </c:forEach>
+            <c:if test="${sessionScope.login != null}">
             <form method="post" action="${pageContext.servletContext.contextPath}/productReview/${product.id}">
                 <h3>Post a review: </h3>
                 <p>Name:<input class="checkoutInput" name="name" value="${not empty param.name ? param.name : ''}"/></p>
@@ -73,6 +74,7 @@
                 </c:if>
                 <button class="details_add">POST</button>
             </form>
+            </c:if>
         </div>
     </div>
 </tags:master>

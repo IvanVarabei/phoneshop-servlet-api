@@ -13,7 +13,7 @@
     </c:if>
     <div class="cart">
         <div class="container">
-            <c:if test="${empty requestScope.cart.cartItemList}"><h2 class="title" align="center">Cart is empty</h2>
+            <c:if test="${empty requestScope.cart.cartItemList}"><div class="title">Cart is empty</div>
             </c:if>
             <c:if test="${not empty requestScope.cart.cartItemList}">
                 <form method="post" action="${pageContext.servletContext.contextPath}/cart">
