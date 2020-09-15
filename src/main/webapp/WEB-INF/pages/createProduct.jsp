@@ -18,7 +18,7 @@
 						<td>
 					</tr>
 					<tr>
-						<td>Product code :</td>
+						<td>Product tag :</td>
 						<td><input class="checkoutInput" name="productCode"
 											 value="${not empty param.productCode ? param.productCode : ''}"/>
 							<c:if test="${not empty requestScope.errors['productCodeError']}">
