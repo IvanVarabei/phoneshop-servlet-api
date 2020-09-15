@@ -5,8 +5,10 @@ import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.service.ProductService;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DefaultProductService implements ProductService {
     private ArrayListProductDao productDao = ArrayListProductDao.getInstance();
@@ -26,6 +28,19 @@ public class DefaultProductService implements ProductService {
     @Override
     public List<Product> searchAdvancedProducts(String productCode, Double minPrice, Double maxPrice, Integer minStock) {
         return productDao.findByFields(productCode, minPrice, maxPrice, minStock);
+    }
+
+
+    public synchronized List<Product> findByFields(
+            String[] productCods, Double minPrice, Double maxPrice, Integer minStock, List<Product> items) {
+        return items.stream()
+                .filter(i -> productCods == null || productCods.length == 0 || Arrays.asList(productCods).contains(i.getCode()))
+
+
+                .filter(i -> minStock == null || i.getStock() >= minStock)
+                .filter(i -> minPrice == null || i.getPrice().doubleValue() >= minPrice)
+                .filter(i -> maxPrice == null || i.getPrice().doubleValue() <= maxPrice)
+                .collect(Collectors.toList());
     }
 
     @Override

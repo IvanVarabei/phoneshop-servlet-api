@@ -70,6 +70,11 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
         items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p-> p.setCode(code));
     }
 
+    @Override
+    public List<String> getCategories() {
+        return items.stream().map(Product::getCode).distinct().collect(Collectors.toList());
+    }
+
     public void updateProductDescription(Long productId, String description) {
         items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p-> p.setDescription(description));
     }

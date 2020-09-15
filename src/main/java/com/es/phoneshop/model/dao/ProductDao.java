@@ -16,4 +16,6 @@ public interface ProductDao extends GenericDao<Product> {
     List<Product> findByFields(String productCode, Double minPrice, Double maxPrice, Integer minStock);
 
     void updateProductCode(Long productId, String code);
+
+    List<String> getCategories();
 }

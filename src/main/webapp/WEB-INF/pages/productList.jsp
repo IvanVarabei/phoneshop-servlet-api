@@ -26,42 +26,63 @@
             <div class="product_body">
                 <div class="info_colomn">
                     <nav class="product_nav">
-                        <div class="type">
-                            <img src="${pageContext.request.contextPath}/images/phone_icon.png" alt="" class="type_img">
-                            <div class="type_text">Cell Phones</div>
-                        </div>
-                        <div class="type">
-                            <img src="${pageContext.request.contextPath}/images/phone_icon.png" alt="" class="type_img">
-                            <div class="type_text">Cell Phones</div>
-                        </div>
-                        <div class="type">
-                            <img src="${pageContext.request.contextPath}/images/phone_icon.png" alt="" class="type_img">
-                            <div class="type_text">Cell Phones</div>
-                        </div>
-                        <div class="type">
-                            <img src="${pageContext.request.contextPath}/images/phone_icon.png" alt="" class="type_img">
-                            <div class="type_text">Cell Phones</div>
-                        </div>
-                        <div class="type">
-                            <img src="${pageContext.request.contextPath}/images/phone_icon.png" alt="" class="type_img">
-                            <div class="type_text">Cell Phones</div>
-                        </div>
+<%--                        <div class="type">--%>
+<%--                            <img src="${pageContext.request.contextPath}/images/phone_icon.png" alt="" class="type_img">--%>
+<%--                            <div class="type_text">Cell Phones</div>--%>
+<%--                        </div>--%>
+                        <form>
+                            <jsp:useBean id="categories" type="java.util.List" scope="request"/>
+                            <table>
+                                <tr>
+
+                                    <td>Product code :</td>
+                                    <td>
+                                        <c:forEach var="category" items="${categories}" varStatus="status">
+                                            <c:set var="flag" value="${true}"/>
+                                            <c:forEach var='value' items='${paramValues.productCode}'>
+                                                ${value}==${category}<br>
+                                                <c:if test="${value eq category}">
+                                                   <c:set var="isActive" value="${true}"/>
+                                                    <c:set var="flag" value="${false}"/>
+                                                </c:if>
+                                                <c:if test="${flag eq true and value ne category}">
+                                                    <c:set var="isActive" value="${false}"/>
+                                                </c:if>
+                                            </c:forEach>
+                                            <div>${category}<input class="checkoutInput" ${isActive ? 'checked' : ''} type="checkbox" name="productCode" value="${category}"> </div>
+                                        </c:forEach>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Min price :</td>
+                                    <td><input class="checkoutInput" name="minPrice" value="${not empty param.minPrice ? param.minPrice : ''}"/>
+                                        <c:if test="${not empty requestScope.searchErrors['minPriceError']}">
+                                            <p class="error">${requestScope.searchErrors.minPriceError}</p>
+                                        </c:if>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Max price :</td>
+                                    <td><input class="checkoutInput" name="maxPrice" value="${not empty param.maxPrice ? param.maxPrice : ''}"/>
+                                        <c:if test="${not empty requestScope.searchErrors['maxPriceError']}">
+                                        <p class="error">${requestScope.searchErrors.maxPriceError}</p>
+                                        </c:if>
+                                    <td>
+                                </tr>
+                                <tr>
+                                    <td>Min stock :</td>
+                                    <td><input class="checkoutInput" name="minStock" value="${not empty param.minStock ? param.minStock : ''}"/>
+                                        <c:if test="${not empty requestScope.searchErrors['minStockError']}">
+                                        <p class="error">${requestScope.searchErrors.minStockError}</p>
+                                        </c:if>
+                                    <td>
+                                </tr>
+                            </table>
+                            <input type="hidden" name="query" value="${param.query}">
+                            <button class="editingSearchBtn">Search</button>
+                        </form>
                     </nav>
-                    <div class="news">
-                        <div class="news_title">News</div>
-                        <div class="news_item">
-                            <div class="news_body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam rerum
-                                non molestias et unde animi eligendi, harum ipsum debitis earum vel architecto obcaecati
-                                praesentium iure quam sint, corporis! Vero, voluptatibus.
-                            </div>
-                        </div>
-                        <div class="news_item">
-                            <div class="news_body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam rerum
-                                non molestias et unde animi eligendi, harum ipsum debitis earum vel architecto obcaecati
-                                praesentium iure quam sint, corporis! Vero, voluptatibus.
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="product_items">
                     <div class="product_panel">
@@ -108,10 +129,17 @@
                                 </div>
                             </div>
                             <div class="product_adding_from_plp">
+                                <c:set var="categories" value=""/>
+                                <c:forEach var="category" items="${paramValues.productCode}">
+                                    <c:set var="categories" value="${categories}&productCode=${category}"/>
+                                </c:forEach>
                                 <form method="post" action="${pageContext.servletContext.contextPath}/products?query=${
                                     not empty param.query ? param.query : ''}&sortField=${
                                     not empty param.sortField ? param.sortField : ''}&sortOrder=${
-                                    not empty param.sortOrder ? param.sortOrder : ''}">
+                                    not empty param.sortOrder ? param.sortOrder : ''}&minPrice=${
+                                    not empty param.minPrice ? param.minPrice : ''}&maxPrice=${
+                                    not empty param.maxPrice ? param.maxPrice : ''}&minStock=${
+                                    not empty param.minStock ? param.minStock : ''}${categories}">
                                     <div class="product_add_row">
                                         <div class="product_quantity">
                                             <input class="product_quantity_input" name="quantity" value="${
