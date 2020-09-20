@@ -24,14 +24,13 @@
             <div class="details_name">${product.description}</div>
             <div class="details_row">
                 <div class="details_info1">
-                    <img class="details_img"
-                         src="${product.imageUrl}">
+                    <img class="details_img" src="${product.imageUrl}">
                     <div class="details_price"><fmt:formatNumber value="${product.price}" type="currency"
                                                                  currencySymbol="${product.currency.symbol}"/></div>
                 </div>
                 <div class="details_info2">
                     <div class="details_text">
-                        <p>Code: ${product.code}</p>
+                        <p>Tag: ${product.tag}</p>
                         <p>Stock: ${product.stock}</p>
                         <p>Price history</p>
                         <c:forEach var="entry" items="${product.priceHistory}">${entry.key} - <fmt:formatNumber
@@ -58,10 +57,6 @@
             <c:if test="${sessionScope.login != null}">
             <form method="post" action="${pageContext.servletContext.contextPath}/productReview/${product.id}">
                 <h3>Post a review: </h3>
-                <p>Name:<input class="checkoutInput" name="name" value="${not empty param.name ? param.name : ''}"/></p>
-                <c:if test="${not empty requestScope.reviewErrors['nameError']}">
-                    <p class="error">${requestScope.reviewErrors.nameError}</p>
-                </c:if>
                 <label>Rating:</label>
                 <input type="radio" name="rating" value="1" ${param.rating == 1 ? 'checked' : ''}/>1
                 <input type="radio" name="rating" value="2" ${param.rating == 2 ? 'checked' : ''}/>2
@@ -69,10 +64,10 @@
                 <input type="radio" name="rating" value="4" ${param.rating == 4 ? 'checked' : ''}/>4
                 <input type="radio" name="rating" value="5" ${param.rating == 5 ? 'checked' : empty param.rating ? 'checked' : ''}/>5
                 <p>Comment:<input class="checkoutInput" name="comment" value="${not empty param.comment ? param.comment : ''}"/></p>
-                <c:if test="${not empty requestScope.reviewErrors.commentError}">
-                    <p class="error">${requestScope.reviewErrors.commentError}</p>
+                <c:if test="${not empty requestScope.commentError}">
+                    <p class="error">${requestScope.commentError}</p>
                 </c:if>
-                <button class="details_add">POST</button>
+                <button class="details_add">Leave a review</button>
             </form>
             </c:if>
         </div>

@@ -4,7 +4,7 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 
-<jsp:useBean id="products" type="java.util.ArrayList" scope="request"/>
+<jsp:useBean id="products" type="java.util.List" scope="request"/>
 <tags:master pageTitle="Product List">
     <div class="photo"><img src="${pageContext.request.contextPath}/images/image.png" alt=""></div>
     <c:if test="${not empty requestScope.error}">
@@ -31,16 +31,14 @@
 <%--                            <div class="type_text">Cell Phones</div>--%>
 <%--                        </div>--%>
                         <form>
-                            <jsp:useBean id="categories" type="java.util.List" scope="request"/>
+                            <jsp:useBean id="tags" type="java.util.List" scope="request"/>
                             <table>
                                 <tr>
-
                                     <td>Product code :</td>
                                     <td>
-                                        <c:forEach var="category" items="${categories}" varStatus="status">
+                                        <c:forEach var="category" items="${tags}" varStatus="status">
                                             <c:set var="flag" value="${true}"/>
-                                            <c:forEach var='value' items='${paramValues.productCode}'>
-                                                ${value}==${category}<br>
+                                            <c:forEach var='value' items='${paramValues.tag}'>
                                                 <c:if test="${value eq category}">
                                                    <c:set var="isActive" value="${true}"/>
                                                     <c:set var="flag" value="${false}"/>
@@ -49,33 +47,24 @@
                                                     <c:set var="isActive" value="${false}"/>
                                                 </c:if>
                                             </c:forEach>
-                                            <div>${category}<input class="checkoutInput" ${isActive ? 'checked' : ''} type="checkbox" name="productCode" value="${category}"> </div>
+                                            <div>${category}<input class="checkoutInput" ${isActive ? 'checked' : ''} type="checkbox" name="tag" value="${category}"> </div>
                                         </c:forEach>
 
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Min price :</td>
-                                    <td><input class="checkoutInput" name="minPrice" value="${not empty param.minPrice ? param.minPrice : ''}"/>
-                                        <c:if test="${not empty requestScope.searchErrors['minPriceError']}">
-                                            <p class="error">${requestScope.searchErrors.minPriceError}</p>
-                                        </c:if>
+                                    <td><input class="checkoutInput" name="minPrice" value="${not empty param.minPrice and empty requestScope.errors['minPriceError'] ? param.minPrice : ''}"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Max price :</td>
-                                    <td><input class="checkoutInput" name="maxPrice" value="${not empty param.maxPrice ? param.maxPrice : ''}"/>
-                                        <c:if test="${not empty requestScope.searchErrors['maxPriceError']}">
-                                        <p class="error">${requestScope.searchErrors.maxPriceError}</p>
-                                        </c:if>
+                                    <td><input class="checkoutInput" name="maxPrice" value="${not empty param.maxPrice and empty requestScope.errors['maxPriceError'] ? param.maxPrice : ''}"/>
                                     <td>
                                 </tr>
                                 <tr>
                                     <td>Min stock :</td>
-                                    <td><input class="checkoutInput" name="minStock" value="${not empty param.minStock ? param.minStock : ''}"/>
-                                        <c:if test="${not empty requestScope.searchErrors['minStockError']}">
-                                        <p class="error">${requestScope.searchErrors.minStockError}</p>
-                                        </c:if>
+                                    <td><input class="checkoutInput" name="stock" value="${not empty param.stock and empty requestScope.errors['stockError'] ? param.stock : ''}"/>
                                     <td>
                                 </tr>
                             </table>
@@ -130,16 +119,16 @@
                             </div>
                             <div class="product_adding_from_plp">
                                 <c:set var="categories" value=""/>
-                                <c:forEach var="category" items="${paramValues.productCode}">
-                                    <c:set var="categories" value="${categories}&productCode=${category}"/>
+                                <c:forEach var="category" items="${paramValues.tag}">
+                                    <c:set var="categories" value="${categories}&tag=${category}"/>
                                 </c:forEach>
                                 <form method="post" action="${pageContext.servletContext.contextPath}/products?query=${
                                     not empty param.query ? param.query : ''}&sortField=${
                                     not empty param.sortField ? param.sortField : ''}&sortOrder=${
                                     not empty param.sortOrder ? param.sortOrder : ''}&minPrice=${
                                     not empty param.minPrice ? param.minPrice : ''}&maxPrice=${
-                                    not empty param.maxPrice ? param.maxPrice : ''}&minStock=${
-                                    not empty param.minStock ? param.minStock : ''}${categories}">
+                                    not empty param.maxPrice ? param.maxPrice : ''}&stock=${
+                                    not empty param.stock ? param.stock : ''}${categories}">
                                     <div class="product_add_row">
                                         <div class="product_quantity">
                                             <input class="product_quantity_input" name="quantity" value="${

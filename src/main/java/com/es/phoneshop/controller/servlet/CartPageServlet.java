@@ -1,11 +1,11 @@
 package com.es.phoneshop.controller.servlet;
 
-import com.es.phoneshop.model.dao.ProductDao;
-import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.exception.OutOfStockException;
 import com.es.phoneshop.model.service.CartService;
+import com.es.phoneshop.model.service.ProductService;
 import com.es.phoneshop.model.service.impl.DefaultCartService;
+import com.es.phoneshop.model.service.impl.DefaultProductService;
 import com.es.phoneshop.value.Const;
 
 import javax.servlet.ServletException;
@@ -19,9 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CartPageServlet extends HttpServlet {
-    private static final String CART_JSP = "/WEB-INF/pages/cart.jsp";
-    private static final String REDIRECT_AFTER_UPDATING = "/cart?message=Cart updated successfully";
-    private ProductDao dao = ArrayListProductDao.getInstance();
+    private static final String CART_JSP = "WEB-INF/pages/cart.jsp";
+    private static final String REDIRECT_AFTER_UPDATING = "%s/cart?message=Cart updated successfully";
+    private ProductService productService = DefaultProductService.getInstance();
     private CartService cartService = DefaultCartService.getInstance();
 
     @Override
@@ -38,15 +38,15 @@ public class CartPageServlet extends HttpServlet {
             long productId = Long.parseLong(productIds[i]);
             try {
                 int quantity = NumberFormat.getInstance(req.getLocale()).parse(quantities[i]).intValue();
-                cartService.update(req.getSession(), dao.find(productId), quantity);
+                cartService.update(req.getSession(), productService.find(productId), quantity);
             } catch (ItemNotFoundException | OutOfStockException | ParseException e) {
                 handleError(errors, productId, e);
             }
         }
         if (errors.isEmpty()) {
-            resp.sendRedirect(req.getContextPath() + REDIRECT_AFTER_UPDATING);
+            resp.sendRedirect(String.format(REDIRECT_AFTER_UPDATING, req.getContextPath()));
         } else {
-            req.setAttribute(Const.RequestAttribute.ERRORS, errors);
+            req.setAttribute(Const.AttributeKey.ERRORS, errors);
             req.getRequestDispatcher(CART_JSP).forward(req, resp);
         }
     }

@@ -5,6 +5,7 @@ import com.es.phoneshop.model.entity.StorageItem;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ArrayListGenericDao<T extends StorageItem> implements GenericDao<T> {
@@ -15,8 +16,9 @@ public class ArrayListGenericDao<T extends StorageItem> implements GenericDao<T>
         this.items = items;
     }
 
+    @Override
     public synchronized void save(T storageItem) {
-        if (storageItem.getId() != null && items.removeIf(p -> storageItem.getId().equals(p.getId()))) {
+        if (storageItem.getId() != null && items.removeIf(i -> storageItem.getId().equals(i.getId()))) {
             items.add(storageItem);
             return;
         }
@@ -24,8 +26,19 @@ public class ArrayListGenericDao<T extends StorageItem> implements GenericDao<T>
         items.add(storageItem);
     }
 
+    @Override
     public synchronized T find(Long id) throws ItemNotFoundException {
-        return items.stream().filter(o -> o.getId().equals(id)).findAny()
+        return items.stream().filter(i -> i.getId().equals(id)).findAny()
                 .orElseThrow(ItemNotFoundException::new);
+    }
+
+    @Override
+    public synchronized List<T> findAll() {
+        return Collections.unmodifiableList(items);
+    }
+
+    @Override
+    public synchronized void delete(long id) {
+        items.removeIf(i -> i.getId().equals(id));
     }
 }

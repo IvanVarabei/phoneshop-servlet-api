@@ -60,10 +60,10 @@ public class DefaultCartService implements CartService {
 
     @Override
     public Cart extractCartOrSetNewOne(HttpSession session) {
-        if (session.getAttribute(Const.RequestAttribute.CART) == null) {
-            session.setAttribute(Const.RequestAttribute.CART, new Cart());
+        if (session.getAttribute(Const.AttributeKey.CART) == null) {
+            session.setAttribute(Const.AttributeKey.CART, new Cart());
         }
-        return (Cart) session.getAttribute(Const.RequestAttribute.CART);
+        return (Cart) session.getAttribute(Const.AttributeKey.CART);
     }
 
     private void refreshCart(Cart cart) {

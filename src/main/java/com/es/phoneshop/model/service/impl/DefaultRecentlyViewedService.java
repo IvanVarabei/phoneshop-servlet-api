@@ -24,14 +24,14 @@ public class DefaultRecentlyViewedService implements RecentlyViewedService {
     }
 
     public void updateRecentlyViewedLine(HttpSession session, Product product) {
-        Queue<Product> recent = session.getAttribute(Const.RequestAttribute.RECENT) == null ? new LinkedList<>() :
-                (Queue<Product>) session.getAttribute(Const.RequestAttribute.RECENT);
+        Queue<Product> recent = session.getAttribute(Const.AttributeKey.RECENT) == null ? new LinkedList<>() :
+                (Queue<Product>) session.getAttribute(Const.AttributeKey.RECENT);
         if (!recent.contains(product)) {
             recent.offer(product);
         }
         if (recent.size() > RECENT_VIEWED_AMOUNT) {
             recent.poll();
         }
-        session.setAttribute(Const.RequestAttribute.RECENT, recent);
+        session.setAttribute(Const.AttributeKey.RECENT, recent);
     }
 }

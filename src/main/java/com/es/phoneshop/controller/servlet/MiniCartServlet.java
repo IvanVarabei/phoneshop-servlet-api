@@ -13,7 +13,7 @@ public class MiniCartServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute(Const.RequestAttribute.CART, req.getSession().getAttribute(Const.RequestAttribute.CART));
+        req.setAttribute(Const.AttributeKey.CART, req.getSession().getAttribute(Const.AttributeKey.CART));
         req.getRequestDispatcher(MINI_CART_JSP).include(req, resp);
     }
 

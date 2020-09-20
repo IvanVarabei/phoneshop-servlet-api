@@ -1,8 +1,8 @@
 package com.es.phoneshop.controller.servlet;
 
-import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.service.ProductService;
 import com.es.phoneshop.model.service.impl.DefaultProductService;
+import com.es.phoneshop.util.CustomParser;
 import com.es.phoneshop.value.Const;
 
 import javax.servlet.ServletException;
@@ -12,31 +12,30 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.ObjDoubleConsumer;
+import java.util.function.ObjIntConsumer;
 
 public class EditProductPageServlet extends HttpServlet {
-    private static final String ADVANCED_SEARCH_JSP = "/WEB-INF/pages/editProduct.jsp";
+    private static final String ADVANCED_SEARCH_JSP = "WEB-INF/pages/editProduct.jsp";
     private ProductService productService = DefaultProductService.getInstance();
-    private ArrayListProductDao productDao = ArrayListProductDao.getInstance();
-    Pattern intNotNegativePattern = Pattern.compile("^\\d+$");
-    Pattern notNegativePattern = Pattern.compile("^\\d+[.,]?\\d*$");
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String productCode = req.getParameter(Const.RequestParam.PRODUCT_CODE);
+        String productCode = req.getParameter(Const.RequestParam.SEARCH_TAG);
         String potentialMinPrice = req.getParameter(Const.RequestParam.MIN_PRICE);
         String potentialMaxPrice = req.getParameter(Const.RequestParam.MAX_PRICE);
-        String potentialMinStock = req.getParameter(Const.RequestParam.MIN_STOCK);
-        Map<String, String> searchErrors = new HashMap<>();
-        Double minPrice = extractDouble(potentialMinPrice, Const.ErrorInfo.MIN_PRICE_ERROR, searchErrors);
-        Double maxPrice = extractDouble(potentialMaxPrice, Const.ErrorInfo.MAX_PRICE_ERROR, searchErrors);
-        Integer minStock = extractInteger(potentialMinStock, Const.ErrorInfo.MIN_STOCK_ERROR, searchErrors);
-        if (searchErrors.isEmpty()) {
-            req.setAttribute(Const.RequestAttribute.PRODUCTS, productService
-                    .searchAdvancedProducts(productCode, minPrice, maxPrice, minStock));
+        String potentialMinStock = req.getParameter(Const.RequestParam.SEARCH_STOCK);
+        Map<String, String> errors = new HashMap<>();
+        Double minPrice = handleNonNegativeDouble(potentialMinPrice, Const.ErrorKey.MIN_PRICE, errors);
+        Double maxPrice = handleNonNegativeDouble(potentialMaxPrice, Const.ErrorKey.MAX_PRICE, errors);
+        Integer minStock = handleNonNegativeInt(potentialMinStock, Const.ErrorKey.STOCK, errors);
+        if (errors.isEmpty()) {
+            req.setAttribute(Const.AttributeKey.PRODUCTS, productService.filterProductsByFields(
+                    productService.findAll(), minPrice, maxPrice, minStock, productCode));
         } else {
-            req.setAttribute(Const.RequestAttribute.SEARCH_ERRORS, searchErrors);
+            req.setAttribute(Const.AttributeKey.SEARCH_ERRORS, errors);
         }
         req.getRequestDispatcher(ADVANCED_SEARCH_JSP).forward(req, resp);
     }
@@ -44,91 +43,72 @@ public class EditProductPageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String[] productIds = req.getParameterValues(Const.RequestParam.PRODUCT_ID);
-        String[] imageUrls = req.getParameterValues("imageUrl");
-        String[] codes = req.getParameterValues("code");
-        String[] descriptions = req.getParameterValues("description");
-        String[] prices = req.getParameterValues("price");
-        String[] stocks = req.getParameterValues("stock");
-        Map<Long, Map<String,String>> editError = new HashMap<>();
+        String[] imageUrls = req.getParameterValues(Const.RequestParam.IMAGE_URL);
+        String[] tags = req.getParameterValues(Const.RequestParam.TAG);
+        String[] descriptions = req.getParameterValues(Const.RequestParam.DESCRIPTION);
+        String[] prices = req.getParameterValues(Const.RequestParam.PRICE);
+        String[] stocks = req.getParameterValues(Const.RequestParam.STOCK);
+        Map<Long, Map<String, String>> productsErrors = new HashMap<>();
         for (int i = 0; i < productIds.length; i++) {
-            long productId = Long.parseLong(productIds[i]);
-            Map<String,String> currentProductError = new HashMap<>();
-            updateProductImageUrl(productId, imageUrls[i], currentProductError);
-            updateProductCode(productId, codes[i], currentProductError);
-            updateProductDescription(productId, descriptions[i], currentProductError);
-            updateProductPrice(productId, prices[i], currentProductError);
-            updateProductStock(productId, stocks[i], currentProductError);
-            if(!currentProductError.isEmpty()) {
-                editError.put(productId, currentProductError);
+            long id = Long.parseLong(productIds[i]);
+            Map<String, String> errors = new HashMap<>();
+            updateString(id, imageUrls[i], errors, Const.ErrorKey.IMAGE_URL, productService::updateImageUrl);
+            updateString(id, tags[i], errors, Const.ErrorKey.TAG, productService::updateTag);
+            updateString(id, descriptions[i], errors, Const.ErrorKey.DESCRIPTION, productService::updateDescription);
+            updateDouble(id, prices[i], errors, Const.ErrorKey.PRICE, productService::updatePrice);
+            updateInt(id, stocks[i], errors, Const.ErrorKey.STOCK, productService::updateStock);
+            if (!errors.isEmpty()) {
+                productsErrors.put(id, errors);
             }
         }
-        if(!editError.isEmpty()) {
-            req.setAttribute("editError", editError);
+        if (!productsErrors.isEmpty()) {
+            req.setAttribute(Const.AttributeKey.ERRORS, productsErrors);
         }
         doGet(req, resp);
     }
 
-    private void updateProductImageUrl(long productId, String imageUrl, Map<String,String> currentProductError) {
+    public Double handleNonNegativeDouble(String potentialDouble, String errorKey, Map<String, String> errors) {
+        if (potentialDouble == null || potentialDouble.isEmpty()) {
+            return null;
+        }
+        Optional<Double> number = CustomParser.parseNonNegativeDouble(potentialDouble);
+        if (number.isEmpty()) {
+            errors.put(errorKey, Const.ErrorInfo.NON_NEGATIVE_NUMBER);
+        }
+        return number.orElse(null);//todo
+    }
+
+    public Integer handleNonNegativeInt(String potentialInteger, String errorKey, Map<String, String> errors) {
+        if (potentialInteger == null || potentialInteger.isEmpty()) {
+            return null;
+        }
+        Optional<Integer> number = CustomParser.parseNonNegativeInt(potentialInteger);
+        if (number.isEmpty()) {
+            errors.put(errorKey, Const.ErrorInfo.NON_NEGATIVE_INT);
+        }
+        return number.orElse(null);
+    }
+
+    private void updateString(long productId, String imageUrl, Map<String, String> error, String errorKey,
+                              BiConsumer<Long, String> consumer) {
         if (imageUrl.isEmpty()) {
-            currentProductError.put("imageUrlError", "can not be empty");
+            error.put(errorKey, Const.ErrorInfo.VALUE_IS_REQUIRED);
         } else {
-            productDao.updateProductImageUrl(productId, imageUrl);
+            consumer.accept(productId, imageUrl);
         }
     }
 
-    private void updateProductCode(long productId, String code, Map<String,String> currentProductError) {
-        if (code.isEmpty()) {
-            currentProductError.put("codeError", "can not be empty");
-        } else {
-            productDao.updateProductCode(productId, code);
-        }
+    private void updateDouble(long productId, String potentialDouble, Map<String, String> error, String errorKey,
+                              ObjDoubleConsumer<Long> consumer) {
+        CustomParser.parseNonNegativeDouble(potentialDouble)
+                .ifPresentOrElse(d -> consumer.accept(productId, d),
+                        () -> error.put(errorKey, Const.ErrorInfo.NON_NEGATIVE_NUMBER));
     }
 
-    private void updateProductDescription(long productId, String description, Map<String,String> currentProductError) {
-        if (description.isEmpty()) {
-            currentProductError.put("descriptionError", "can not be empty");
-        } else {
-            productDao.updateProductDescription(productId, description);
-        }
-    }
-
-    private void updateProductPrice(long productId, String potentialPrice, Map<String,String> currentProductError) {
-        Matcher matcher = notNegativePattern.matcher(potentialPrice);
-        if (matcher.find()) {
-            productDao.updateProductPrice(productId, Double.parseDouble(matcher.group()));
-        } else {
-            currentProductError.put("priceError", "must be non negative");
-        }
-    }
-
-    private void updateProductStock(long productId, String potentialStock, Map<String,String> currentProductError) {
-        Matcher matcher = intNotNegativePattern.matcher(potentialStock);
-        if (matcher.find()) {
-            productDao.updateProductStock(productId, Integer.parseInt(matcher.group()));
-        } else {
-            currentProductError.put("stockError", "must be non negative int");
-        }
-    }
-
-    private Double extractDouble(String potentialDouble, String errorName, Map<String, String> searchErrors) {
-        if (potentialDouble != null && !potentialDouble.isEmpty()) {
-            try {
-                return Double.parseDouble(potentialDouble);
-            } catch (NumberFormatException e) {
-                searchErrors.put(errorName, Const.ErrorInfo.NOT_NUMBER);
-            }
-        }
-        return null;
-    }
-
-    private Integer extractInteger(String potentialInteger, String errorName, Map<String, String> searchErrors) {
-        if (potentialInteger != null && !potentialInteger.isEmpty()) {
-            try {
-                return Integer.parseInt(potentialInteger);
-            } catch (NumberFormatException e) {
-                searchErrors.put(errorName, Const.ErrorInfo.NOT_NUMBER);
-            }
-        }
-        return null;
+    private void updateInt(long productId, String potentialInt, Map<String, String> error, String errorKey,
+                           ObjIntConsumer<Long> consumer) {
+        CustomParser.parseNonNegativeInt(potentialInt)
+                .ifPresentOrElse(i -> consumer.accept(productId, i),
+                        () -> error.put(errorKey, Const.ErrorInfo.NON_NEGATIVE_INT));
     }
 }

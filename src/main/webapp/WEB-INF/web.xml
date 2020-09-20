@@ -42,6 +42,22 @@
         <filter-name>userFilter</filter-name>
         <url-pattern>/productReviewModeration</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>userFilter</filter-name>
+        <url-pattern>/createProduct</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>userFilter</filter-name>
+        <url-pattern>/editProduct</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>userFilter</filter-name>
+        <url-pattern>/deleteProduct/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>userFilter</filter-name>
+        <url-pattern>/adminMenu</url-pattern>
+    </filter-mapping>
 
     <filter>
         <filter-name>adminFilter</filter-name>
@@ -50,6 +66,22 @@
     <filter-mapping>
         <filter-name>adminFilter</filter-name>
         <url-pattern>/productReviewModeration</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>adminFilter</filter-name>
+        <url-pattern>/createProduct</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>adminFilter</filter-name>
+        <url-pattern>/editProduct</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>adminFilter</filter-name>
+        <url-pattern>/deleteProduct/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>adminFilter</filter-name>
+        <url-pattern>/adminMenu</url-pattern>
     </filter-mapping>
     <!-- todo ends-->
     <servlet>

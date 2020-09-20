@@ -18,9 +18,9 @@
 			<form>
 				<table>
 					<tr>
-						<td>Product code :</td>
-						<td><input class="checkoutInput" name="productCode"
-											 value="${not empty param.productCode ? param.productCode : ''}"/></td>
+						<td>Product tag :</td>
+						<td><input class="checkoutInput" name="searchTag"
+											 value="${not empty param.searchTag ? param.searchTag : ''}"/></td>
 					</tr>
 					<tr>
 						<td>Min price :</td>
@@ -40,9 +40,9 @@
 					</tr>
 					<tr>
 						<td>Min stock :</td>
-						<td><input class="checkoutInput" name="minStock" value="${not empty param.minStock ? param.minStock : ''}"/>
-							<c:if test="${not empty requestScope.searchErrors['minStockError']}">
-							<p class="error">${requestScope.searchErrors.minStockError}</p>
+						<td><input class="checkoutInput" name="searchStock" value="${not empty param.searchStock ? param.searchStock : ''}"/>
+							<c:if test="${not empty requestScope.searchErrors['stockError']}">
+							<p class="error">${requestScope.searchErrors.stockError}</p>
 							</c:if>
 						<td>
 					</tr>
@@ -56,16 +56,16 @@
 				<table class="editingTable">
 					<thead>
 					<td>imageUrl 235px</td>
-					<td>code</td>
+					<td>tag</td>
 					<td>description</td>
 					<td>price</td>
 					<td>stock</td>
 					</thead>
 					<form method="post">
 						<c:forEach var="product" items="${products}" varStatus="status">
-							<c:set var="currentProductError" value="${requestScope.editError[product.id]}"/>
+							<c:set var="currentProductError" value="${requestScope.errors[product.id]}"/>
 							<c:set var="imageUrlError" value="${currentProductError.imageUrlError}"/>
-							<c:set var="codeError" value="${currentProductError.codeError}"/>
+							<c:set var="tagError" value="${currentProductError.tagError}"/>
 							<c:set var="descriptionError" value="${currentProductError.descriptionError}"/>
 							<c:set var="priceError" value="${currentProductError.priceError}"/>
 							<c:set var="stockError" value="${currentProductError.stockError}"/>
@@ -77,9 +77,9 @@
 									<p>${imageUrlError}</p>
 								</td>
 								<td>
-									<input class="editingInput" name="code"
-												 value="${not empty codeError ? paramValues['code'][status.index] : product.code}"/>
-									<p>${codeError}</p>
+									<input class="editingInput" name="tag"
+												 value="${not empty tagError ? paramValues['tag'][status.index] : product.tag}"/>
+									<p>${tagError}</p>
 								</td>
 								<td><input class="editingInput" name="description"
 													 value="${not empty descriptionError ? paramValues['description'][status.index] : product.description}"/>
@@ -96,7 +96,7 @@
 								</td>
 								<td>
 									<button class="details_add" formmethod="post" formaction="
-									${pageContext.servletContext.contextPath}/deleteProduct/${product.id}?productCode=${param.productCode}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&minStock=${param.minStock}">
+									${pageContext.servletContext.contextPath}/deleteProduct/${product.id}?searchTag=${param.searchTag}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&searchStock=${param.searchStock}">
 										delete
 									</button>
 								</td>

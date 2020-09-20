@@ -15,7 +15,7 @@
 	<div class="cart">
 	<div class="container">
 	<p class="title">Admin page. Product reviews moderation.</p>
-	<div align="center"><c:if test="${productReviews.isEmpty()}">There are no reviews</c:if></div>
+	<div class="title"><c:if test="${productReviews.isEmpty()}">There are no reviews</c:if></div>
 	<c:if test="${!productReviews.isEmpty()}">
 	<form method="post">
 		<table class="cart_table">

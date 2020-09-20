@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class RecentlyViewedServlet extends HttpServlet {
-    private static final String RECENTLY_VIEWED_JSP = "/WEB-INF/pages/recentlyViewed.jsp";
+    private static final String RECENTLY_VIEWED_JSP = "WEB-INF/pages/recentlyViewed.jsp";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute(Const.RequestAttribute.RECENT, req.getSession().getAttribute(Const.RequestAttribute.RECENT));
+        req.setAttribute(Const.AttributeKey.RECENT, req.getSession().getAttribute(Const.AttributeKey.RECENT));
         req.getRequestDispatcher(RECENTLY_VIEWED_JSP).include(req, resp);
     }
 

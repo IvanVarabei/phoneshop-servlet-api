@@ -2,7 +2,6 @@ package com.es.phoneshop.controller.servlet;
 
 import com.es.phoneshop.model.dao.impl.ArrayListUserDao;
 import com.es.phoneshop.model.entity.User;
-import com.es.phoneshop.model.exception.UserAlreadyExistException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,7 +31,7 @@ public class RegisterPageServlet extends HttpServlet {
                 req.setAttribute("message", "Such a user already exists. Try another login.");
                 req.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(req, resp);
             }else{
-                dao.save(new User(login, password1, User.Role.USER));
+                dao.save(new User(login, password1, User.Role.CLIENT));
                 HttpSession session = req.getSession();
                 session.setAttribute("login", login);
                 session.setAttribute("password", password1);

@@ -33,8 +33,37 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
     }
 
     @Override
-    public synchronized void delete(Long id) {
-        items.removeIf(p -> id.equals(p.getId()));
+    public synchronized void updateProductImageUrl(Long productId, String imageUrl) {
+        items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p -> p.setImageUrl(imageUrl));
+    }
+
+    @Override
+    public synchronized void updateProductDescription(Long productId, String description) {
+        items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p -> p.setDescription(description));
+    }
+
+    @Override
+    public synchronized void updateProductTag(Long productId, String tag) {
+        items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p -> p.setTag(tag));
+    }
+
+    @Override
+    public synchronized void updateProductPrice(long productId, double price) {
+        items.stream().filter(i -> i.getId().equals(productId)).findAny()
+                .ifPresent(p -> {
+                    p.setPrice(BigDecimal.valueOf(price));
+                    p.setPriceHistory(LocalDate.now(), BigDecimal.valueOf(price));
+                });
+    }
+
+    @Override
+    public synchronized void updateProductStock(long productId, int stockValue) {
+        items.stream().filter(i -> i.getId().equals(productId)).findAny().ifPresent(p -> p.setStock(stockValue));
+    }
+
+    @Override
+    public synchronized List<String> findTags() {
+        return items.stream().map(Product::getTag).distinct().collect(Collectors.toList());
     }
 
     @Override
@@ -47,50 +76,6 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
             return search(query).sorted(comparator).collect(Collectors.toList());
         }
         return search(query).collect(Collectors.toList());
-    }
-
-    @Override
-    public synchronized void updateProductStock(long productId, int stockValue) {
-        items.stream().filter(i -> i.getId().equals(productId)).findAny().ifPresent(p -> p.setStock(stockValue));
-    }
-
-    @Override
-    public synchronized List<Product> findByFields(
-            String productCode, Double minPrice, Double maxPrice, Integer minStock) {
-        return items.stream()
-                .filter(i -> productCode == null || productCode.isEmpty() || i.getCode().equals(productCode))
-                .filter(i -> minStock == null || i.getStock() >= minStock)
-                .filter(i -> minPrice == null || i.getPrice().doubleValue() >= minPrice)
-                .filter(i -> maxPrice == null || i.getPrice().doubleValue() <= maxPrice)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void updateProductCode(Long productId, String code) {
-        items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p-> p.setCode(code));
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return items.stream().map(Product::getCode).distinct().collect(Collectors.toList());
-    }
-
-    public void updateProductDescription(Long productId, String description) {
-        items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p-> p.setDescription(description));
-    }
-
-
-    public synchronized void updateProductPrice(long productId, double price) {
-        items.stream().filter(i -> i.getId().equals(productId)).findAny()
-                .filter(p -> p.getPrice().doubleValue() != price)
-                .ifPresent(p -> {
-                    p.setPrice(BigDecimal.valueOf(price));
-                    p.setPriceHistory(LocalDate.now(),BigDecimal.valueOf(price));
-                });
-    }
-
-    public void updateProductImageUrl(Long productId, String imageUrl) {
-        items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p-> p.setImageUrl(imageUrl));
     }
 
     private <U> U defineSortField(Product p, SortField sortField) {

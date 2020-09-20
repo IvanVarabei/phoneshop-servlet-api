@@ -4,10 +4,17 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <tags:master pageTitle="create product">
+	<c:if test="${not empty param.message}">
+		<div class="add_info add_success">
+			<div class="container">
+				<div class="add_message">${param.message}</div>
+			</div>
+		</div>
+	</c:if>
 	<div class="editing">
 		<div class="container">
 			<div class="title">Admin page. Create product.</div>
-			<form method="post">
+			<form method="post" action="${pageContext.servletContext.contextPath}/createProduct">
 				<table>
 					<tr>
 						<td>ImageUrl 235px :</td>
@@ -19,10 +26,10 @@
 					</tr>
 					<tr>
 						<td>Product tag :</td>
-						<td><input class="checkoutInput" name="productCode"
-											 value="${not empty param.productCode ? param.productCode : ''}"/>
-							<c:if test="${not empty requestScope.errors['productCodeError']}">
-								<p class="error">${requestScope.errors.productCodeError}</p>
+						<td><input class="checkoutInput" name="tag"
+											 value="${not empty param.tag ? param.tag : ''}"/>
+							<c:if test="${not empty requestScope.errors['tagError']}">
+								<p class="error">${requestScope.errors.tagError}</p>
 							</c:if>
 						</td>
 					</tr>

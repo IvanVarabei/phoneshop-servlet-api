@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Product implements Serializable, StorageItem {
     private Long id;
-    private String code;
+    private String tag;
     private String description;
     /**
      * null means there is no price because the product is outdated or new
@@ -20,22 +20,21 @@ public class Product implements Serializable, StorageItem {
      */
     private Currency currency;
     private int stock;
-    private LinkedHashMap<LocalDate, BigDecimal> priceHistory;
+    private Map<LocalDate, BigDecimal> priceHistory = new LinkedHashMap<>();
     private String imageUrl;
 
 
     public Product() {
     }
 
-    public Product(String code, String description, BigDecimal price, Currency currency, int stock,
-                   LinkedHashMap<LocalDate, BigDecimal> priceHistory, String imageUrl) {
-        this.code = code;
+    public Product(String tag, String description, BigDecimal price, Currency currency, int stock, String imageUrl) {
+        this.tag = tag;
         this.description = description;
         this.price = price;
         this.currency = currency;
         this.stock = stock;
-        this.priceHistory = priceHistory;
         this.imageUrl = imageUrl;
+        this.setPriceHistory(LocalDate.now(), price);
     }
 
     @Override
@@ -48,12 +47,12 @@ public class Product implements Serializable, StorageItem {
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
+    public String getTag() {
+        return tag;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String getDescription() {
@@ -119,7 +118,7 @@ public class Product implements Serializable, StorageItem {
         if (id != null ? !id.equals(product.id) : product.id != null) {
             return false;
         }
-        if (code != null ? !code.equals(product.code) : product.code != null) {
+        if (tag != null ? !tag.equals(product.tag) : product.tag != null) {
             return false;
         }
         if (description != null ? !description.equals(product.description) : product.description != null) {
@@ -140,7 +139,7 @@ public class Product implements Serializable, StorageItem {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (code != null ? code.hashCode() : 0);
+        result = 31 * result + (tag != null ? tag.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
@@ -154,7 +153,7 @@ public class Product implements Serializable, StorageItem {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Product{");
         sb.append("id=").append(id);
-        sb.append(", code='").append(code).append('\'');
+        sb.append(", tag='").append(tag).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", price=").append(price);
         sb.append(", currency=").append(currency);

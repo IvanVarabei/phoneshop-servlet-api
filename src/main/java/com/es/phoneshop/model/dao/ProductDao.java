@@ -7,15 +7,17 @@ import com.es.phoneshop.model.entity.Product;
 import java.util.List;
 
 public interface ProductDao extends GenericDao<Product> {
-    void delete(Long id);
+    void updateProductImageUrl(Long productId, String imageUrl);
+
+    void updateProductTag(Long productId, String tag);
+
+    void updateProductDescription(Long productId, String description);
+
+    void updateProductPrice(long productId, double price);//todo long Long
+
+    void updateProductStock(long productId, int stock);
+
+    List<String> findTags();
 
     List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder);
-
-    void updateProductStock(long productId, int stockValue);
-
-    List<Product> findByFields(String productCode, Double minPrice, Double maxPrice, Integer minStock);
-
-    void updateProductCode(Long productId, String code);
-
-    List<String> getCategories();
 }

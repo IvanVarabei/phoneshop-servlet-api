@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 public class CheckoutPageServlet extends HttpServlet {
     private static final String CHECKOUT_JSP = "/WEB-INF/pages/checkout.jsp";
     private static final String ORDER_OVERVIEW_REDIRECT = "%s/order/overview/%s";
-    private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+[1-9]{1}[0-9]{7,11}$");
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+[1-9][0-9]{7,11}$");
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private CartService cartService = DefaultCartService.getInstance();
     private OrderService orderService = DefaultOrderService.getInstance();
@@ -33,8 +33,8 @@ public class CheckoutPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Cart cart = cartService.extractCartOrSetNewOne(req.getSession());
-        req.setAttribute(Const.RequestAttribute.ORDER, orderService.createOrder(cart));
-        req.setAttribute(Const.RequestAttribute.PAY_METHODS, orderService.getPaymentMethods());
+        req.setAttribute(Const.AttributeKey.ORDER, orderService.createOrder(cart));
+        req.setAttribute(Const.AttributeKey.PAY_METHODS, orderService.getPaymentMethods());
         req.getRequestDispatcher(CHECKOUT_JSP).forward(req, resp);
     }
 
@@ -58,9 +58,9 @@ public class CheckoutPageServlet extends HttpServlet {
             cartService.clearCart(cartService.extractCartOrSetNewOne(req.getSession()));
             resp.sendRedirect(String.format(ORDER_OVERVIEW_REDIRECT, req.getContextPath(), order.getSecureId()));
         } else {
-            req.setAttribute(Const.RequestAttribute.ERRORS, errorAttributes);
-            req.setAttribute(Const.RequestAttribute.ORDER, order);
-            req.setAttribute(Const.RequestAttribute.PAY_METHODS, orderService.getPaymentMethods());
+            req.setAttribute(Const.AttributeKey.ERRORS, errorAttributes);
+            req.setAttribute(Const.AttributeKey.ORDER, order);
+            req.setAttribute(Const.AttributeKey.PAY_METHODS, orderService.getPaymentMethods());
             req.getRequestDispatcher(CHECKOUT_JSP).forward(req, resp);
         }
     }

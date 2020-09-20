@@ -15,7 +15,7 @@ public class User implements StorageItem, Serializable {
     }
 
     public enum Role {
-        USER, ADMIN
+        CLIENT, ADMIN
     }
 
     @Override

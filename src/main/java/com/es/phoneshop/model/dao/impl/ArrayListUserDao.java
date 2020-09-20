@@ -1,9 +1,10 @@
 package com.es.phoneshop.model.dao.impl;
 
+import com.es.phoneshop.model.dao.UserDao;
 import com.es.phoneshop.model.entity.User;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 
-public class ArrayListUserDao extends ArrayListGenericDao<User>{
+public class ArrayListUserDao extends ArrayListGenericDao<User> implements UserDao {
     private ArrayListUserDao() {
     }
 
@@ -18,11 +19,13 @@ public class ArrayListUserDao extends ArrayListGenericDao<User>{
         return ArrayListUserDaoHolder.ARRAY_LIST_USER_DAO_INSTANCE;
     }
 
-    public synchronized User find(String login) throws ItemNotFoundException {
+    @Override
+    public synchronized User findByLogin(String login) throws ItemNotFoundException {
         return items.stream().filter(u -> u.getLogin().equals(login)).findAny().orElseThrow(ItemNotFoundException::new);
     }
 
-    public synchronized boolean ifExist(String login, String password)  {
+    @Override
+    public synchronized boolean ifExist(String login, String password) {
         return items.stream().anyMatch(u -> u.getLogin().equals(login) && u.getPassword().equals(password));
     }
 }
