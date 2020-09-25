@@ -5,10 +5,10 @@
 
 <tags:master pageTitle="Register">
 	<form method="post" action="${pageContext.request.contextPath}/register">
-		<p>${requestScope.message}</p>
+		<p>${requestScope.error}</p>
 		<div>Enter login:<input name="login"></div>
-		<div>Enter password:<input name="password1"></div>
-		<div>Enter password one more time:<input name="password2"></div>
+		<div>Enter password:<input name="password"></div>
+		<div>Enter password one more time:<input name="repeatPassword"></div>
 		<button>REGISTER</button>
 	</form>
 </tags:master>

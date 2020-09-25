@@ -3,7 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    <display-name>Phoneshop servlet api training</display-name>
 
     <context-param>
         <param-name>isInsertDemoData</param-name>
@@ -16,7 +15,7 @@
     <listener>
         <listener-class>com.es.phoneshop.controller.listener.InitialUsersListener</listener-class>
     </listener>
-    <!-- todo starts-->
+
     <filter>
         <filter-name>dosFilter</filter-name>
         <filter-class>com.es.phoneshop.controller.filter.DosFilter</filter-class>
@@ -37,26 +36,6 @@
     <filter-mapping>
         <filter-name>userFilter</filter-name>
         <url-pattern>/order/overview/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>userFilter</filter-name>
-        <url-pattern>/productReviewModeration</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>userFilter</filter-name>
-        <url-pattern>/createProduct</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>userFilter</filter-name>
-        <url-pattern>/editProduct</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>userFilter</filter-name>
-        <url-pattern>/deleteProduct/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>userFilter</filter-name>
-        <url-pattern>/adminMenu</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -83,7 +62,7 @@
         <filter-name>adminFilter</filter-name>
         <url-pattern>/adminMenu</url-pattern>
     </filter-mapping>
-    <!-- todo ends-->
+
     <servlet>
         <servlet-name>register</servlet-name>
         <servlet-class>com.es.phoneshop.controller.servlet.RegisterPageServlet</servlet-class>

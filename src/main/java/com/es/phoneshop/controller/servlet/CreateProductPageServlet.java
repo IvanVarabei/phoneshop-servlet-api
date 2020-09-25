@@ -33,9 +33,9 @@ public class CreateProductPageServlet extends HttpServlet {
         String potentialPrice = req.getParameter(Const.RequestParam.PRICE);
         String potentialStock = req.getParameter(Const.RequestParam.STOCK);
         Map<String, String> errors = new HashMap<>();
-        String imageUrl = extractStringOrSetError(potentialImageUrl, Const.ErrorKey.IMAGE_URL, errors);
-        String productCode = extractStringOrSetError(potentialProductCode, Const.ErrorKey.TAG, errors);
-        String description = extractStringOrSetError(potentialDescription, Const.ErrorKey.DESCRIPTION, errors);
+        String imageUrl = extractStringOrReturnNull(potentialImageUrl, Const.ErrorKey.IMAGE_URL, errors);
+        String productCode = extractStringOrReturnNull(potentialProductCode, Const.ErrorKey.TAG, errors);
+        String description = extractStringOrReturnNull(potentialDescription, Const.ErrorKey.DESCRIPTION, errors);
         Double price = extractNonNegativeDoubleOrSetError(potentialPrice, Const.ErrorKey.PRICE, errors);
         Integer stock = extractNonNegativeIntOrSetError(potentialStock, Const.ErrorKey.STOCK, errors);
         if (!errors.isEmpty()) {
@@ -47,12 +47,12 @@ public class CreateProductPageServlet extends HttpServlet {
         }
     }
 
-    private String extractStringOrSetError(String sourceData, String errorKey, Map<String, String> errors) {
+    private String extractStringOrReturnNull(String sourceData, String errorKey, Map<String, String> errors) {
         if (sourceData != null && !sourceData.isEmpty()) {
             return sourceData;
         } else {
             errors.put(errorKey, Const.ErrorInfo.VALUE_IS_REQUIRED);
-            return null; //todo
+            return null;
         }
     }
 

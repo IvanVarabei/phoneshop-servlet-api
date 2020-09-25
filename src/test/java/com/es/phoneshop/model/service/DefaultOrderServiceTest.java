@@ -101,13 +101,6 @@ public class DefaultOrderServiceTest {
     }
 
     @Test
-    public void testFindOrderById() throws ItemNotFoundException {
-        orderService.findOrder(1L);
-
-        verify(orderDao).find(1L);
-    }
-
-    @Test
     public void testFindOrderBySecureId() throws ItemNotFoundException {
         orderService.findOrderBySecureId("id");
 

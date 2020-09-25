@@ -28,4 +28,9 @@ public class ArrayListUserDao extends ArrayListGenericDao<User> implements UserD
     public synchronized boolean ifExist(String login, String password) {
         return items.stream().anyMatch(u -> u.getLogin().equals(login) && u.getPassword().equals(password));
     }
+
+    @Override
+    public synchronized boolean ifLoginExist(String login) {
+        return items.stream().anyMatch(u -> u.getLogin().equals(login));
+    }
 }

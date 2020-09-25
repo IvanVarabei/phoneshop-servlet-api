@@ -29,6 +29,11 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
+    public void save(Product product) {
+        productDao.save(product);
+    }
+
+    @Override
     public List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
         return productDao.findProducts(query, sortField, sortOrder);
     }
@@ -45,7 +50,7 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public  List<String> findTags() {
+    public List<String> findTags() {
         return productDao.findTags();
     }
 
@@ -55,7 +60,7 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public List<Product> findAll(){
+    public List<Product> findAll() {
         return productDao.findAll();
     }
 
@@ -77,17 +82,17 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public void updateImageUrl(Long productId, String imageUrl) {
+    public void updateImageUrl(long productId, String imageUrl) {
         productDao.updateProductImageUrl(productId, imageUrl);
     }
 
     @Override
-    public void updateTag(Long productId, String tag) {
+    public void updateTag(long productId, String tag) {
         productDao.updateProductTag(productId, tag);
     }
 
     @Override
-    public void updateDescription(Long productId, String description) {
+    public void updateDescription(long productId, String description) {
         productDao.updateProductDescription(productId, description);
     }
 

@@ -11,15 +11,17 @@ import java.util.List;
 public interface ProductService {
     void saveProduct(String imageUrl, String productCode, String description, BigDecimal price, int stock);
 
+    void save(Product product);
+
     void delete(long productId);
 
-    void updateImageUrl(Long productId, String imageUrl);
+    void updateImageUrl(long productId, String imageUrl);
 
-    void updateTag(Long productId, String tag);
+    void updateTag(long productId, String tag);
 
-    void updateDescription(Long productId, String description);
+    void updateDescription(long productId, String description);
 
-    void updatePrice(long productId, double price); //todo
+    void updatePrice(long productId, double price);
 
     void updateStock(long productId, int stock);
 

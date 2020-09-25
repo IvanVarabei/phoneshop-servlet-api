@@ -22,6 +22,16 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    public void save(User item) {
+        userDao.save(item);
+    }
+
+    @Override
+    public void delete(long id) {
+        userDao.delete(id);
+    }
+
+    @Override
     public User findByLogin(String login) throws ItemNotFoundException {
         return userDao.findByLogin(login);
     }
@@ -29,5 +39,10 @@ public class DefaultUserService implements UserService {
     @Override
     public boolean ifExist(String login, String password) {
         return userDao.ifExist(login, password);
+    }
+
+    @Override
+    public boolean ifLoginExist(String login) {
+        return userDao.ifLoginExist(login);
     }
 }

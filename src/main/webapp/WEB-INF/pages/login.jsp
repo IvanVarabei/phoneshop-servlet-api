@@ -5,7 +5,7 @@
 
 <tags:master pageTitle="Login">
 	<form method="post" action="${pageContext.request.contextPath}/login">
-		<p>${requestScope.message}</p>
+		<p>${requestScope.error}</p>
 		<div>Enter login:<input name="login"></div>
 		<div>Enter password:<input name="password"></div>
 		<button>LOGIN</button>

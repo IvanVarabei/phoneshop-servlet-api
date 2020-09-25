@@ -181,9 +181,6 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(to left, #FFE4E1, rgba(255, 255, 255, 0));
 }
 
-/*.details{*/
-/*    text-align: right;*/
-/*}*/
 .success {
     color: green;
 }
@@ -331,23 +328,46 @@ body {
     padding: 0 0 30px 0;
 }
 
+.filter {
+    flex: 0 0 255px;
+    align-self:flex-start;
+}
+
 .type {
     background: white;
-    display: flex;
-    height: 58px;
     margin: 0 0 2px 0;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
     border-radius: 6px;
     align-items: center;
 }
-
-.type_img {
-    margin: 20px;
+.filter_name{
+    padding: 10px 0 0 10px;
+    font-size: 25px;
+}
+.filter_tag{
+    color: #808080;
+    padding: 10px;
+}
+.filter_cost{
+    padding: 10px;
+    display: inline-flex;
+}
+.filter_cost_input{
+    padding: 0 5px;
+    width: 100px;
+    height: 25px;
+    border: #b3b3b3 solid 2px;
+}
+.filter_stock_input{
+    margin: 10px;
+    padding: 0 5px;
+    width: 200px;
+    height: 25px;
+    border: #b3b3b3 solid 2px;
 }
 
-.type_text {
-    color: #808080;
-    font-size: 13px;
+.filter_btn{
+    margin: 10px !important;
 }
 
 .news {

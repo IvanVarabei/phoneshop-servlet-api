@@ -7,4 +7,6 @@ public interface UserDao extends GenericDao<User>{
     User findByLogin(String login) throws ItemNotFoundException;
 
     boolean ifExist(String login, String password);
+
+    boolean ifLoginExist(String login);
 }

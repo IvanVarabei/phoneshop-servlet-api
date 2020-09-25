@@ -1,41 +1,41 @@
 package com.es.phoneshop.controller.servlet;
 
-import com.es.phoneshop.model.dao.impl.ArrayListUserDao;
 import com.es.phoneshop.model.entity.User;
+import com.es.phoneshop.model.service.UserService;
+import com.es.phoneshop.model.service.impl.DefaultUserService;
+import com.es.phoneshop.value.Const;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class RegisterPageServlet extends HttpServlet {
-    private ArrayListUserDao dao = ArrayListUserDao.getInstance();
+    private static final String REGISTER_JSP = "WEB-INF/pages/register.jsp";
+    private static final String REDIRECT_AFTER_REGISTER = "index.jsp";
+    private UserService userService = DefaultUserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(req, resp);
+        req.getRequestDispatcher(REGISTER_JSP).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String login = req.getParameter("login");
-        String password1 = req.getParameter("password1");
-        String password2 = req.getParameter("password2");
-        if (!password1.equals(password2)) {
-            req.setAttribute("message", "You entered different passwords.");
-            req.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(req, resp);
+        String login = req.getParameter(Const.AttributeKey.LOGIN);
+        String password = req.getParameter(Const.AttributeKey.PASSWORD);
+        String repeatPassword = req.getParameter(Const.AttributeKey.REPEAT_PASSWORD);
+        if (!password.equals(repeatPassword)) {
+            req.setAttribute(Const.AttributeKey.ERROR, Const.ErrorInfo.DIFFERENT_PASSWORDS);
+            req.getRequestDispatcher(REGISTER_JSP).forward(req, resp);
         } else {
-            if(dao.ifExist(login, password1)){
-                req.setAttribute("message", "Such a user already exists. Try another login.");
-                req.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(req, resp);
-            }else{
-                dao.save(new User(login, password1, User.Role.CLIENT));
-                HttpSession session = req.getSession();
-                session.setAttribute("login", login);
-                session.setAttribute("password", password1);
-                resp.sendRedirect("index.jsp");
+            if (userService.ifLoginExist(login)) {
+                req.setAttribute(Const.AttributeKey.ERROR, Const.ErrorInfo.USER_ALREADY_EXIST);
+                req.getRequestDispatcher(REGISTER_JSP).forward(req, resp);
+            } else {
+                userService.save(new User(login, password, User.Role.CLIENT));
+                resp.sendRedirect(REDIRECT_AFTER_REGISTER);
             }
         }
     }

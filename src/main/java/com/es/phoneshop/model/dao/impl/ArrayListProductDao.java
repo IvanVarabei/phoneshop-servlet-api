@@ -33,17 +33,17 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
     }
 
     @Override
-    public synchronized void updateProductImageUrl(Long productId, String imageUrl) {
+    public synchronized void updateProductImageUrl(long productId, String imageUrl) {
         items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p -> p.setImageUrl(imageUrl));
     }
 
     @Override
-    public synchronized void updateProductDescription(Long productId, String description) {
+    public synchronized void updateProductDescription(long productId, String description) {
         items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p -> p.setDescription(description));
     }
 
     @Override
-    public synchronized void updateProductTag(Long productId, String tag) {
+    public synchronized void updateProductTag(long productId, String tag) {
         items.stream().filter(p -> p.getId().equals(productId)).findAny().ifPresent(p -> p.setTag(tag));
     }
 

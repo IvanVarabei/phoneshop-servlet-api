@@ -75,7 +75,7 @@ public class EditProductPageServlet extends HttpServlet {
         if (number.isEmpty()) {
             errors.put(errorKey, Const.ErrorInfo.NON_NEGATIVE_NUMBER);
         }
-        return number.orElse(null);//todo
+        return number.orElse(null);
     }
 
     public Integer handleNonNegativeInt(String potentialInteger, String errorKey, Map<String, String> errors) {

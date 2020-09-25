@@ -57,11 +57,6 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public Order findOrder(Long id) throws ItemNotFoundException {
-        return orderDao.find(id);
-    }
-
-    @Override
     public Order findOrderBySecureId(String id) throws ItemNotFoundException {
         return orderDao.findOrderBySecureId(id);
     }

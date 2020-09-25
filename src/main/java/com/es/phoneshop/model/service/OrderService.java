@@ -12,8 +12,6 @@ public interface OrderService {
 
     void placeOrder(Order order);
 
-    Order findOrder(Long id) throws ItemNotFoundException;
-
     Order findOrderBySecureId(String id) throws ItemNotFoundException;
 
     List<PaymentMethod> getPaymentMethods();

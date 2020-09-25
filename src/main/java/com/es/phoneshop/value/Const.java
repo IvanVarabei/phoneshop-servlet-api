@@ -27,6 +27,9 @@ public class Const {
         public static final String NON_NEGATIVE_NUMBER = "Must be non negative";
         public static final String NON_NEGATIVE_INT = "Must be non negative int";
         public static final String INVALID_VALUE = "Invalid value";
+        public static final String DIFFERENT_PASSWORDS = "You entered different passwords.";
+        public static final String USER_ALREADY_EXIST = "Such a user already exists. Try another login.";
+        public static final String WRONG_LOGIN_PASSWORD = "There is no user having such login and password.";
         public static final int PAGE_NOT_FOUND_CODE = 404;
         public static final int TOO_MANY_REQUESTS_CODE = 429;
 
@@ -48,6 +51,9 @@ public class Const {
         public static final String TAGS = "tags";
         public static final String PRODUCT_REVIEWS = "productReviews";
         public static final String LOGIN = "login";
+        public static final String PASSWORD = "password";
+        public static final String REPEAT_PASSWORD = "repeatPassword";
+        public static final String DESIRABLE_SECURED_PAGE = "destination";
 
         private AttributeKey() {
         }

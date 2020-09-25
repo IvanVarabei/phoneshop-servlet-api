@@ -1,19 +1,20 @@
 package com.es.phoneshop.controller.listener;
 
-import com.es.phoneshop.model.dao.impl.ArrayListUserDao;
 import com.es.phoneshop.model.entity.User;
+import com.es.phoneshop.model.service.UserService;
+import com.es.phoneshop.model.service.impl.DefaultUserService;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.util.List;
 
 public class InitialUsersListener implements ServletContextListener {
-    private ArrayListUserDao dao = ArrayListUserDao.getInstance();
+    private UserService userService = DefaultUserService.getInstance();
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         for (User user : List.of(new User("q", "q", User.Role.ADMIN))) {
-            dao.save(user);
+            userService.save(user);
         }
     }
 

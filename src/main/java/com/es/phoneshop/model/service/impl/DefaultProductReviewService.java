@@ -38,7 +38,7 @@ public class DefaultProductReviewService implements ProductReviewService {
     }
 
     @Override
-    public void save(ProductReview productReview) { // todo generalize save and delete
+    public void save(ProductReview productReview) {
         productReviewDao.save(productReview);
     }
 

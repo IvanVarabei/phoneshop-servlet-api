@@ -73,11 +73,11 @@ public class ProductListPageServlet extends HttpServlet {
         String potentialMaxPrice = req.getParameter(Const.RequestParam.MAX_PRICE);
         String potentialMinStock = req.getParameter(Const.RequestParam.STOCK);
         Map<String, Boolean> errors = new HashMap<>();
-        Double minPrice = extractValueOrSetError(potentialMinPrice, errors, Const.ErrorKey.MIN_PRICE,
+        Double minPrice = extractValueOrSetErrorReturnNull(potentialMinPrice, errors, Const.ErrorKey.MIN_PRICE,
                 CustomParser::parseNonNegativeDouble);
-        Double maxPrice = extractValueOrSetError(potentialMaxPrice, errors, Const.ErrorKey.MAX_PRICE,
+        Double maxPrice = extractValueOrSetErrorReturnNull(potentialMaxPrice, errors, Const.ErrorKey.MAX_PRICE,
                 CustomParser::parseNonNegativeDouble);
-        Integer minStock = extractValueOrSetError(potentialMinStock, errors, Const.ErrorKey.STOCK,
+        Integer minStock = extractValueOrSetErrorReturnNull(potentialMinStock, errors, Const.ErrorKey.STOCK,
                 CustomParser::parseNonNegativeInt);
         if (!errors.isEmpty()) {
             req.setAttribute(Const.AttributeKey.ERRORS, errors);
@@ -85,11 +85,11 @@ public class ProductListPageServlet extends HttpServlet {
         return productService.filterProductsByFields(items, minPrice, maxPrice, minStock, productCods);
     }
 
-    private <T> T extractValueOrSetError(String potentialMinPrice, Map<String, Boolean> errors,
-                                         String errorKey, Function<String, Optional<T>> function) {
+    private <T> T extractValueOrSetErrorReturnNull(String potentialMinPrice, Map<String, Boolean> errors,
+                                                   String errorKey, Function<String, Optional<T>> function) {
         return function.apply(potentialMinPrice).orElseGet(() -> {
             errors.put(errorKey, true);
-            return null;//todo
+            return null;
         });
     }
 

@@ -7,13 +7,13 @@ import com.es.phoneshop.model.entity.Product;
 import java.util.List;
 
 public interface ProductDao extends GenericDao<Product> {
-    void updateProductImageUrl(Long productId, String imageUrl);
+    void updateProductImageUrl(long productId, String imageUrl);
 
-    void updateProductTag(Long productId, String tag);
+    void updateProductTag(long productId, String tag);
 
-    void updateProductDescription(Long productId, String description);
+    void updateProductDescription(long productId, String description);
 
-    void updateProductPrice(long productId, double price);//todo long Long
+    void updateProductPrice(long productId, double price);
 
     void updateProductStock(long productId, int stock);
 
