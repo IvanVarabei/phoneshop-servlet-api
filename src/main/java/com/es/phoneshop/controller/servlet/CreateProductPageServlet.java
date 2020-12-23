@@ -42,8 +42,12 @@ public class CreateProductPageServlet extends HttpServlet {
             req.setAttribute(Const.AttributeKey.ERRORS, errors);
             req.getRequestDispatcher(CREATE_PRODUCT_JSP).forward(req, resp);
         } else {
-            productService.saveProduct(imageUrl, productCode, description, BigDecimal.valueOf(price), stock);
-            resp.sendRedirect(String.format(REDIRECT_AFTER_CREATING, req.getContextPath(), req.getServletPath()));
+            if(productService.saveProduct(imageUrl, productCode, description, BigDecimal.valueOf(price), stock)){
+                resp.sendRedirect(String.format(REDIRECT_AFTER_CREATING, req.getContextPath(), req.getServletPath()));
+            }else {
+                req.setAttribute(Const.AttributeKey.ERROR, "Already exists");
+                req.getRequestDispatcher(CREATE_PRODUCT_JSP).forward(req, resp);
+            }
         }
     }
 

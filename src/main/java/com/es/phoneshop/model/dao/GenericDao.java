@@ -5,6 +5,8 @@ import com.es.phoneshop.model.exception.ItemNotFoundException;
 import java.util.List;
 
 public interface GenericDao<T> {
+    void setItems(List<T> items);
+
     void save(T storageItem);
 
     T find(Long id) throws ItemNotFoundException;

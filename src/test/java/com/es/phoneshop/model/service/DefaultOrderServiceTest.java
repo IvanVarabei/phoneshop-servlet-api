@@ -55,6 +55,8 @@ public class DefaultOrderServiceTest {
         when(cartItem2.getProduct()).thenReturn(product2);
         when(product1.getStock()).thenReturn(3);
         when(product2.getStock()).thenReturn(3);
+        when(product1.getId()).thenReturn(1l);
+        when(product2.getId()).thenReturn(2l);
         when(cartItem1.getQuantity()).thenReturn(1);
         when(cartItem2.getQuantity()).thenReturn(1);
         when(order.getCartItemList()).thenReturn(cartItemList);
@@ -81,15 +83,15 @@ public class DefaultOrderServiceTest {
     }
 
     //todo
-//    @Test
-//    public void testPlaceOrder() {
-//        orderService.placeOrder(order);
-//
-//        verify(order).setSecureId(anyString());
-//        verify(orderDao).save(order);
-//        verify(productDao).updateProductStock(product1, 2);
-//        verify(productDao).updateProductStock(product2, 2);
-//    }
+    @Test
+    public void testPlaceOrder() {
+        orderService.placeOrder(order);
+
+        verify(order).setSecureId(anyString());
+        verify(orderDao).save(order);
+        verify(productDao).updateProductStock(cartItem1.getProduct().getId(), 2);
+        verify(productDao).updateProductStock(cartItem2.getProduct().getId(), 2);
+    }
 
     @Test
     public void testGetPaymentMethod() {

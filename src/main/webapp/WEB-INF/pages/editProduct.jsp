@@ -19,12 +19,13 @@
 				<table>
 					<tr>
 						<td>Product tag :</td>
-						<td><input class="checkoutInput" name="searchTag"
+						<td><input class="checkoutInput" name="searchTag" type="text" minlength="1" maxlength="30"
 											 value="${not empty param.searchTag ? param.searchTag : ''}"/></td>
 					</tr>
 					<tr>
 						<td>Min price :</td>
-						<td><input class="checkoutInput" name="minPrice" value="${not empty param.minPrice ? param.minPrice : ''}"/>
+						<td><input class="checkoutInput" type="number" max="9999999" name="minPrice" value="${not empty param.minPrice ? param.minPrice : ''}"
+						 />
 							<c:if test="${not empty requestScope.searchErrors['minPriceError']}">
 								<p class="error">${requestScope.searchErrors.minPriceError}</p>
 							</c:if>
@@ -32,7 +33,8 @@
 					</tr>
 					<tr>
 						<td>Max price :</td>
-						<td><input class="checkoutInput" name="maxPrice" value="${not empty param.maxPrice ? param.maxPrice : ''}"/>
+						<td><input class="checkoutInput" type="number" max="9999999" name="maxPrice"
+											 value="${not empty param.maxPrice ? param.maxPrice : ''}"/>
 							<c:if test="${not empty requestScope.searchErrors['maxPriceError']}">
 							<p class="error">${requestScope.searchErrors.maxPriceError}</p>
 							</c:if>
@@ -40,7 +42,8 @@
 					</tr>
 					<tr>
 						<td>Min stock :</td>
-						<td><input class="checkoutInput" name="searchStock" value="${not empty param.searchStock ? param.searchStock : ''}"/>
+						<td><input class="checkoutInput" type="number" max="9999999" name="searchStock"
+											 value="${not empty param.searchStock ? param.searchStock : ''}"/>
 							<c:if test="${not empty requestScope.searchErrors['stockError']}">
 							<p class="error">${requestScope.searchErrors.stockError}</p>
 							</c:if>

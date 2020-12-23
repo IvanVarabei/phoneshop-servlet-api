@@ -3,7 +3,7 @@
 <%@ tag trimDirectiveWhitespaces="true" %>
 <%@ attribute name="pageTitle" required="true" %>
 
-<html>
+<html xmlns:jsp="http://java.sun.com/JSP/Page">
 <head>
 	<title>${pageTitle}</title>
 	<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/styles/main.css">
@@ -17,14 +17,28 @@
 		<header class="header">
 			<div class="container">
 				<div class="header_row">
+
 					<div class="header_name">
-						<a href="${pageContext.request.contextPath}/">phone shop</a></div>
+						<a href="${pageContext.request.contextPath}/">phone shop</a>
+					</div>
+
 					<form class="header_search" action="${pageContext.request.contextPath}/products">
-						<input class="header_input" name="query" value="${param.query}" placeholder="Search goods">
+						<input class="header_input" name="query" value="${param.query}" placeholder="Search goods" maxlength="30">
 						<button class="header_search_button">
 							<img src="${pageContext.request.contextPath}/images/search_icon.png" alt="">
 						</button>
 					</form>
+
+					<div class="header__auth">
+						<c:if test="${not empty sessionScope.login}">
+							<div class="header__auth_elem"><a href="${pageContext.request.contextPath}/logout">Logout</a></div>
+						</c:if>
+						<c:if test="${empty sessionScope.login}">
+							<div class="header__auth_elem"><a href="${pageContext.request.contextPath}/login">Login</a></div>
+							<div class="header__auth_elem"><a href="${pageContext.request.contextPath}/register">Register</a></div>
+						</c:if>
+					</div>
+
 					<jsp:include page="/cart/miniCart"/>
 				</div>
 			</div>

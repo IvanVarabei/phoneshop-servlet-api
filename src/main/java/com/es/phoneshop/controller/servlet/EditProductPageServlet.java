@@ -22,7 +22,7 @@ public class EditProductPageServlet extends HttpServlet {
     private ProductService productService = DefaultProductService.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String productCode = req.getParameter(Const.RequestParam.SEARCH_TAG);
         String potentialMinPrice = req.getParameter(Const.RequestParam.MIN_PRICE);
         String potentialMaxPrice = req.getParameter(Const.RequestParam.MAX_PRICE);
@@ -41,7 +41,7 @@ public class EditProductPageServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String[] productIds = req.getParameterValues(Const.RequestParam.PRODUCT_ID);
         String[] imageUrls = req.getParameterValues(Const.RequestParam.IMAGE_URL);
         String[] tags = req.getParameterValues(Const.RequestParam.TAG);
@@ -63,8 +63,10 @@ public class EditProductPageServlet extends HttpServlet {
         }
         if (!productsErrors.isEmpty()) {
             req.setAttribute(Const.AttributeKey.ERRORS, productsErrors);
+            doGet(req, resp);
+        }else{
+            resp.sendRedirect(req.getContextPath() + "/editProduct");
         }
-        doGet(req, resp);
     }
 
     public Double handleNonNegativeDouble(String potentialDouble, String errorKey, Map<String, String> errors) {

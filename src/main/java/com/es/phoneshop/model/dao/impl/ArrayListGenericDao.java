@@ -12,6 +12,7 @@ public class ArrayListGenericDao<T extends StorageItem> implements GenericDao<T>
     protected List<T> items = new ArrayList<>();
     protected long id;
 
+    @Override
     public void setItems(List<T> items) {
         this.items = items;
     }

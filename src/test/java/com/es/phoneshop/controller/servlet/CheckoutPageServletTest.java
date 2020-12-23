@@ -91,7 +91,7 @@ public class CheckoutPageServletTest {
 
         servlet.doPost(req, resp);
         Map<String, String> expectedErrors = new HashMap<>();
-        expectedErrors.put("firstName", "Value is required.");
+        expectedErrors.put("firstName", "Value is required");
 
         verify(req).setAttribute("errors", expectedErrors);
         verify(req).setAttribute("order", order);
@@ -105,7 +105,7 @@ public class CheckoutPageServletTest {
 
         servlet.doPost(req, resp);
         Map<String, String> expectedErrors = new HashMap<>();
-        expectedErrors.put("phone", "Invalid value.");
+        expectedErrors.put("phone", "Invalid value");
 
         verify(req).setAttribute("errors", expectedErrors);
     }
@@ -116,7 +116,7 @@ public class CheckoutPageServletTest {
 
         servlet.doPost(req, resp);
         Map<String, String> expectedErrors = new HashMap<>();
-        expectedErrors.put("deliveryDate", "Invalid value.");
+        expectedErrors.put("deliveryDate", "Invalid value");
 
         verify(req).setAttribute("errors", expectedErrors);
     }
@@ -127,7 +127,7 @@ public class CheckoutPageServletTest {
 
         servlet.doPost(req, resp);
         Map<String, String> expectedErrors = new HashMap<>();
-        expectedErrors.put("paymentMethod", "Value is required.");
+        expectedErrors.put("paymentMethod", "Value is required");
 
         verify(req).setAttribute("errors", expectedErrors);
     }

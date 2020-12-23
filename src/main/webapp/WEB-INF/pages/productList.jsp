@@ -40,8 +40,10 @@
 										<c:set var="isActive" value="${false}"/>
 									</c:if>
 								</c:forEach>
-								<div class="filter_tag"><input ${isActive ? 'checked' : ''} type="checkbox" name="tag"
-																																						value="${category}">${category}</div>
+								<div class="filter_tag">
+									<input ${isActive ? 'checked' : ''} type="checkbox" name="tag" value="${category}">
+									<div class="concrete__category">${category}</div>
+								</div>
 							</c:forEach>
 							<div class="filter_name">Cost</div>
 							<div class="filter_cost">

@@ -11,6 +11,13 @@
 			</div>
 		</div>
 	</c:if>
+	<c:if test="${not empty requestScope.error}">
+		<div class="add_info add_error">
+			<div class="container">
+				<div class="add_message">${requestScope.error}</div>
+			</div>
+		</div>
+	</c:if>
 	<div class="editing">
 		<div class="container">
 			<div class="title">Admin page. Create product.</div>
@@ -18,7 +25,8 @@
 				<table>
 					<tr>
 						<td>ImageUrl 235px :</td>
-						<td><input class="checkoutInput" name="imageUrl" value="${not empty param.imageUrl ? param.imageUrl : ''}"/>
+						<td><input class="checkoutInput" name="imageUrl" value="${not empty param.imageUrl ? param.imageUrl : ''}"
+											 type="text" minlength="1" maxlength="30"/>
 							<c:if test="${not empty requestScope.errors['imageUrlError']}">
 							<p class="error">${requestScope.errors.imageUrlError}</p>
 							</c:if>
@@ -26,7 +34,7 @@
 					</tr>
 					<tr>
 						<td>Product tag :</td>
-						<td><input class="checkoutInput" name="tag"
+						<td><input class="checkoutInput" name="tag" type="text" minlength="1" maxlength="30"
 											 value="${not empty param.tag ? param.tag : ''}"/>
 							<c:if test="${not empty requestScope.errors['tagError']}">
 								<p class="error">${requestScope.errors.tagError}</p>
@@ -35,7 +43,8 @@
 					</tr>
 					<tr>
 						<td>Description :</td>
-						<td><input class="checkoutInput" name="description" value="${not empty param.description ? param.description : ''}"/>
+						<td><input class="checkoutInput" name="description" type="text" minlength="1" maxlength="30"
+											 value="${not empty param.description ? param.description : ''}"/>
 							<c:if test="${not empty requestScope.errors['descriptionError']}">
 							<p class="error">${requestScope.errors.descriptionError}</p>
 							</c:if>
@@ -43,7 +52,8 @@
 					</tr>
 					<tr>
 						<td>Price :</td>
-						<td><input class="checkoutInput" name="price" value="${not empty param.price ? param.price : ''}"/>
+						<td><input class="checkoutInput" name="price" type="number" max="99999999"
+											 value="${not empty param.price ? param.price : ''}"/>
 							<c:if test="${not empty requestScope.errors['priceError']}">
 								<p class="error">${requestScope.errors.priceError}</p>
 							</c:if>
@@ -51,7 +61,8 @@
 					</tr>
 					<tr>
 						<td>Stock :</td>
-						<td><input class="checkoutInput" name="stock" value="${not empty param.stock ? param.stock : ''}"/>
+						<td><input class="checkoutInput" name="stock" type="number" max="99999999"
+											 value="${not empty param.stock ? param.stock : ''}"/>
 							<c:if test="${not empty requestScope.errors['stockError']}">
 							<p class="error">${requestScope.errors.stockError}</p>
 							</c:if>

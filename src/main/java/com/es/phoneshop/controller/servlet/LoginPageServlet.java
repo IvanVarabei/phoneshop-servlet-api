@@ -28,7 +28,11 @@ public class LoginPageServlet extends HttpServlet {
         if (userService.ifExist(login, password)) {
             session.setAttribute(Const.AttributeKey.LOGIN, login);
             session.setAttribute(Const.AttributeKey.PASSWORD, password);
-            resp.sendRedirect(req.getContextPath() + session.getAttribute(Const.AttributeKey.DESIRABLE_SECURED_PAGE));
+            if(session.getAttribute(Const.AttributeKey.DESIRABLE_SECURED_PAGE) != null){
+                resp.sendRedirect(req.getContextPath() + session.getAttribute(Const.AttributeKey.DESIRABLE_SECURED_PAGE));
+            }else{
+                resp.sendRedirect(req.getContextPath());
+            }
         } else {
             req.setAttribute(Const.AttributeKey.ERROR, Const.ErrorInfo.WRONG_LOGIN_PASSWORD);
             req.getRequestDispatcher(LOGIN_JSP).forward(req, resp);

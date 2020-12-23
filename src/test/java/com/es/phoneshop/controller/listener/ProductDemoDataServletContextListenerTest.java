@@ -1,6 +1,7 @@
 package com.es.phoneshop.controller.listener;
 
 import com.es.phoneshop.model.dao.ProductDao;
+import com.es.phoneshop.model.service.ProductService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,7 @@ public class ProductDemoDataServletContextListenerTest {
     @Mock
     private ServletContext servletContext;
     @Mock
-    private ProductDao productDao;
+    private ProductService productService;
     @InjectMocks
     private final ServletContextListener listener = new ProductDemoDataServletContextListener();
 
@@ -36,7 +37,7 @@ public class ProductDemoDataServletContextListenerTest {
     public void testContextInitialized() {
         listener.contextInitialized(servletContextEvent);
 
-        verify(productDao, atLeastOnce()).save(any());
+        verify(productService, atLeastOnce()).save(any());
     }
 
     @Test
@@ -45,6 +46,6 @@ public class ProductDemoDataServletContextListenerTest {
 
         listener.contextInitialized(servletContextEvent);
 
-        verify(productDao, never()).save(any());
+        verify(productService, never()).save(any());
     }
 }

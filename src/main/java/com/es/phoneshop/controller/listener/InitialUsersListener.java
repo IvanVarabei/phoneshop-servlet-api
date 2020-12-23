@@ -13,7 +13,7 @@ public class InitialUsersListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        for (User user : List.of(new User("q", "q", User.Role.ADMIN))) {
+        for (User user : List.of(new User("qqq", "qqq", User.Role.ADMIN))) {
             userService.save(user);
         }
     }

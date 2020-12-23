@@ -9,6 +9,6 @@
     <c:set var="categories" value="${categories}&tag=${category}"/>
 </c:forEach>
 <a href="?query=${param.query}&sortField=${sortField}&sortOrder=${sortOrder}&minPrice=${param.minPrice}
-&maxPrice=${param.maxPrice}&stock=${param.minStock}${categories}"
+&maxPrice=${param.maxPrice}&stock=${param.stock}${categories}"
    class="${sortField eq param.sortField and sortOrder eq param.sortOrder ? 'activeRef' : ''}">
     ${direction eq 'up'? '&uArr;' : '&dArr;'}</a>

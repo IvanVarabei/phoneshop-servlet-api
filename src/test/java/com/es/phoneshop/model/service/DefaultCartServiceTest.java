@@ -43,7 +43,6 @@ public class DefaultCartServiceTest {
     @Mock
     private HttpSession session;
     private List<CartItem> cartItems;
-    @InjectMocks
     private CartService cartService = DefaultCartService.getInstance();
 
     @Before

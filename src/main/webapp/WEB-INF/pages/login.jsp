@@ -4,12 +4,19 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <tags:master pageTitle="Login">
-	<form method="post" action="${pageContext.request.contextPath}/login">
-		<p>${requestScope.error}</p>
-		<div>Enter login:<input name="login"></div>
-		<div>Enter password:<input name="password"></div>
-		<button>LOGIN</button>
-	</form>
-	<br>
-	<div><a href="${pageContext.request.contextPath}/register">REGISTER</a></div>
+	<div class="cart">
+		<div class="container">
+			<form class="auth__form" method="post" action="${pageContext.request.contextPath}/login">
+				<p class="error">${requestScope.error}</p>
+				<div>Enter login:<input class="header_input" name="login" minlength="3" maxlength="20" required></div>
+				<div>Enter password:<input class="header_input" name="password" minlength="3" maxlength="20" required
+																	 type="password"></div>
+				<button>LOGIN</button>
+				<br>
+				<br>
+				<div><a href="${pageContext.request.contextPath}/register">REGISTER</a></div>
+			</form>
+
+		</div>
+	</div>
 </tags:master>

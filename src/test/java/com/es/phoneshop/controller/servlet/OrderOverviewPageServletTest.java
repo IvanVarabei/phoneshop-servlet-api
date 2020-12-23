@@ -39,22 +39,20 @@ public class OrderOverviewPageServletTest {
         when((orderService.findOrderBySecureId("some-id"))).thenReturn(order);
         when(req.getRequestDispatcher("/WEB-INF/pages/orderOverview.jsp")).thenReturn(requestDispatcher);
     }
-
     @Test
-    public void testDoGet() throws ServletException, IOException {
+    public void doGetOrderFoundForward() throws ServletException, IOException {
         servlet.doGet(req, resp);
 
         verify(req).setAttribute("order", order);
         verify(requestDispatcher).forward(req, resp);
     }
-
     @Test
-    public void testDoGetOrderNotFound() throws ServletException, IOException, ItemNotFoundException {
+    public void doGetOrderNotFoundSendError() throws ServletException, IOException, ItemNotFoundException {
         doThrow(ItemNotFoundException.class).when(orderService).findOrderBySecureId("some-id");
 
         servlet.doGet(req, resp);
 
-        verify(req).setAttribute("message", "Order with code 'some-id' not found.");
+        verify(req).setAttribute("message", "Order with code 'some-id' not found");
         verify(resp).sendError(404);
     }
 }

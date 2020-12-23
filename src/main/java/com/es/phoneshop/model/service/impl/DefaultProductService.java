@@ -42,7 +42,8 @@ public class DefaultProductService implements ProductService {
     public List<Product> filterProductsByFields(
             List<Product> items, Double minPrice, Double maxPrice, Integer minStock, String... productTags) {
         return items.stream()
-                .filter(i -> productTags == null || productTags.length == 0 || productTags[0] == null || productTags[0].isEmpty() || Arrays.asList(productTags).contains(i.getTag()))
+                .filter(i -> productTags == null || productTags.length == 0 || productTags[0] == null ||
+                        productTags[0].isEmpty() || Arrays.asList(productTags).contains(i.getTag()))
                 .filter(i -> minStock == null || i.getStock() >= minStock)
                 .filter(i -> minPrice == null || i.getPrice().doubleValue() >= minPrice)
                 .filter(i -> maxPrice == null || i.getPrice().doubleValue() <= maxPrice)
@@ -65,15 +66,21 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public void saveProduct(String imageUrl, String productCode, String description, BigDecimal price, int stock) {
-        Product product = new Product();
-        product.setImageUrl(imageUrl);
-        product.setTag(productCode);
-        product.setDescription(description);
-        product.setPrice(price);
-        product.setStock(stock);
-        product.setCurrency(Currency.getInstance("USD"));
-        productDao.save(product);
+    public boolean saveProduct(String imageUrl, String productCode, String description, BigDecimal price, int stock) {
+        List<Product> products = productDao.findAll();
+        if(products.parallelStream().noneMatch(p -> p.getDescription().equalsIgnoreCase(description)
+                && p.getTag().equalsIgnoreCase(productCode))){
+            Product product = new Product();
+            product.setImageUrl(imageUrl);
+            product.setTag(productCode);
+            product.setDescription(description);
+            product.setPrice(price);
+            product.setStock(stock);
+            product.setCurrency(Currency.getInstance("USD"));
+            productDao.save(product);
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class RecentlyViewedServletTest {
     @Before
     public void setup() {
         when(request.getSession()).thenReturn(session);
-        when(request.getRequestDispatcher("/WEB-INF/pages/recentlyViewed.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher("WEB-INF/pages/recentlyViewed.jsp")).thenReturn(requestDispatcher);
     }
 
     @Test

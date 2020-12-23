@@ -1,10 +1,10 @@
 package com.es.phoneshop.controller.servlet;
 
-import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.entity.Product;
 import com.es.phoneshop.model.exception.ItemNotFoundException;
 import com.es.phoneshop.model.exception.OutOfStockException;
 import com.es.phoneshop.model.service.CartService;
+import com.es.phoneshop.model.service.ProductService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +29,7 @@ public class CartPageServletTest {
     @Mock
     private HttpServletResponse response;
     @Mock
-    private ArrayListProductDao dao;
+    private ProductService productService;
     @Mock
     private CartService cartService;
     @Mock
@@ -47,11 +47,11 @@ public class CartPageServletTest {
     public void setup() throws ItemNotFoundException {
         when(request.getLocale()).thenReturn(Locale.ENGLISH);
         when(request.getSession()).thenReturn(session);
-        when(request.getRequestDispatcher("/WEB-INF/pages/cart.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher("WEB-INF/pages/cart.jsp")).thenReturn(requestDispatcher);
         when(request.getParameterValues("productId")).thenReturn(new String[]{"1", "2"});
         when(request.getParameterValues("quantity")).thenReturn(new String[]{"1", "2"});
-        when(dao.find(1L)).thenReturn(product1);
-        when(dao.find(2L)).thenReturn(product2);
+        when(productService.find(1L)).thenReturn(product1);
+        when(productService.find(2L)).thenReturn(product2);
     }
 
     @Test

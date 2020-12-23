@@ -262,6 +262,18 @@ body {
     height: 120px;
 }
 
+.header__auth{
+    display: flex;
+    flex-direction: column;
+}
+.header__auth_elem{
+    margin: 10px;
+}
+
+.auth__form{
+    padding: 10px 30px 30px 30px;
+}
+
 .header_name {
     font-size: 22px;
     text-transform: uppercase;
@@ -290,7 +302,7 @@ body {
 
 .header_input {
     margin: 16px 0 0 20px;
-    width: 278px;
+    width: 278px !important;
 }
 
 .header_search_button {
@@ -347,6 +359,11 @@ body {
 .filter_tag{
     color: #808080;
     padding: 10px;
+}
+.concrete__category{
+    display: inline-block;
+    margin: 0 0 0 10px;
+    font-size: 22px;
 }
 .filter_cost{
     padding: 10px;
@@ -616,6 +633,21 @@ body {
     font-size: 18px;
 }
 
+.comments{
+    padding: 0 30px 30px 30px;
+}
+
+.comments__title{
+    font-size: 20px;
+    margin: 10px 0 15px 0;
+}
+.single__comment{
+    padding: 20px;
+}
+.comment__body{
+    padding: 10px;
+    font-size: 16px;
+}
 .cart {
     margin: 0 auto 30px;
     padding: 30px 0 0 0;

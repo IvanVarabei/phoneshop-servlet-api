@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface ProductService {
-    void saveProduct(String imageUrl, String productCode, String description, BigDecimal price, int stock);
+    boolean saveProduct(String imageUrl, String productCode, String description, BigDecimal price, int stock);
 
     void save(Product product);
 

@@ -38,14 +38,14 @@ public class DosFilterTest {
     }
 
     @Test
-    public void testDoGet() throws ServletException, IOException {
+    public void doFilterAllowed() throws ServletException, IOException {
         filter.doFilter(req, resp, filterChain);
 
         verify(filterChain).doFilter(req, resp);
     }
 
     @Test
-    public void testDoGetNotAllowed() throws ServletException, IOException {
+    public void doFilterNotAllowedSetStatusTooManyRequests() throws ServletException, IOException {
         when(dosProtectionService.isAllowed("198.34.2.45")).thenReturn(false);
 
         filter.doFilter(req, resp, filterChain);
